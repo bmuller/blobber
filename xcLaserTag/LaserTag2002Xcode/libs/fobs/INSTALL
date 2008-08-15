@@ -1,0 +1,339 @@
+FOBS - BUILDING INSTRUCTIONS - 0.4.2
+------------------------------------
+
+This document contains a full description of the FOBS build process. A simpler compilation guide, using all default options, which also covers some use cases can be found in file 'FOBS_GUIDE'.
+
+1-INTRODUCTION:
+
+Fobs requires two software packages in order to be built: 
+
+- ffmpeg (This Fobs version has been built successfully using: SVN revision 13764)
+- scons (This Fobs version has been built successfully using: 0.98.5)
+
+Both version of these two packages are included in the sources tarball for your convenience. From version 0.4.2, scons comes in uncompressed format in the source package. It can be found in $FOBS_ROOT/scons-local. You may use other different versions to the ones provided, but compatibility is not assured. The ffmpeg project has changed the behavior of key function calls in several updates, so especial care has to be taken when using a different ffmpeg revision. 
+
+Other important software packages that need to be installed in your system are:
+- Python: needed by scons to built the Fobs project. Last version, 2.5.2, has been tested to be compatible.
+- Java Developer Kit: required to build the Java part of Fobs, Fobs4JMF. OpenJDK-1.6 package for Windows and Linux, and Apple JDK 1.5 for Mac have been tested to be compatible.
+
+
+
+2-PREPARATION:
+
+a) System setup:
+
+Fobs can be build in different platforms. Binaries have been successfully created under Windows (using MinGW), Linux (Ubuntu 8.04) and MacOSX (OSX 10.5 and 10.4). Follow the appropriate instructions depending on your system:
+
+*MinGW: (More information on section 5)
+ - Install MSYS-1.0.10 ,msysdtk-1.0.1 and MinGW 5.1.3. Install nasm-2.0-win32 (copy nasmw.exe to mingw/bin directory)
+ - Download and install last bash update for MinGW (ffmpeg configure script complains about the bash version provided in the msys package), Bash-3.1.
+ - Install last python release
+[Related links:
+	http://www.mingw.org
+	http://sourceforge.net/projects/nasm
+	http://www.python.org/download/
+]
+
+*Mac OSX:
+ - Tiger: Install latest realease of XCode (2.5 at the time of this Fobs release). You will also need to install a newer version of make (>3.80) using fink or darwin ports (required to compile ffmpeg).
+ - Leopard: Install latest release of XCode (3.0 at the time of this Fobs release).
+ 
+*Linux:
+ - Install development tools (gcc, g++, make, automake, autoconf, python, nasm, libtool). In Ubuntu, these tools are gathered in the 'build-essentials' and 'libtool' packages.
+
+
+b) Environment:
+In the rest of this guide, we will make use of the following environment variable:
+	> export $FOBS_ROOT=/path/to/your/fobs/source/package
+which points to the folder where Fobs sources where unpacked.
+
+Test that 'python' and 'javac' are reachable from the command line. If not, include them in the PATH:
+	e.g. export PATH=$PATH:/usr/lib/jvm/java-6-openjdk/bin
+
+Setting up the JAVA_HOME variable also helps the building script to find required files:
+	e.g. export JAVA_HOME=/usr/lib/jvm/java-6-openjdk
+
+
+c) Dependencies:
+I don't really like the idea of thousands of SHARED libraries which my project depends upon. It usually makes the project more difficult to pack and distribute, and it is especially uncomfortable for final users, which may have different versions of the required components installed in their systems. For that reason, Fobs building process has been design to use a local sandbox where all the 3rd party libraries required are built and stored. This can be easily accomplished by using the --prefix option of the "configure" scripts, necessary to build all of these libs (including ffmpeg libavcodec and libavformat). 
+
+IMPORTANT: I have experienced problems when globally available dynamic versions of some of the libraries were available in /usr/lib or /usr/local/lib. If you experience problems, try to make sure the compiler is not choosing those versions instead of the local sandbox versions.
+
+By default, the building script assumes that all dependencies are stored under:
+	$FOBS_ROOT/external
+
+Most of the times, using the following lines will be enough to get required libraries built and installed in our dependencies folder:
+
+	$./configure --prefix=$FOBS_ROOT/external --enable-shared=no
+	and then
+	$make
+	$make install
+
+The 'make install' command creates the necessary files in the subdirectories of the $FOBS_ROOT/external directory, including:
+	$FOBS_ROOT/external/lib
+	$FOBS_ROOT/external/lib/pkgconfig
+	$FOBS_ROOT/external/include
+
+This default location can be changed (see section 3), but the rest of this guide assumes this will be the prefix of all dependencies.
+
+
+c) Compile ffmpeg: (further instructions in section 4.7)
+The ffmpeg version included in the package needs to be unpacked. To unpack it, follow this steps:
+cd $FOBS_ROOT
+tar xvfj resources/current-ffmpeg.tar.bz2
+
+This creates the directory '$FOBS_ROOT/ffmpeg'. As a pre-step for Fobs compilation, the ffmpeg sources need to be compiled. Ffmpeg depends on many third party libraries, so the building process can be hard. This guide contains comprehensive information to get ffmpeg built without (too many) problems in section 4.
+
+You'll need to instruct ffmpeg to look for 3rd party libraries using the following parameters in the ./configure command:
+$./configure 	--prefix=$FOBS_ROOT/external --enable-shared=no [more options] 
+				--extra-ldflags=-L$FOBS_ROOT/external/lib --extra-cflags=-I$FOBS_ROOT/external/include
+
+Some additional files from ffmpeg are required to build fobs. Run the following commands from the ffmpeg sources root folder:
+cp libavformat/avi.h $FOBS_ROOT/external/include/libavformat/ 
+cp libavformat/riff.h $FOBS_ROOT/external/include/libavformat/
+mkdir $FOBS_ROOT/external/include/libswscale
+cp libswscale/swscale.h $FOBS_ROOT/external/include/libswscale/swscale.h
+
+
+
+
+
+3-BUILDING FOBS:
+
+Please note that Fobs won't compile if you have not built the ffmpeg package included. Please refer to section 4 to get more details. 
+
+Fobs is built running the building script "buildFobs.sh":
+cd $FOBS_ROOT
+./buildFobs.sh [OPTIONS]
+(options must not be preceded by '-')
+
+This script invokes python to run SCons. Built files are stored under $FOBS_ROOT/dist.
+
+3.1 - Cleaning:
+
+./buildFobs.sh clean	OR
+./buildFobs.sh -c
+
+3.2 - Options
+
+To get help on the available options, type:
+./buildFobs.sh --help
+
+Available options in the current release:
+FFMPEG_HOME=/path/to/dependencies (default '#external')
+FOBS4JMF=yes|no (default yes) - Build JMF PlugIn (if a jdk is present in the machine)
+OPTIMIZATIONS=yes|no (default yes) - Build Fobs using optimizations (-O3)
+DEBUG_SYMBOLS=yes|no (default no) - Build Fobs using debug information (-g)
+
+3.3 - Use examples:
+./buildFobs.sh FOBS4JMF=no DEBUG_SYMBOLS=yes (JMF plugin will not be built, source will be compiled with debug support)
+./buildFobs.sh FFMPEG_HOME=#dependencies (The script will look for dependencies in folder $FOBS_ROOT/dependencies. The '#' at the beginning is a special character for the SCons build environment, which denotes the root directory of the current source package, $FOBS_ROOT in our case)
+./buildFobs.sh FFMPEG_HOME=/path/to/dependencies (Same as above)
+
+
+
+
+
+
+4-COMPILING 3rd PARTY LIBRARIES TO IMPROVE FORMAT&CODEC SUPPORT
+
+Here are some tips for the compilation of 3rd party libraries that can be used to extend ffmpeg encoding/decoding/parsing capabilities. Each of the following subsections references a 3rd party library which can be used within the ffmpeg context. For each of these libraries, compilation advice is given for each different platform (when appropriate). 
+
+4.1-xvidcore-1.1.3: 
+ *ALL PLATFORMS: I normally remove the dynamic library (it always gets created) to avoid fobs4jmf depending on any shared library
+
+ *MACOSX: Trying to compile xvidcore in Macintel machines with asm enabled will lead to errors. Robert Swain has a very interesting article describing a workaround that allows to compile it with no errors and with full functionality. Three simple stages are enough:
+   1 - declare the following env var: $export LDFLAGS="-read_only_relocs suppress"
+   2 - Run the configure script: ./configure --enable-macosx_module --prefix=/home/username/Sources/fobs-src/resources
+   3 - edit the build/generic/platform.inc file so that it reads:
+		AS=nasm
+		AFLAGS=-I$(<D)/ -f macho -DPREFIX=_
+		ASSEMBLY_EXTENSION=asm
+	
+	Don't miss any of the steps as the procedure won't work!!
+
+ *MinGW: change "$minimum_nasm_patch_version" for "$nasm_patch" in line 4027 of the configure script
+
+4.2-x264:
+ *ALL PLATFORMS: The configure script of this package does NOT allow to specify a prefix parameter. You'll have to copy the library (libx264.a) and header (x264.h) file manually to the appropriate directory (resources/lib and resources/include).
+
+4.3-faad2-2.61:
+ *ALL PLATFORMS: 
+	./bootstrap &&
+	./configure --prefix=$FOBS_ROOT/external --enable-shared=no &&
+	make &&
+	make install
+
+ *MinGW: To build from the command line, go to WinFAAD2Inst/faad2/libfaad,
+ - First a small edit to common.h has to be performed.
+   on line 312 change:
+    #if defined(_WIN32) && !defined(__MINGW32__)
+    to:
+    #if defined(HAS_LRINTF)
+    #elif defined(_WIN32) && !defined(__MINGW32__)
+   and then run:
+    gcc -c -I"." -DDRM -DDRM_PS -DHAS_LRINTF -DHAVE_MEMCPY=1 -DHAVE_STRING_H=1 -mthreads -fexceptions -fexceptions -fexpensive-optimizations -march=pentium3 *.c
+    ar r libfaad.a *.o
+    ranlib libfaad.a 
+
+ - You'll have to copy following files to the resources dir:
+     WinFAAD2Inst/faad2/libfaad/libfaad.a -> resources/lib
+     WinFAAD2Inst/faad2/include/*.h        -> resources/include
+
+4.4-faac-1.26 :
+ *ALL PLATFORMS: 
+	./bootstrap &&
+	./configure --prefix=$FOBS_ROOT/external --enable-shared=no &&
+	make &&
+	make install
+ 
+ *MACOSX 10.4 (10.5 works fine): The makefile tries to link C++ using gcc at the end of the build process. You can manually create the file so that "make install" proceeds. Here is howto:
+	1) Copy the last gcc invokation which should look like:
+gcc -O2 -Wall -o faac main.o input.o  ../libfaac/.libs/libfaac.a ../common/mp4v2/.libs/libmp4v2.a -lm -lstdc++
+	2) change to the 'frontend/' directory:
+cd frontend/
+	3) Paste the line and change gcc for g++:
+g++ -O2 -Wall -o faac main.o input.o  ../libfaac/.libs/libfaac.a ../common/mp4v2/.libs/libmp4v2.a -lm -lstdc++
+
+ *MinGW:
+  To build from the command line, go to WinFAACInst/faac/libfaac or WinFAAC960Inst/faac/libfaac and run:
+    gcc -DDRM -mthreads -fexceptions -I../include -c *.c kiss_fft/*.c
+    ar r libfaac.a *.o kiss_fft/*.o
+    ranlib libfaac.a 
+
+  You'll have to copy following files to the resources dir:
+    WinFAAD2Inst/faac/libfaac/libfaac.a -> resources/lib
+    WinFAAD2Inst/faac/include/*.h       -> resources/include
+
+4.5-libvorbis-1.1.2 (also valid for v1.2.0):
+ *ALL PLATFORMS: Install this library after libogg. Remember to tell the configure script about the path of the ogg installation. That means you need to build and install libogg first and use the following command to configure libvorbis:
+	./configure --enable-shared=no --prefix=$FOBS_ROOT/external --with-ogg=$FOBS_ROOT/external
+
+4.6-libtheora-1.0beta3:
+ *ALL PLATFORMS: Install this library after libogg and libvorbis. Remember to tell the configure script about the path of the ogg installation. That means you need to build and install libogg first and use the following command to configure libvorbis:
+	./configure --enable-shared=no --prefix=$FOBS_ROOT/external --with-ogg=$FOBS_ROOT/external
+
+
+4.7-ffmpeg
+ *All Platforms: Configure. There are several options:
+
+	1)Configure:
+	-Non distributable: Uses non-free components, so cannot be redistributed freely.
+./configure --disable-shared --prefix=$FOBS_ROOT/external --enable-liba52 --enable-libamr-nb --enable-libamr-wb  --enable-libfaac --enable-libfaad --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --extra-cflags=-I$FOBS_ROOT/external/include --extra-ldflags=-L$FOBS_ROOT/external/lib  --enable-gpl --enable-nonfree
+
+	-GPL: Fobs binaries have been generated using this configuration. Excludes amr-nb and amr-wb.
+./configure --disable-shared --prefix=$FOBS_ROOT/external --enable-liba52   --enable-libfaac --enable-libfaad --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --extra-cflags=-I$FOBS_ROOT/external/include --extra-ldflags=-L$FOBS_ROOT/external/lib  --enable-gpl 
+
+	-LGPL: Most distributable version: excludes libxvid, libx264, libfaad, and liba52.
+./configure --disable-shared --prefix=$FOBS_ROOT/external    --enable-libfaac  --enable-libmp3lame --enable-libtheora --enable-libvorbis   --extra-cflags=-I$FOBS_ROOT/external/include --extra-ldflags=-L$FOBS_ROOT/external/lib  
+
+	*Linux: If is normally necessary to explecitely include ptrheads. Append " --enable-pthreads" to the end of the previous configure commands (without quotes)
+
+	 *MinGW: Append " --enable-memalign-hack" to the end of the previous configure commands (without quotes)
+
+	2) make [*MinGW: use "mingw32-make.exe" instead of "make"]
+	
+	3) make install [*MinGW: use "mingw32-make.exe" instead of "make"]
+	
+ 	4) Some additional files MUST be copied after make install:
+	4.1- cp libavformat/avi.h $FOBS_ROOT/external/include/libavformat/ 
+	4.2- cp libavformat/riff.h $FOBS_ROOT/external/include/libavformat/
+	4.3- mkdir $FOBS_ROOT/external/include/libswscale
+	4.4- cp libswscale/swscale.h $FOBS_ROOT/external/include/libswscale/swscale.h
+
+
+
+
+
+
+
+5 - Setting up the MinGW Environment to compile in Win32
+
+First and more important: DONT USE PATHS WITH SPACES!!! for your MinGW installation. The following components need to be installed:
+
+Packages that need to be installed:
+
+MinGW-5.1.4:
+	From: http://downloads.sourceforge.net/mingw/MinGW-5.1.4.exe
+	Remarks: INCLUDE G++ in the setup wizard!!
+	Install to: c:\mingw
+
+MSYS-1.0.10: 
+	From: http://downloads.sourceforge.net/mingw/MSYS-1.0.10.exe?modtime=1079444447&big_mirror=1
+	Remarks: Install after mingw. Write 'c:/mingw' when the install script asks you for the location of MinGW.
+	Install to: c:\msys\1.0
+
+MsysDTK-1.0.1:
+	From: http://downloads.sourceforge.net/mingw/msysDTK-1.0.1.exe
+	Install to: c:\msys\1.0
+
+nasm-2.0: Optional
+	From: http://downloads.sourceforge.net/nasm/nasm-2.00-win32.zip
+	Remarks: Install ONLY if you are willing to include support for libxvid asm routines.
+	Install to: Unzip and copy to c:\mingw\bin
+
+coreutils-5.97:
+	From: http://downloads.sourceforge.net/mingw/coreutils-5.97-MSYS-1.0.11-snapshot.tar.bz2
+	Remarks: Install to avoid problems with ffmpeg configure script
+	Install:
+		Copy bz2 file to c:\msys\1.0
+		Run Msys
+		Go to root folder: "cd /"
+		Uncompress "tar xvfj coreutils-5.97-MSYS-1.0.11-snapshot.tar.bz2"	
+		Copy files "cp coreutils-5.97/bin/* bin"
+		Remove files "rm -Rf coreutils-5.97"
+		Close Msys
+
+Bash-3.1:
+	From: http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2
+	Install:
+		Copy bz2 file to c:\msys\1.0
+		Run Msys
+		Go to root folder: "cd /" 
+		Type "tar xvfj bash*.bz2"	
+		Close Msys
+
+Python 2.5.2:
+	From: http://python.org/ftp/python/2.5.2/python-2.5.2.msi
+	Install to: c:\msys\python25
+
+OpenJDK-1.6_0.6:
+	From: http://java.sun.com/javase/downloads/index.jsp
+	Install: Setup path to jdk binaries:
+		1. Click Start > Control Panel > System on Windows XP or Start > Settings > Control Panel > System on Windows 2000.
+		2. Click Advanced > Environment Variables.
+		3. Add the location of bin folder of JDK installation for PATH in User Variables and System Variables. A typical value for PATH is: C:\Program Files\Java\jdk1.6.0_<version>\bin
+
+svn-1.4.5: Optional
+	From: http://subversion.tigris.org/files/documents/15/41686/svn-1.4.6-setup.exe
+	Remarks: Just install if you want to download the latest snapshot of ffmpeg (might not work with Fobs). Remember, compatibility is only grated for the ffmpeg distribution included in Fobs sources package.
+
+
+
+
+
+6 - Links to third party libraries:
+
+Download 3rd party libraries if you want Fobs to support them. These have to linked to ffmpeg.
+
+liba52-0.7.4 -> From http://liba52.sourceforge.net/files/a52dec-0.7.4.tar.gz
+libfaac-1.26 -> From http://downloads.sourceforge.net/faac/faac-1.26.tar.gz
+libfaad2-2.6.1->From http://downloads.sourceforge.net/faac/faad2-2.6.1.tar.gz
+	./bootstrap
+	./configure --prefix=/home/jsan/fobs-src/resources --enable-shared=no 
+	Edit file common\mp4ff\mp4ff_int_types.h and change the line
+		#if defined (_WIN32)
+	for
+		#if defined (FAKE_DEFINE)
+	make
+	make install
+libmp3lame-3.97->From http://downloads.sourceforge.net/lame/lame-3.97.tar.gz
+libogg-1.1.3 -> From http://downloads.xiph.org/releases/ogg/libogg-1.1.3.tar.gz
+libvorbis-1.2.0->From http://downloads.xiph.org/releases/vorbis/libvorbis-1.2.0.tar.gz
+libtheora-1.0b2->From http://downloads.xiph.org/releases/theora/libtheora-1.0beta2.tar.gz
+libx264 -> Latest snapshot from ftp://ftp.videolan.org/pub/videolan/x264/snapshots/
+libxvid-1.1.3 -> From http://downloads.xvid.org/downloads/xvidcore-1.1.3.tar.gz
+
+(These are the latest versions available when this file was written on 15/June/2008)
+
+Good Luck!

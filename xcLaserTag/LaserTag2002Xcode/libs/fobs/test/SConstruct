@@ -1,0 +1,6 @@
+Import('env_ffmpeg')
+
+env_ffmpeg.Program('#dist/test/decode','decode.cpp')
+env_ffmpeg.Program('#dist/test/transcoder','transcoder.cpp')
+env_ffmpeg.Program('#dist/test/reencoder','reencoder.cpp')
+env_ffmpeg.Program('#dist/test/decode_loop','decode_loop.cpp')

@@ -1,0 +1,65 @@
+import sys
+import os
+
+sys.path += [sys.path[0]+'/scripts']
+
+import fobs
+
+opts = Options('scripts/fobs.py')
+opts.Add('FFMPEG_HOME', 'Path of a fresh ffmpeg build')
+#opts.Add('JNI_H_PATH', 'Path of jni.h in your system')
+#opts.Add('JNI_MD_H_PATH', 'Path of jni_md.h in your system (Optional for MacosX, MinGW and Linux)')
+opts.Add('FOBS4JMF', 'Build Fobs4JMF plugin (yes|no)')
+#opts.Add('EXTERNAL_LIBS', 'Link fobs with external libraries (Useful when ffmpeg has been compiled with support for faad, faac, lib52a, etc). Comma separated list of lib names (without -l prefix).')
+#opts.Add('EXTERNAL_LIB_PATHS', 'Comma separated list of lib paths (without -L prefix).')
+#opts.Add('EXTERNAL_INC_PATHS', 'Comma separated list of include paths (without -I prefix).')
+opts.Add('OPTIMIZATIONS', 'Compile with optimizations (yes|no).')
+opts.Add('DEBUG_SYMBOLS', 'Compile with debug symbols (yes|no).')
+env = Environment(options = opts)
+Help(opts.GenerateHelpText(env))
+opts.Add('root','Unmutable variable')
+opts.Add('SYSTEM_ROOT','Unmutable variable')
+env = Environment(options = opts)
+
+
+
+if ARGUMENTS.has_key('FFMPEG_HOME'):
+	env['FFMPEG_HOME'] = ARGUMENTS['FFMPEG_HOME']
+
+if ARGUMENTS.has_key('JNI_H_PATH'):
+	env['JNI_H_PATH']=ARGUMENTS['JNI_H_PATH']
+
+if ARGUMENTS.has_key('JNI_MD_H_PATH'):
+	env['JNI_MD_H_PATH']=ARGUMENTS['JNI_MD_H_PATH']
+
+if ARGUMENTS.has_key('FOBS4JMF'):
+	env['FOBS4JMF']=ARGUMENTS['FOBS4JMF']
+
+if ARGUMENTS.has_key('EXTERNAL_LIBS'):
+   #When a single item list is provided, Split does not return a list
+   tmp = Split(ARGUMENTS['EXTERNAL_LIBS'].replace(',',' '))
+   if(type(tmp)==type([])):
+	   env['EXTERNAL_LIBS']=tmp
+   else:
+      env['EXTERNAL_LIBS']=[tmp]
+
+if ARGUMENTS.has_key('EXTERNAL_LIB_PATHS'):
+   tmp = Split(ARGUMENTS['EXTERNAL_LIB_PATHS'].replace(',',' '))   
+   if(type(tmp)==type([])):
+	   env['EXTERNAL_LIB_PATHS']=tmp
+   else:
+      env['EXTERNAL_LIB_PATHS']=[tmp]
+
+if ARGUMENTS.has_key('EXTERNAL_INC_PATHS'):
+   tmp = Split(ARGUMENTS['EXTERNAL_INC_PATHS'].replace(',',' '))
+   if(type(tmp)==type([])):
+	   env['EXTERNAL_INC_PATHS']=tmp
+   else:
+      env['EXTERNAL_INC_PATHS']=[tmp]
+
+env['root']=os.getcwd()
+
+if ARGUMENTS.has_key('SYSTEM_ROOT'):
+	env['SYSTEM_ROOT'] = ARGUMENTS['SYSTEM_ROOT']
+
+opts.Save('scripts/fobs.py',env)

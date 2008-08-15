@@ -1,0 +1,454 @@
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/data/settings/colors.xml ../pristine/LaserTag2002Xcode/app/LaserTag2002/data/settings/colors.xml
+	</COLOR9>							      |		</COLOR9 >								
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/app/appController.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/app/appController.cpp
+	fprintf(stderr, "%Value: %d\n", GUI.getI("USE_CAMERA" <
+	fprintf(stderr, "dat laser\n");			      <
+	fprintf(stderr, "after dat laser\n");		      <
+	fprintf(stderr, "before something crazy\n");	      <
+	fprintf(stderr, "after something crazy\n");	      <
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/app/appController.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/app/appController.h
+#endif							      /	#endif
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/app/baseGui.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/app/baseGui.h
+#endif							      /	#endif
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/app/guiSetting.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/app/guiSetting.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/app/guiSetting.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/app/guiSetting.h
+#endif							      /	#endif
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/app/guiSettingsManager.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/app/guiSettingsManager.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/app/guiSettingsManager.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/app/guiSettingsManager.h
+#endif							      /	#endif
+							      <
+Only in LaserTag2002Xcode/app/LaserTag2002/src: data
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataIn/coordWarping.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataIn/coordWarping.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataIn/coordWarping.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataIn/coordWarping.h
+#endif							      /	#endif
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataIn/hitZone.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataIn/hitZone.h
+#endif							      /	#endif
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataIn/laserTracking.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataIn/laserTracking.cpp
+	fprintf(stderr,"rabbit hole\n");		      <
+	fprintf(stderr,"why over here?\n");		      <
+	fprintf(stderr,"rabbit hole\n");		      <
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataIn/laserTracking.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataIn/laserTracking.h
+*/							      /	*/
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/baseBrush.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/baseBrush.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/basicVectorBrush.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/basicVectorBrush.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gestureBrush.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gestureBrush.cpp
+							      >									
+							      >									
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gestureBrush.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gestureBrush.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/angleStroke.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/angleStroke.cpp
+							      >									
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/angleStroke.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/angleStroke.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/maxStroke.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/maxStroke.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/maxStroke.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/maxStroke.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/ofVec3f.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/ofVec3f.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/ofVec3f.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/ofVec3f.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/strokeRenderer.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/strokeRenderer.cpp
+}							      /	}
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/strokeRenderer.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/strokeRenderer.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/swimmingMachine.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/swimmingMachine.cpp
+}							      /	}
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/swimmingMachine.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/swimmingMachine.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/swimStroke.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/gestureBrush/gmachines_uncurler/swimStroke.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/graffLetter.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/graffLetter.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/pngBrush.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/pngBrush.cpp
+							      |			
+							      >		diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/pngBrush.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/pngBrush.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/vectorBrush.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/vectorBrush.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/vectorBrush.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/brushes/vectorBrush.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/drips.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/drips.cpp
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+							      >
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/drips.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/drips.h
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+							      >									
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/imageProjection.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/imageProjection.h
+#endif							      /	#endif
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/laserSending.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/laserSending.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/laserSending.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/laserSending.h
+#include "UDPManager.h"							      |	#include "udpManager.h"								
+#endif							      /	#endif
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/dataOut/trackPlayer.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/dataOut/trackPlayer.h
+#endif							      /	#endif
+							      <
+Only in LaserTag2002Xcode/app/LaserTag2002/src: laserTag
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/main.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/main.cpp
+}							      /	}
+							      <
+Only in LaserTag2002Xcode/app/LaserTag2002/src: Makefile
+Only in LaserTag2002Xcode/app/LaserTag2002/src: output.txt
+Only in LaserTag2002Xcode/app/LaserTag2002/src: run.sh
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/testApp.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/testApp.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/testApp.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/testApp.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/utils/colorManager.cpp ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/utils/colorManager.cpp
+							      /		
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/utils/colorManager.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/utils/colorManager.h
+#endif							      /	#endif
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/app/LaserTag2002/src/utils/glBlendFunc.h ../pristine/LaserTag2002Xcode/app/LaserTag2002/src/utils/glBlendFunc.h
+} 							      /	} 
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/fmodex/inc/fmod_errors.h ../pristine/LaserTag2002Xcode/libs/fmodex/inc/fmod_errors.h
+        case FMOD_ERR_ALREADYLOCKED:          static char fAl |	        case FMOD_ERR_ALREADYLOCKED:          return "Tried t
+        case FMOD_ERR_BADCOMMAND:             static char fBa |	        case FMOD_ERR_BADCOMMAND:             return "Tried t
+        case FMOD_ERR_CDDA_DRIVERS:           static char fCD |	        case FMOD_ERR_CDDA_DRIVERS:           return "Neither
+        case FMOD_ERR_CDDA_INIT:              static char fCD |	        case FMOD_ERR_CDDA_INIT:              return "An erro
+        case FMOD_ERR_CDDA_INVALID_DEVICE:    static char fCD |	        case FMOD_ERR_CDDA_INVALID_DEVICE:    return "Couldn'
+        case FMOD_ERR_CDDA_NOAUDIO:           static char fCD |	        case FMOD_ERR_CDDA_NOAUDIO:           return "No audi
+        case FMOD_ERR_CDDA_NODEVICES:         static char fCD |	        case FMOD_ERR_CDDA_NODEVICES:         return "No CD/D
+        case FMOD_ERR_CDDA_NODISC:            static char fCD |	        case FMOD_ERR_CDDA_NODISC:            return "No disc
+        case FMOD_ERR_CDDA_READ:              static char fCD |	        case FMOD_ERR_CDDA_READ:              return "A CDDA 
+        case FMOD_ERR_CHANNEL_ALLOC:          static char fCh |	        case FMOD_ERR_CHANNEL_ALLOC:          return "Error t
+        case FMOD_ERR_CHANNEL_STOLEN:         static char fCh |	        case FMOD_ERR_CHANNEL_STOLEN:         return "The spe
+        case FMOD_ERR_COM:                    static char fCO |	        case FMOD_ERR_COM:                    return "A Win32
+        case FMOD_ERR_DMA:                    static char fDM |	        case FMOD_ERR_DMA:                    return "DMA Fai
+        case FMOD_ERR_DSP_CONNECTION:         static char fDS |	        case FMOD_ERR_DSP_CONNECTION:         return "DSP con
+        case FMOD_ERR_DSP_FORMAT:             static char fDS |	        case FMOD_ERR_DSP_FORMAT:             return "DSP For
+        case FMOD_ERR_DSP_NOTFOUND:           static char fDS |	        case FMOD_ERR_DSP_NOTFOUND:           return "DSP con
+        case FMOD_ERR_DSP_RUNNING:            static char fDS |	        case FMOD_ERR_DSP_RUNNING:            return "DSP err
+        case FMOD_ERR_DSP_TOOMANYCONNECTIONS: static char fDS |	        case FMOD_ERR_DSP_TOOMANYCONNECTIONS: return "DSP con
+        case FMOD_ERR_EVENT_FAILED:           static char fEv |	        case FMOD_ERR_EVENT_FAILED:           return "An Even
+        case FMOD_ERR_EVENT_INFOONLY:         static char fEv |	        case FMOD_ERR_EVENT_INFOONLY:         return "Can't e
+        case FMOD_ERR_EVENT_INTERNAL:         static char fEv |	        case FMOD_ERR_EVENT_INTERNAL:         return "An erro
+        case FMOD_ERR_EVENT_MAXSTREAMS:       static char fEv |	        case FMOD_ERR_EVENT_MAXSTREAMS:       return "Event f
+        case FMOD_ERR_EVENT_MISMATCH:         static char fEv |	        case FMOD_ERR_EVENT_MISMATCH:         return "FSB mis
+        case FMOD_ERR_EVENT_NAMECONFLICT:     static char fEv |	        case FMOD_ERR_EVENT_NAMECONFLICT:     return "A categ
+        case FMOD_ERR_EVENT_NOTFOUND:         static char fEv |	        case FMOD_ERR_EVENT_NOTFOUND:         return "The req
+        case FMOD_ERR_FILE_BAD:               static char fFi |	        case FMOD_ERR_FILE_BAD:               return "Error l
+        case FMOD_ERR_FILE_COULDNOTSEEK:      static char fFi |	        case FMOD_ERR_FILE_COULDNOTSEEK:      return "Couldn'
+        case FMOD_ERR_FILE_DISKEJECTED:       static char fFi |	        case FMOD_ERR_FILE_DISKEJECTED:       return "Media w
+        case FMOD_ERR_FILE_EOF:               static char fFi |	        case FMOD_ERR_FILE_EOF:               return "End of 
+        case FMOD_ERR_FILE_NOTFOUND:          static char fFi |	        case FMOD_ERR_FILE_NOTFOUND:          return "File no
+        case FMOD_ERR_FILE_UNWANTED:          static char fFi |	        case FMOD_ERR_FILE_UNWANTED:          return "Unwante
+        case FMOD_ERR_FORMAT:                 static char fFo |	        case FMOD_ERR_FORMAT:                 return "Unsuppo
+        case FMOD_ERR_HTTP:                   static char fHt |	        case FMOD_ERR_HTTP:                   return "A HTTP 
+        case FMOD_ERR_HTTP_ACCESS:            static char fHT |	        case FMOD_ERR_HTTP_ACCESS:            return "The spe
+        case FMOD_ERR_HTTP_PROXY_AUTH:        static char fHT |	        case FMOD_ERR_HTTP_PROXY_AUTH:        return "Proxy a
+        case FMOD_ERR_HTTP_SERVER_ERROR:      static char fHT |	        case FMOD_ERR_HTTP_SERVER_ERROR:      return "A HTTP 
+        case FMOD_ERR_HTTP_TIMEOUT:           static char fHT |	        case FMOD_ERR_HTTP_TIMEOUT:           return "The HTT
+        case FMOD_ERR_INITIALIZATION:         static char fIn |	        case FMOD_ERR_INITIALIZATION:         return "FMOD wa
+        case FMOD_ERR_INITIALIZED:            static char fIn |	        case FMOD_ERR_INITIALIZED:            return "Cannot 
+        case FMOD_ERR_INTERNAL:               static char fIn |	        case FMOD_ERR_INTERNAL:               return "An erro
+        case FMOD_ERR_INVALID_ADDRESS:        static char fIn |	        case FMOD_ERR_INVALID_ADDRESS:        return "On Xbox
+        case FMOD_ERR_INVALID_FLOAT:          static char fIn |	        case FMOD_ERR_INVALID_FLOAT:          return "Value p
+        case FMOD_ERR_INVALID_HANDLE:         static char fIn |	        case FMOD_ERR_INVALID_HANDLE:         return "An inva
+        case FMOD_ERR_INVALID_PARAM:          static char fIn |	        case FMOD_ERR_INVALID_PARAM:          return "An inva
+        case FMOD_ERR_INVALID_SPEAKER:        static char fIn |	        case FMOD_ERR_INVALID_SPEAKER:        return "An inva
+        case FMOD_ERR_INVALID_VECTOR:         static char fIn |	        case FMOD_ERR_INVALID_VECTOR:         return "The vec
+        case FMOD_ERR_IRX:                    static char fIR |	        case FMOD_ERR_IRX:                    return "PS2 onl
+        case FMOD_ERR_MAXAUDIBLE:             static char fMa |	        case FMOD_ERR_MAXAUDIBLE:             return "Reached
+        case FMOD_ERR_MEMORY:                 static char fMe |	        case FMOD_ERR_MEMORY:                 return "Not eno
+        case FMOD_ERR_MEMORY_CANTPOINT:       static char fMe |	        case FMOD_ERR_MEMORY_CANTPOINT:       return "Can't u
+        case FMOD_ERR_MEMORY_IOP:             static char fMe |	        case FMOD_ERR_MEMORY_IOP:             return "PS2 onl
+        case FMOD_ERR_MEMORY_SRAM:            static char fMe |	        case FMOD_ERR_MEMORY_SRAM:            return "Not eno
+        case FMOD_ERR_NEEDS2D:                static char fNe |	        case FMOD_ERR_NEEDS2D:                return "Tried t
+        case FMOD_ERR_NEEDS3D:                static char fNe |	        case FMOD_ERR_NEEDS3D:                return "Tried t
+        case FMOD_ERR_NEEDSHARDWARE:          static char fNe |	        case FMOD_ERR_NEEDSHARDWARE:          return "Tried t
+        case FMOD_ERR_NEEDSSOFTWARE:          static char fNe |	        case FMOD_ERR_NEEDSSOFTWARE:          return "Tried t
+        case FMOD_ERR_NET_CONNECT:            static char fNe |	        case FMOD_ERR_NET_CONNECT:            return "Couldn'
+        case FMOD_ERR_NET_SOCKET_ERROR:       static char fNe |	        case FMOD_ERR_NET_SOCKET_ERROR:       return "A socke
+        case FMOD_ERR_NET_URL:                static char fNe |	        case FMOD_ERR_NET_URL:                return "The spe
+        case FMOD_ERR_NET_WOULD_BLOCK:        static char fNe |	        case FMOD_ERR_NET_WOULD_BLOCK:        return "Operati
+        case FMOD_ERR_NOTREADY:               static char fNo |	        case FMOD_ERR_NOTREADY:               return "Operati
+        case FMOD_ERR_OUTPUT_ALLOCATED:       static char fOu |	        case FMOD_ERR_OUTPUT_ALLOCATED:       return "Error i
+        case FMOD_ERR_OUTPUT_CREATEBUFFER:    static char fOu |	        case FMOD_ERR_OUTPUT_CREATEBUFFER:    return "Error c
+        case FMOD_ERR_OUTPUT_DRIVERCALL:      static char fOu |	        case FMOD_ERR_OUTPUT_DRIVERCALL:      return "A call 
+        case FMOD_ERR_OUTPUT_FORMAT:          static char fOu |	        case FMOD_ERR_OUTPUT_FORMAT:          return "Soundca
+        case FMOD_ERR_OUTPUT_INIT:            static char fOu |	        case FMOD_ERR_OUTPUT_INIT:            return "Error i
+        case FMOD_ERR_OUTPUT_NOHARDWARE:      static char fOu |	        case FMOD_ERR_OUTPUT_NOHARDWARE:      return "FMOD_HA
+        case FMOD_ERR_OUTPUT_NOSOFTWARE:      static char fOu |	        case FMOD_ERR_OUTPUT_NOSOFTWARE:      return "Attempt
+        case FMOD_ERR_PAN:                    static char fPa |	        case FMOD_ERR_PAN:                    return "Panning
+        case FMOD_ERR_PLUGIN:                 static char fPl |	        case FMOD_ERR_PLUGIN:                 return "An unsp
+        case FMOD_ERR_PLUGIN_INSTANCES:       static char fPl |	        case FMOD_ERR_PLUGIN_INSTANCES:       return "The num
+        case FMOD_ERR_PLUGIN_MISSING:         static char fPl |	        case FMOD_ERR_PLUGIN_MISSING:         return "A reque
+        case FMOD_ERR_PLUGIN_RESOURCE:        static char fPl |	        case FMOD_ERR_PLUGIN_RESOURCE:        return "A resou
+        case FMOD_ERR_RECORD:                 static char fRe |	        case FMOD_ERR_RECORD:                 return "An erro
+        case FMOD_ERR_REVERB_INSTANCE:        static char fRe |	        case FMOD_ERR_REVERB_INSTANCE:        return "Specifi
+        case FMOD_ERR_SUBSOUNDS:              static char fSu |	        case FMOD_ERR_SUBSOUNDS:              return "The err
+        case FMOD_ERR_SUBSOUND_ALLOCATED:     static char fSu |	        case FMOD_ERR_SUBSOUND_ALLOCATED:     return "This su
+        case FMOD_ERR_TAGNOTFOUND:            static char fTa |	        case FMOD_ERR_TAGNOTFOUND:            return "The spe
+        case FMOD_ERR_TOOMANYCHANNELS:        static char fTo |	        case FMOD_ERR_TOOMANYCHANNELS:        return "The sou
+        case FMOD_ERR_UNIMPLEMENTED:          static char fun |	        case FMOD_ERR_UNIMPLEMENTED:          return "Somethi
+        case FMOD_ERR_UNINITIALIZED:          static char fun |	        case FMOD_ERR_UNINITIALIZED:          return "This co
+        case FMOD_ERR_UNSUPPORTED:            static char fun |	        case FMOD_ERR_UNSUPPORTED:            return "A comma
+        case FMOD_ERR_UPDATE:                 static char fUp |	        case FMOD_ERR_UPDATE:                 return "An erro
+        case FMOD_ERR_VERSION:                static char fVe |	        case FMOD_ERR_VERSION:                return "The ver
+        case FMOD_OK:                         static char fOk |	        case FMOD_OK:                         return "No erro
+        default :                             static char fDe |	        default :                             return "Unknown
+Only in LaserTag2002Xcode/libs/fmodex/inc: test.c
+Only in LaserTag2002Xcode/libs/fmodex/lib: libfmodexp.so
+Only in LaserTag2002Xcode/libs/fmodex/lib: libfmodexp.so.4.16.04
+Only in LaserTag2002Xcode/libs/fmodex/lib: libfmodex.so
+Only in LaserTag2002Xcode/libs/fmodex/lib: libfmodex.so.4.16.04
+Only in LaserTag2002Xcode/libs: fobs
+Only in ../pristine/LaserTag2002Xcode/libs/freeimage/lib: freeimage.a
+Only in LaserTag2002Xcode/libs/freeimage/lib: freeimage.a.original
+Only in LaserTag2002Xcode/libs/freeimage/lib: libfreeimage.a
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/GLee/GLee.c ../pristine/LaserTag2002Xcode/libs/GLee/GLee.c
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/GLee/GLee.h ../pristine/LaserTag2002Xcode/libs/GLee/GLee.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/communication/ofTCPClient.cpp ../pristine/LaserTag2002Xcode/libs/ofAddons/communication/ofTCPClient.cpp
+							      >									
+							      >									
+							      >									
+							      >									
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/communication/ofTCPClient.h ../pristine/LaserTag2002Xcode/libs/ofAddons/communication/ofTCPClient.h
+							      >									
+							      >									
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/communication/ofTCPServer.cpp ../pristine/LaserTag2002Xcode/libs/ofAddons/communication/ofTCPServer.cpp
+							      >										
+							      >									
+							      >									
+							      >									
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/communication/ofTCPServer.h ../pristine/LaserTag2002Xcode/libs/ofAddons/communication/ofTCPServer.h
+							      >									
+							      >									
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvColorImage.cpp ../pristine/LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvColorImage.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvColorImage.h ../pristine/LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvColorImage.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvConstants.h ../pristine/LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvConstants.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvContourFinder.h ../pristine/LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvContourFinder.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvGrayscaleImage.cpp ../pristine/LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvGrayscaleImage.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvGrayscaleImage.h ../pristine/LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvGrayscaleImage.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvMain.h ../pristine/LaserTag2002Xcode/libs/ofAddons/computerVision/ofCvMain.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/graphics/ofTextureAdv.cpp ../pristine/LaserTag2002Xcode/libs/ofAddons/graphics/ofTextureAdv.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/graphics/ofTextureAdv.h ../pristine/LaserTag2002Xcode/libs/ofAddons/graphics/ofTextureAdv.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/ofAddons.h ../pristine/LaserTag2002Xcode/libs/ofAddons/ofAddons.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofDirList.cpp ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofDirList.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofDirList.h ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofDirList.h
+#endif							      /	#endif
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofThread.cpp ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofThread.cpp
+	#ifdef TARGET_LINUX				      |		#ifdef TARGET_OSX
+	#ifdef TARGET_LINUX				      |		#ifdef TARGET_OSX
+	#ifdef TARGET_LINUX				      |		#ifdef TARGET_OSX
+		#ifdef TARGET_LINUX			      |			#ifdef TARGET_OSX
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofThread.h ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofThread.h
+#ifdef TARGET_LINUX					      |	#ifdef TARGET_OSX
+		#ifdef TARGET_LINUX			      |			#ifdef TARGET_OSX
+	#ifdef TARGET_LINUX				      |		#ifdef TARGET_OSX
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofVectorMath/ofMatrix3x3.h ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofVectorMath/ofMatrix3x3.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofVectorMath/ofVec2f.h ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofVectorMath/ofVec2f.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofVectorMath/ofVec3f.h ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofVectorMath/ofVec3f.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofVectorMath/ofVec4f.h ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofVectorMath/ofVec4f.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofVectorMath/ofVectorMath.h ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofVectorMath/ofVectorMath.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofXML.cpp ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofXML.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofXML.h ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofXML.h
+#endif							      /	#endif
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofXMLSettings.cpp ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofXMLSettings.cpp
+							      >
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/ofAddons/utils/ofXMLSettings.h ../pristine/LaserTag2002Xcode/libs/ofAddons/utils/ofXMLSettings.h
+#endif							      /	#endif
+							      <
+Only in LaserTag2002Xcode/libs/openCV/lib: laserTag
+Only in LaserTag2002Xcode/libs/openCV/lib: libcv.so
+Only in LaserTag2002Xcode/libs/openCV/lib: libcv.so.1
+Only in LaserTag2002Xcode/libs/openCV/lib: libcv.so.1.0.0
+Only in LaserTag2002Xcode/libs/openCV/lib: libcxcore.la
+Only in LaserTag2002Xcode/libs/openCV/lib: libcxcore.lai
+Only in LaserTag2002Xcode/libs/openCV/lib: libcxcore.so
+Only in LaserTag2002Xcode/libs/openCV/lib: libcxcore.so.1
+Only in LaserTag2002Xcode/libs/openCV/lib: libcxcore.so.1.0.0
+Only in LaserTag2002Xcode/libs/openCV/lib: output.txt
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/app/ofAppGlutGlue.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/app/ofAppGlutGlue.h
+fprintf(stderr, "idle_cb\n");				      |
+fprintf(stderr, "idle_cb--farther\n");			      <
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/app/ofAppRunner.cpp ../pristine/LaserTag2002Xcode/libs/openFrameworks/app/ofAppRunner.cpp
+							      <
+							      >
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/app/ofAppRunner.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/app/ofAppRunner.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/app/ofSimpleApp.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/app/ofSimpleApp.h
+							      >
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/communication/ofSerial.cpp ../pristine/LaserTag2002Xcode/libs/openFrameworks/communication/ofSerial.cpp
+							      >
+							      >
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/communication/ofSerial.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/communication/ofSerial.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/graphics/ofGraphics.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/graphics/ofGraphics.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/graphics/ofImage.cpp ../pristine/LaserTag2002Xcode/libs/openFrameworks/graphics/ofImage.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/graphics/ofImage.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/graphics/ofImage.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/graphics/ofTexture.cpp ../pristine/LaserTag2002Xcode/libs/openFrameworks/graphics/ofTexture.cpp
+							      >
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/graphics/ofTexture.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/graphics/ofTexture.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/graphics/ofTrueTypeFont.cpp ../pristine/LaserTag2002Xcode/libs/openFrameworks/graphics/ofTrueTypeFont.cpp
+							      >
+							      >
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/ofCore.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/ofCore.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/sound/ofSoundPlayer.cpp ../pristine/LaserTag2002Xcode/libs/openFrameworks/sound/ofSoundPlayer.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/sound/ofSoundPlayer.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/sound/ofSoundPlayer.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/sound/ofSoundStream.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/sound/ofSoundStream.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/utils/ofConstants.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/utils/ofConstants.h
+	//#define TARGET_OSX				      <
+/*#ifdef TARGET_LINUX					      |	#ifdef TARGET_LINUX
+*/							      <
+#define OF_VIDEO_PLAYER_FOBS				      <
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/utils/ofMath.cpp ../pristine/LaserTag2002Xcode/libs/openFrameworks/utils/ofMath.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/utils/ofMath.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/utils/ofMath.h
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/utils/ofUtils.cpp ../pristine/LaserTag2002Xcode/libs/openFrameworks/utils/ofUtils.cpp
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/utils/ofUtils.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/utils/ofUtils.h
+							      >
+Only in ../pristine/LaserTag2002Xcode/libs/openFrameworks/video: ofQtUtils.cpp
+Only in LaserTag2002Xcode/libs/openFrameworks/video: ofQtUtils.cpp.ignore
+Only in ../pristine/LaserTag2002Xcode/libs/openFrameworks/video: ofQtUtils.h
+Only in LaserTag2002Xcode/libs/openFrameworks/video: ofQtUtils.h.ignore
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/video/ofVideoGrabber.cpp ../pristine/LaserTag2002Xcode/libs/openFrameworks/video/ofVideoGrabber.cpp
+fprintf(stderr, "got inside grabber\n");		      |
+fprintf(stderr,"linux land\n");				      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/video/ofVideoPlayer.cpp ../pristine/LaserTag2002Xcode/libs/openFrameworks/video/ofVideoPlayer.cpp
+							      >
+							      >
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/openFrameworks/video/ofVideoPlayer.h ../pristine/LaserTag2002Xcode/libs/openFrameworks/video/ofVideoPlayer.h
+							      >
+							      >
+							      >
+							      >
+							      >
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/tcpUdpManager/TCPManager.h ../pristine/LaserTag2002Xcode/libs/tcpUdpManager/TCPManager.h
+	#include <arpa/inet.h>				      <
+							      >		#include <arpa/inet.h>			
+							      >		#include <sys/timeb.h>
+	#include <sys/timeb.h>				      <
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/tcpUdpManager/UDPManager.cpp ../pristine/LaserTag2002Xcode/libs/tcpUdpManager/UDPManager.cpp
+		BOOL val = true;			      |			BOOL val = TRUE;
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/tcpUdpManager/UDPManager.h ../pristine/LaserTag2002Xcode/libs/tcpUdpManager/UDPManager.h
+	//#define SO_MAX_MSG_SIZE TCP_MAXSEG		      |		#define SO_MAX_MSG_SIZE TCP_MAXSEG
+	#define SO_MAX_MSG_SIZE 0			      <
+							      <
+diff -r -y --suppress-common-lines LaserTag2002Xcode/libs/xml/tinyxmlerror.cpp ../pristine/LaserTag2002Xcode/libs/xml/tinyxmlerror.cpp
+							      <

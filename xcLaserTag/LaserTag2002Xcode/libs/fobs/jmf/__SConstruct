@@ -1,0 +1,58 @@
+import os
+import sys
+import fobs
+ffmpeg_path=fobs.FFMPEG_HOME
+jni_path=fobs.JNI_H_PATH
+jni_md_path=fobs.JNI_MD_H_PATH
+
+env = Environment()
+ffmpeg_lib_deps = ['avformat', 'avcodec', 'avutil'] + fobs.EXTERNAL_LIBS
+
+if env['PLATFORM'] == 'posix':
+	ffmpeg_lib_deps += ['dl']
+elif env['PLATFORM'] == 'win32':
+	env = Environment(tools=['mingw'],CCFLAGS=['-DHAVE_AV_CONFIG_H'])
+	env.Prepend(LINKFLAGS = ['-shared', '-D_JNI_IMPLEMENTATION_', '-Wl,--kill-at']);
+else:
+   ffmpeg_lib_deps += ['z']
+
+
+env.Append(CPPPATH=[ffmpeg_path,ffmpeg_path+'/include/ffmpeg', ffmpeg_path+'/libavcodec', ffmpeg_path+'/libavformat', ffmpeg_path+'/libswscale', ffmpeg_path+'/libavutil',jni_path,jni_md_path,jni_path+'/win32', jni_path+'/linux','#src/cppapi']+fobs.EXTERNAL_INC_PATHS)
+env.Append(LIBPATH=[ffmpeg_path+'/lib',ffmpeg_path+'/libavcodec', ffmpeg_path+'/libavformat',ffmpeg_path+'/libavutil', '#lib']+fobs.EXTERNAL_LIB_PATHS)
+
+
+if fobs.DEBUG_SYMBOLS == 'yes':
+    env.Append(LINKFLAGS=['-g'])
+    env.Append(CCFLAGS=['-g'])
+if fobs.OPTIMIZATIONS == 'yes':
+    env.Append(LINKFLAGS=['-O3'])
+    env.Append(CCFLAGS=['-O3'])
+
+
+if sys.platform == 'darwin':
+	env['SHLINKFLAGS'] = '$LINKFLAGS -dynamiclib -read_only_relocs warning -single_module' 
+	env['SHLIBSUFFIX'] = '.jnilib' 
+#	env.Append(CCFLAGS=['-falign-loops=16', '-faltivec'])
+#	env.Append(CCFLAGS=['-D', '__STDC_CONSTANT_MACROS'])
+
+
+env.Append(LIBS=['fobs']+ffmpeg_lib_deps)
+env.Append(LINKFLAGS=['-dynamic'])
+if env['PLATFORM'] == 'win32':
+	env.Program('#lib/fobs4jmf/fobs4jmf.dll',Split('decoder.cpp stand_alone_codec.cpp'))
+else:
+	env.SharedLibrary('#lib/fobs4jmf/fobs4jmf',Split('decoder.cpp stand_alone_codec.cpp'))
+
+#Create Fobs4Jmf Jar file
+envjava = Environment(tools = ['javac', 'jar'])
+envjava['ENV']['PATH'] = os.environ['PATH']
+if env['PLATFORM'] == 'win32':
+    envjava.Java(target = '#lib/fobs4jmf/classes', source = 'com', JAVACFLAGS=['-classpath', 'resources/jmf.jar;resources/jogl.jar;resources/junit.jar','-target','1.4.2','-source','1.4'])
+else:
+    envjava.Java(target = '#lib/fobs4jmf/classes', source = 'com', JAVACFLAGS=['-classpath', 'resources/jmf.jar:resources/jogl.jar:resources/junit.jar','-target','1.4.2','-source','1.4'])
+envjava['JARCHDIR'] = 'lib/fobs4jmf/classes'
+envjava.Jar(target = '#lib/fobs4jmf/fobs4jmf.jar', source = '#lib/fobs4jmf/classes')
+
+#install other resources
+Install('#lib/fobs4jmf', '#resources/jmf.properties')
+Install('#lib/fobs4jmf', '#resources/jmf.jar')

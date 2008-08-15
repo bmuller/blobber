@@ -1,0 +1,14 @@
+prefix=/home/zenko/Internets/xcLaserTag/LaserTag2002Xcode/libs/fobs//external
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavdevice
+Description: FFmpeg device handling library
+Version: 52.0.0
+Requires: libavformat = 52.16.0
+Requires.private: 
+Conflicts:
+Libs: -L${libdir} -lavdevice -lz -pthread -lm -ldl -ldl
+Libs.private: 
+Cflags: -I${includedir}

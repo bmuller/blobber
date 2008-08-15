@@ -1,0 +1,134 @@
+file /home/zenko/Internets/xcLaserTag/LaserTag2002Xcode/libs/fobs/SConstruct,line 36:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for C++ header file stdint.h... 
+scons: Configure: ".sconf_temp/conftest_0.cpp" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_0.cpp <-
+  |  |
+  |  |#include <stdint.h>
+  |  |
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_0.o" is up to date.
+scons: Configure: The original builder output was:
+  |g++ -o .sconf_temp/conftest_0.o -c -pthread -D__STDC_CONSTANT_MACROS= -Dattribute_deprecated= -Iexternal/include .sconf_temp/conftest_0.cpp
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: Checking for C header file libavcodec/avcodec.h... 
+scons: Configure: ".sconf_temp/conftest_1.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_1.c <-
+  |  |
+  |  |#include "libavcodec/avcodec.h"
+  |  |
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_1.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_1.o -c -pthread -D__STDC_CONSTANT_MACROS= -Dattribute_deprecated= -Iexternal/include .sconf_temp/conftest_1.c
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: Checking for C header file libavformat/avformat.h... 
+scons: Configure: ".sconf_temp/conftest_2.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_2.c <-
+  |  |
+  |  |#include "libavformat/avformat.h"
+  |  |
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_2.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_2.o -c -pthread -D__STDC_CONSTANT_MACROS= -Dattribute_deprecated= -Iexternal/include .sconf_temp/conftest_2.c
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: Checking for C header file libavformat/avi.h... 
+scons: Configure: ".sconf_temp/conftest_3.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_3.c <-
+  |  |
+  |  |#include "libavformat/avi.h"
+  |  |
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_3.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_3.o -c -pthread -D__STDC_CONSTANT_MACROS= -Dattribute_deprecated= -Iexternal/include .sconf_temp/conftest_3.c
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: Checking for C header file libavformat/riff.h... 
+scons: Configure: ".sconf_temp/conftest_4.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_4.c <-
+  |  |
+  |  |#include "libavformat/riff.h"
+  |  |
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_4.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_4.o -c -pthread -D__STDC_CONSTANT_MACROS= -Dattribute_deprecated= -Iexternal/include .sconf_temp/conftest_4.c
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: Checking for C header file libswscale/swscale.h... 
+scons: Configure: ".sconf_temp/conftest_5.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_5.c <-
+  |  |
+  |  |#include "libswscale/swscale.h"
+  |  |
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_5.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_5.o -c -pthread -D__STDC_CONSTANT_MACROS= -Dattribute_deprecated= -Iexternal/include .sconf_temp/conftest_5.c
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: Checking for C header file inttypes.h... 
+scons: Configure: ".sconf_temp/conftest_6.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_6.c <-
+  |  |
+  |  |#include "inttypes.h"
+  |  |
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_6.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_6.o -c -pthread -D__STDC_CONSTANT_MACROS= -Dattribute_deprecated= -Iexternal/include .sconf_temp/conftest_6.c
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: Checking for C type int64_t... 
+scons: Configure: ".sconf_temp/conftest_7.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_7.c <-
+  |  |
+  |  |
+  |  |#include <inttypes.h>
+  |  |
+  |  |int main() {
+  |  |  if ((int64_t *) 0)
+  |  |    return 0;
+  |  |  if (sizeof (int64_t))
+  |  |    return 0;
+  |  |}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_7.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_7.o -c -pthread -D__STDC_CONSTANT_MACROS= -Dattribute_deprecated= -Iexternal/include .sconf_temp/conftest_7.c
+  |
+scons: Configure: ".sconf_temp/conftest_7" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_7 -pthread .sconf_temp/conftest_7.o -Lexternal/lib -lavformat -lavcodec -lz -lm -ldl -lavutil
+  |
+scons: Configure: (cached) yes
+
+

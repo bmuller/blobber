@@ -1,0 +1,40 @@
+Import('env_ffmpeg')
+
+
+env_ffmpeg.Library('#dist/lib/fobscore',Split('PacketBuffer.cpp Decoder.cpp Encoder.cpp Transcoder.cpp Error.cpp'))
+env_ffmpeg.Install('#dist/include', Split('PacketBuffer.h Decoder.h Encoder.h Transcoder.h Error.h common.h'))
+
+env_ffmpeg.Append(LIBPATH='#dist/lib')
+env_ffmpeg.Append(CPPPATH='#dist/include')
+env_ffmpeg.Prepend(LIBS='fobscore')
+
+Return('env_ffmpeg')
+
+# if env['PLATFORM'] == 'posix':
+# 	ffmpeg_lib_deps += ['dl','pthread'] #,z
+# elif env['PLATFORM'] == 'win32':
+# 	env = Environment(tools=['mingw'])
+# else:
+#    ffmpeg_lib_deps += ['z']
+# 
+# env.Append(CPPPATH=[ffmpeg_path,ffmpeg_path+'/include/ffmpeg', ffmpeg_path+'/libavcodec', ffmpeg_path+'/libavformat', ffmpeg_path+'/libswscale', ffmpeg_path+'/libavutil']+fobs.EXTERNAL_INC_PATHS)
+# env.Append(LIBPATH=[ffmpeg_path+'/lib',ffmpeg_path+'/libavcodec', ffmpeg_path+'/libavformat', ffmpeg_path+'/libavutil', '#lib']+fobs.EXTERNAL_LIB_PATHS)
+# 
+# 
+# if fobs.DEBUG_SYMBOLS == 'yes':
+#     env.Append(LINKFLAGS=['-g'])
+#     env.Append(CCFLAGS=['-g'])
+# if fobs.OPTIMIZATIONS == 'yes':
+#     env.Append(LINKFLAGS=['-O3'])
+#     env.Append(CCFLAGS=['-O3'])
+# 
+# if sys.platform == 'darwin':
+# 	env['SHLINKFLAGS'] = '$LINKFLAGS -dynamiclib -read_only_relocs warning -single_module' 
+# 	env.Append(CCFLAGS=['-D', '__STDC_CONSTANT_MACROS'])
+# 
+# env.Library('#lib/fobs',Split('PacketBuffer.cpp Decoder.cpp Encoder.cpp Transcoder.cpp Error.cpp'))
+# #env.SharedLibrary('#lib/fobsdyn', Split('PacketBuffer.o Decoder.o Encoder.o Transcoder.o Error.o'), LIBS=['fobs']+ffmpeg_lib_deps)
+# env.Install('#lib', Split('Decoder.h Encoder.h Transcoder.h Error.h common.h'))
+# env.Program('#lib/samples/test','test.cpp', LIBS=['fobs']+ffmpeg_lib_deps)
+# env.Program('#lib/samples/tc','tc.cpp', LIBS=['fobs']+ffmpeg_lib_deps)
+# env.Program('#lib/samples/reencoder','reencoder.cpp', LIBS=['fobs']+ffmpeg_lib_deps)

@@ -1,0 +1,57 @@
+FOBS 0.4.2 README
+-----------------
+
+This Fobs version has been built successfully using:
+- ffmpeg (SVN revision 13764)
+- scons 0.98.5
+
+
+Unless otherwise specified, all files and software in this package are subject to the LPGL License Version 2.1 and copyright is owned by Omnividea Multimedia S.L. See the accompanying file COPYING.
+
+For the most current version of fobs see:
+
+   http://fobs.sourceforge.net
+
+
+
+1-DESCRIPTION
+----------------------
+FOBS is a set of object oriented wrappers upon the libavcodec set of libraries to work with multimedia files. It is released under the LGPL license. Further information (installation and build instructions) can be found at the official page of this project (http://fobs.sourceforge.net).
+
+
+* FOBS are Ffmpeg OBjectS. It is a set of object oriented APIs to deal with media. It relies in the ffmpeg library, but provides developers with a much simpler programming interface. It enables developers to build easily object oriented applications that work with MultiMedia files in multiplatform environments (Linux, MacOS X, and Win32(MinGW) are officially supported).
+
+FOBS i available for the following programming languages: 
+- C++
+- Java: Java support is implemented as a JMF plugin.  .
+
+
+* Simplify your media applications
+
+Libavcodec provides a powerful solution to deal with media files in your applications. However, the C API offered by this library has a steep learning curve for the developer. Fobs relies in libavcodec but provides a more convenient programming paradigm, based on higher level concepts (such as 'decoder', 'frame', etc.) in opposition to libavcodec ('packet', 'stream', etc.). This new paradigm is object oriented, and the API is much simpler and clearer.
+
+*Fobs4JMF
+
+JMF, The Java Media Framework, provides a common API to work with multimedia content. Unfortunately, JMF lacks support for the most commonly used formats and features quite low performance (multimedia codecs are java-based).
+
+Fobs features java support as a JMF plugin, Fobs4JMF. Fobs4JMF provides "native" support for encoding and decoding a myriad of multimedia codecs and formats (ogg, theora, xvid, h264, etc). More importantly, Fobs4JMF get transparently used by JMF, so JMF-based applications can take advantage of native-speed decoding of multimedia files. 
+
+Open your .xvid, .ogg, etc. files with JMStudio or add support for more formats to your already coded JMF application without changing a line of code. The Fobs JMF PlugIn takes care of it all. 
+
+ 
+2-BUILDING FOBS
+--------------------------
+Up to date building instructions can be found in the file "INSTALL", included in the root folder of the sources package.
+
+
+3-KNOWN ISSUES
+--------------------------
+There seems to be problems with the compatibility of JMStudio in J2SE 1.5 and above under GNU/Linux. This is not a Fobs issue but an UI incompatibility introduced with the new version of the JVM. The only functional workaround to this issue is using the following argument when invoking java command:
+-Dawt.toolkit=sun.awt.motif.MToolkit  (e.g. java -Dawt.toolkit=sun.awt.motif.MToolkit -cp jmf.jar JMStudio)
+
+UPDATE: This issue seems to have disappeared in the latest release openjdk-1.6. 
+
+Thanks to Andy Bailey for this tip!
+
+
+

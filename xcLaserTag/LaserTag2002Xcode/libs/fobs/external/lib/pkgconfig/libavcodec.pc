@@ -1,0 +1,14 @@
+prefix=/home/zenko/Internets/xcLaserTag/LaserTag2002Xcode/libs/fobs//external
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavcodec
+Description: FFmpeg codec library
+Version: 51.57.2
+Requires: libavutil = 49.7.0
+Requires.private: 
+Conflicts:
+Libs: -L${libdir} -lavcodec -lz -pthread -lm -ldl -ldl
+Libs.private: 
+Cflags: -I${includedir}

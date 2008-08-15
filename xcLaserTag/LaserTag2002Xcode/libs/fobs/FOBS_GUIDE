@@ -1,0 +1,82 @@
+FOBS_GUIDE - 0.4.2 - Easy steps for Fobs compilation and use
+------------------------------------------------------------
+
+Fobs relies in a wide number of libraries, but many of them are optional. In this guide, we cover the most simple build scenario for Fobs (section 1) and provide examples of its use (section 2).
+
+
+1 - FOBS COMPILATION:
+
+The easiest way to compile Fobs is to use an ffmpeg build with no support for external libraries. Though some codecs will be left out of the compatibility list, most of them will still be usable. 
+
+First of all you need appropriate build support installed in your operating system. Follow the instructions of section 2-A and 2-B of the INSTALL file to ensure you can start with the procedure.
+
+We will assume that Fobs sources have been unpacked in the folder:
+/path/to/fobs/sources
+
+For simplicity, we will define the following env variable:
+export FOBS_ROOT=/path/to/fobs/sources
+
+1.1 - Building ffmpeg:
+
+> cd $FOBS_ROOT
+> tar xvfj resources/current-ffmpeg.tar.bz2
+> cd ffmpeg
+
+Configure depending on your system:
+* MacOSX:
+> ./configure --disable-shared --prefix=$FOBS_ROOT/external
+
+* Linux:
+> ./configure --disable-shared --prefix=$FOBS_ROOT/external --enable-pthreads
+
+* MinGW:
+> ./configure --disable-shared --prefix=$FOBS_ROOT/external --enable-memalign-hack
+
+Run 'make':
+> make
+> make install
+
+Manually install additional required files:
+> cp libavformat/avi.h $FOBS_ROOT/external/include/libavformat/ 
+> cp libavformat/riff.h $FOBS_ROOT/external/include/libavformat/
+> mkdir $FOBS_ROOT/external/include/libswscale
+> cp libswscale/swscale.h $FOBS_ROOT/external/include/libswscale/swscale.h
+
+1.2 - Building Fobs:
+> cd $FOBS_ROOT
+Run the build script:
+> ./buildFobs.sh FFMPEG_HOME=#external FOBS4JMF=yes OPTIMIZATION=yes DEBUG_SYMBOLS=no
+
+Fobs binaries will be placed in the '$FOOB_ROOT/dist' folder.
+
+
+2 - FOBS USAGE:
+
+2.1 - FOBS4JMF:
+Fobs is a programming library, and, as such, cannot be tested as a final user application. The most straightforward way to test Fobs capabilities is via the JMF plugin, Fobs4JMF. All the necessary files are copied into $FOBS_ROOT/dist/jmf during the build process.
+> cd $FOBS_ROOT/dist/jmf
+
+It is convenient to update LD_LIBRARY_PATH to include the plugin folder, so the native library can be found:
+> export LD_LIBRARY_PATH=$FOBS_ROOT/dist/jmf (Linux)
+> export DYLD_LIBRARY_PATH=$FOBS_ROOT/dist/jmf (MacOSX)
+
+The Java Media Framework is included in this folder (jmf.jar). JMF includes a java-based Multimedia player called JMStudio. To run JMStudio we type the following command:
+> java -cp jmf.jar JMStudio
+
+If we run JMStudio like this, the Fobs4JMF plugin is not loaded. If we want to include the plugin in the execution we use the following command:
+> java -cp fobs4jmf.jar:jmf.jar JMStudio
+
+Different command line output indicates the presence of Fobs4JMF in the system. A short audio sample, in .ogg format, is also included in the folder. We can test how Fobs4JMF allows to handle additional formats using some online available videos:
+>java -cp jmf.jar JMStudio "http://nasa.ibiblio.org/video/NASAKidsScienceNews/mpeg4/NASAKSN-HowDoSpaceShuttlesBlastOff.mp4"
+(Returns error: Cannot find a suitable player)
+
+>java -cp fobs4jmf.jar:jmf.jar JMStudio "http://nasa.ibiblio.org/video/NASAKidsScienceNews/mpeg4/NASAKSN-HowDoSpaceShuttlesBlastOff.mp4"
+(After caching the file locally, the video starts playing)
+
+2.2 - C++ Tests:
+The folder $FOBS_ROOT/dist/test includes four simple example applications, focusing on describing the use of the library in different scenarios (decoding, encoding and transcoding):
+- decode [-snap] input_filename: Decoder class use example. Decodes a multimedia file and shows characteristics and some decoding stats.
+
+- reencode input_filename output_filename: Encoder class use example. Reencodes a video file with the following output parameters: Video-> frame_size=300x300, bitrate=600bps, codec=mpeg4; Audio-> sample_rate=22050, bitrate=32bps, codec=mp3 stream.
+
+- transcode input_filename output_filename: Transcoder class use example. Transcode a video file into AVI format (video and audio codecs remain unchanged).

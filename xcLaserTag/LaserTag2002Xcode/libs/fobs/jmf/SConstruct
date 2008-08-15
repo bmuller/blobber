@@ -1,0 +1,22 @@
+Import('env_ffmpeg')
+
+env = env_ffmpeg.Clone()
+
+if env['PLATFORM'] == 'darwin':
+	env.Append(SHLINKFLAGS=['-read_only_relocs', 'suppress','-single_module'])
+	env['SHLIBSUFFIX'] = '.jnilib'
+
+if env['PLATFORM'] == 'win32':
+	env.Prepend(LINKFLAGS = ['-D_JNI_IMPLEMENTATION_', '-Wl,--kill-at']);
+
+env.SharedLibrary('#dist/jmf/fobs4jmf',Split('decoder.cpp stand_alone_codec.cpp'))
+
+
+env.Append(JAVACLASSPATH=['resources/jmf.jar','resources/jogl.jar','resources/junit.jar'])
+env.Append(JAVACFLAGS=['-target','1.4.2','-source','1.4'])
+
+fobs4jmf_classes=env.Java(target='#dist/jmf/classes',source='com')
+env['JARCHDIR']='#dist/jmf/classes'
+env.Jar(target='#dist/jmf/fobs4jmf.jar',source='#dist/jmf/classes')
+
+env.Install('#dist/jmf',Split('#resources/jmf.jar #resources/jogl.jar #resources/junit.jar #resources/jmf.properties'))
