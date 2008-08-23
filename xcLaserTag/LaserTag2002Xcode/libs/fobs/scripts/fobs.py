@@ -1,6 +1,0 @@
-FFMPEG_HOME = '#external'
-FOBS4JMF = 'yes'
-OPTIMIZATIONS = 'yes'
-DEBUG_SYMBOLS = 'no'
-root = '/home/zenko/Internets/xcLaserTag/LaserTag2002Xcode/libs/fobs'
-SYSTEM_ROOT = '/'
