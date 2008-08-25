@@ -3,7 +3,7 @@
 using namespace std;
 
 FrameGrabber::FrameGrabber(string dev) : cur_frame(-1) {
-  fd = open(dev.c_str(), O_RDONLY);
+  fd = open(dev.c_str(), O_RDWR); //O_RDONLY);
   if (fd == -1 ) {
     cerr << "open video device failed" << endl;
   }
@@ -35,6 +35,10 @@ FrameGrabber::FrameGrabber(string dev) : cur_frame(-1) {
     cerr << "warning: cannot get tuner info (not present?)";
   }
 
+  if(ioctl(fd, VIDIOCGWIN, &window) < 0) {
+    cerr << "fg_open(): set default window attrs failed" << endl;
+  }
+
   // Set default window to max size
   window.x = 0;
   window.y = 0;
@@ -49,7 +53,10 @@ FrameGrabber::FrameGrabber(string dev) : cur_frame(-1) {
     cerr << "fg_open(): set default window attrs failed" << endl;
   }
 
+
   // Set default picture attributes (50%)
+  // these following attrs made the fps very very small
+  /*
   picture.brightness = US50PC;
   picture.hue        = US50PC;
   picture.colour     = US50PC;
@@ -57,6 +64,17 @@ FrameGrabber::FrameGrabber(string dev) : cur_frame(-1) {
   picture.whiteness  = US50PC;
   picture.depth      = 32;
   picture.palette    = VIDEO_PALETTE_RGB32;
+  */
+
+  picture.brightness = 16384;
+  picture.hue        = 0;
+  picture.colour     = 0;
+  picture.contrast   = 8192;
+  picture.whiteness  = 0;
+  picture.depth      = 32;
+  picture.palette    = VIDEO_PALETTE_RGB32;
+  //picture.depth      = 24;
+  //picture.palette    = VIDEO_PALETTE_RGB24;
 
   if (ioctl(fd, VIDIOCSPICT, &picture) < 0 ) {
     cerr << "set picture attributes failed" << endl;

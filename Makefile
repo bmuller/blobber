@@ -8,3 +8,5 @@ utils:
 	g++ utils.cpp -o utils.o -c
 clean:
 	rm *.o test
+gtk: frame framegrabber utils
+	g++ gtktest.cpp frame.o framegrabber.o utils.o -o gtktest `pkg-config gtkmm-2.4 --cflags --libs`

@@ -22,6 +22,7 @@ public:
     default:
       cerr << "Unsupported frame format: " << frame->format << endl;
     }
+    cout << "bpp is " << bpp << endl;
   };
   ~CamScreen() { delete frame; delete fg; };
   void update() { fg->grabFrame(frame); };
@@ -58,21 +59,23 @@ int main( int argc, char* argv[] ) {
 
   SDL_Event event;
   int running = 1;
+  int iter = 0;
   while( running ) {
-    while ( SDL_PollEvent(&event) ) {
-      if ( event.type == SDL_QUIT ) 
-	running = 0;     
-      if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE )
-	running = 0;
+    //while( SDL_PollEvent(&event) ) {
 
-      cs.update();
-      if (SDL_BlitSurface( cs.image, NULL, cs.screen, NULL ) < 0 ) {
-	cerr << "Cannot blit!" << SDL_GetError() << endl;
-	return 1;
-      }
-      SDL_UpdateRect( cs.screen, 0, 0, 0, 0 );
+    if ( event.type == SDL_QUIT ) 
+      running = 0;     
+    if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE )
+      running = 0;
+
+    cs.update();
+    if (SDL_BlitSurface( cs.image, NULL, cs.screen, NULL ) < 0 ) {
+      cerr << "Cannot blit!" << SDL_GetError() << endl;
+      return 1;
     }
-  }
+
+    SDL_UpdateRect( cs.screen, 0, 0, 0, 0 );
+      }
 
   return 0;
 }
