@@ -1,4 +1,4 @@
-#include "nerdtag.h"
+#include "blobber.h"
 
 using namespace std;
 
@@ -34,7 +34,7 @@ int Frame::getSize() {
 
     default:
       // Unsupported!                                                                                                 
-      fprintf( stderr, "frame_get_size(): Unsupported type!\n" );
+      throw UnsupportedFrameFormatException("Unsupported frame type.");
       size = -1;
   }
   return size;

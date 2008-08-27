@@ -1,27 +1,17 @@
-#include "nerdtag.h"
+#include "blobber.h"
 
 using namespace std;
 
-class OptionsWindow : public Gtk::Window {
-public:
-  OptionsWindow() { 
-    Camarea area("/dev/video0");
-    resize(area.width, area.height+50);
-    add(area);
-    exitButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::exit) );
-    show_all_children();
-  };
+OptionsWindow::OptionsWindow() : exitButton("Exit"), area("/dev/video0"), table(2, 15) { 
+  resize(area.width, area.height+50);   
+  exitButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::exit) );
 
-  void exit() {
-    cout << "exit!\n";
-  };
-protected:
-  Gtk::Button exitButton;
+  add(table);
+  table.attach(area, 0, 2, 0, 14);
+  table.attach(exitButton, 0, 1, 14, 15, Gtk::EXPAND, Gtk::EXPAND); 
+  show_all_children();
 };
 
-int main(int argc, char** argv) {
-  Gtk::Main kit(argc, argv);
-  OptionsWindow win;
-  Gtk::Main::run(win);
-  return 0;
-}
+void OptionsWindow::exit() {
+  hide();
+};
