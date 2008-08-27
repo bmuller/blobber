@@ -21,11 +21,15 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 
+#include <gtkmm/main.h>
+#include <gtkmm/window.h>
+#include <gtkmm/drawingarea.h>
+#include <cairomm/cairomm.h>
+#include <glib.h>
+
 #include "types.h"
 #include "utils.h"
 #include "frame.h"
 #include "framegrabber.h"
-
-
 
 

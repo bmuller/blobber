@@ -1,14 +1,12 @@
-main: frame framegrabber utils
-	g++ test.cpp frame.o framegrabber.o utils.o -o test -lSDL
+main: projection frame framegrabber utils
+	g++ options_window.cpp projection.o frame.o framegrabber.o utils.o -o nerdtag `pkg-config gtkmm-2.4 --cflags --libs`
 frame:
-	g++ frame.cpp -o frame.o -c
+	g++ frame.cpp -o frame.o -c `pkg-config gtkmm-2.4 --cflags` 
 framegrabber:
-	g++ framegrabber.cpp -o framegrabber.o -c
+	g++ framegrabber.cpp -o framegrabber.o -c `pkg-config gtkmm-2.4 --cflags`
 utils:
-	g++ utils.cpp -o utils.o -c
+	g++ utils.cpp -o utils.o -c `pkg-config gtkmm-2.4 --cflags`
 clean:
 	rm *.o test
-gtk: frame framegrabber utils
-	g++ gtktest.cpp frame.o framegrabber.o utils.o -o gtktest `pkg-config gtkmm-2.4 --cflags --libs`
-projection: 
-	g++ projection.cpp -o projection `pkg-config gtkmm-2.4 --cflags --libs`
+projection: frame framegrabber utils
+	g++ projection.cpp -o projection.o -c `pkg-config gtkmm-2.4 --cflags`
