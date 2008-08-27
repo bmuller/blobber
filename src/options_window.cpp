@@ -1,18 +1,11 @@
-#include <gtkmm/main.h>
-#include <gtkmm/window.h>
-#include <gtkmm/drawingarea.h>
-#include <cairomm/cairomm.h>
-#include <iostream>
-#include <glib.h>
 #include "nerdtag.h"
 
 using namespace std;
 
 class OptionsWindow : public Gtk::Window {
-  Gtk::Button exitButton;
-  
+public:
   OptionsWindow() { 
-    Projection area;
+    Camarea area("/dev/video0");
     resize(area.width, area.height+50);
     add(area);
     exitButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::exit) );
@@ -22,6 +15,8 @@ class OptionsWindow : public Gtk::Window {
   void exit() {
     cout << "exit!\n";
   };
+protected:
+  Gtk::Button exitButton;
 };
 
 int main(int argc, char** argv) {
