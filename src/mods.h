@@ -9,4 +9,6 @@ class LaserTag : public ModInterface {
  public:
   LaserTag() : ModInterface("LaserTag") {};
   void update(Camarea &area, ProjectionWindow &pw);
+ protected:
+  vector<int> points;
 };
