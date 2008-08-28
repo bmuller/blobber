@@ -3,7 +3,7 @@
 using namespace std;
 
 Camarea::Camarea(string _device) : device(_device), hascam(true) {
-  add_events( Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
+  add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
   try {
     fg = new FrameGrabber(device);
     frame = fg->makeFrame();
@@ -14,7 +14,6 @@ Camarea::Camarea(string _device) : device(_device), hascam(true) {
     width = 352;
     height = 288;    
   }
-  Glib::signal_idle().connect(sigc::mem_fun(*this, &Camarea::update));
 };
 
 void Camarea::set_device(string _device) { 
@@ -35,13 +34,16 @@ bool Camarea::on_button_release_event(GdkEventButton* event) {
   cout << "release x: " << event->x << " y: " << event->y << endl; 
 };
 
-bool Camarea::update() {
+void Camarea::update_frame() {
+  if(hascam)
+    fg->grabFrame(frame); 
+};
+
+void Camarea::update_screen() {
   Glib::RefPtr<Gdk::Window> window = get_window();
   if(window) {
     Cairo::RefPtr<Cairo::Context> context = get_window()->create_cairo_context();
-    Cairo::RefPtr< Cairo::ImageSurface > surface;
     if(hascam) {
-      fg->grabFrame(frame); 
       surface = Cairo::ImageSurface::create((unsigned char *) frame->data, Cairo::FORMAT_RGB24, frame->width, frame->height, fg->window.width * 4); 
     } else {
       surface = Cairo::ImageSurface::create_from_png("nocam.png");
@@ -50,9 +52,6 @@ bool Camarea::update() {
     context->rectangle (0.0, 0.0, width, height);
     context->clip();
     context->paint(); 
-    return true;
-  } else {
-    return false;
   }
 };
 

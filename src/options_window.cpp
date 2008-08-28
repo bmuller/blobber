@@ -2,7 +2,7 @@
 
 using namespace std;
 
-OptionsWindow::OptionsWindow() : exitButton("Exit"), area("/dev/video0"), table(2, 15) { 
+OptionsWindow::OptionsWindow(string device) : exitButton("Exit"), area(device), table(2, 15) { 
   resize(area.width, area.height+50);   
   exitButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::exit) );
 
