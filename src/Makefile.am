@@ -1,8 +1,9 @@
-INCLUDES = ${SQLITE3_CFLAGS} ${MYSQL_CFLAGS} ${POSTGRESQL_CFLAGS}
-AM_LDFLAGS = ${SQLITE3_LDFLAGS} ${MYSQL_LDFLAGS} ${POSTGRESQL_LDFLAGS}
+ACLOCAL_AMFLAGS=-I ${top_srcdir}/acinclude.d/
+
+INCLUDES = ${GTK_CFLAGS}
+AM_LDFLAGS = ${GTK_LIBS}
 
 bin_PROGRAMS = blobber
 
-HEADERDIR = ../stactiverecord
-blobber_SOURCES = db_test.cpp
-# blobber_LDFLAGS = -lstactiverecord -L$(HEADERDIR)/.libs
+blobber_SOURCES = blobber.cpp camarea.cpp frame.cpp framegrabber.cpp options_window.cpp \
+	projection_window.cpp utils.cpp mods/laser_tag.cpp

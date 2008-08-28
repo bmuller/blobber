@@ -1,9 +1,3 @@
-#define DEBUG 1
-
-// Percentage of a ushort
-#define USHORT_PERCENT(n)    ((n)*65535/100)
-#define US50PC                 USHORT_PERCENT(50)
-
 #include <gtkmm.h>
 #include <cairomm/cairomm.h>
 #include <glib.h>
@@ -24,6 +18,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 
+#include "config.h"
 #include "exception.h"
 #include "types.h"
 #include "utils.h"
