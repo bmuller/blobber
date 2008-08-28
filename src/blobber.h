@@ -10,6 +10,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 #include <linux/fs.h>
 #include <linux/kernel.h>

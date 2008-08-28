@@ -3,6 +3,7 @@
 using namespace std;
 
 void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
+  return;
   unsigned int * data = (unsigned int *) area.frame->data;
   /*
   int location = area.frame->width * area.frame->height / 2;

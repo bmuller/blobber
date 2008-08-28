@@ -1,7 +1,7 @@
 class ModInterface {
  public:
   string name;
-  ModInterface(string n) : name(n) {};
+  ModInterface(string n) : name(n) { debug("Module \"" + n + "\" just created"); };
   virtual void update(Camarea &area, ProjectionWindow &pw) = 0;
 };
 

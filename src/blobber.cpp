@@ -6,7 +6,7 @@ private:
   ProjectionWindow proj;
   vector<ModInterface*> mods;
 public:
-  Blopper() : win("/dev/video0") {
+  Blopper(string device) : win(device) {
     proj.set_transient_for(win);
     proj.show();
     Glib::signal_idle().connect(sigc::mem_fun(*this, &Blopper::on_idle));
@@ -20,7 +20,8 @@ public:
     }
   };
 
-  bool add_mod(ModInterface * mi) {
+  void add_mod(ModInterface * mi) {
+    debug("Module " + mi->name + " loaded...");
     mods.push_back(mi);
   };
 
@@ -35,13 +36,14 @@ public:
 
   void run() {
     Gtk::Main::run(win);
+    debug("finished running");
   };
 };
 
 
 int main(int argc, char** argv) {
   Gtk::Main kit(argc, argv);
-  Blopper b;
+  Blopper b("/dev/video0");
   LaserTag *lt = new LaserTag();
   b.add_mod(lt);
   b.run();
