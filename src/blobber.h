@@ -14,7 +14,7 @@
 
 #include <linux/fs.h>
 #include <linux/kernel.h>
-#include <linux/videodev.h>
+#include <linux/videodev2.h>
 
 #include <sys/mman.h>
 #include <sys/ioctl.h>
@@ -29,3 +29,5 @@
 #include "camarea.h"
 #include "options_window.h"
 #include "mods.h"
+
+#define CLEAR(x) memset (&(x), 0, sizeof (x))

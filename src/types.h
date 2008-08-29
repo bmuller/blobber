@@ -7,3 +7,8 @@ typedef struct {
 } FRAME;
 
 enum COLOR { RED, BLACK, GREEN, BLUE };
+
+struct buffer {
+  void *                  start;
+  size_t                  length;
+};

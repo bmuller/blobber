@@ -2,78 +2,71 @@
 
 using namespace std;
 
-FrameGrabber::FrameGrabber(string dev) : cur_frame(-1) {
-  fd = open(dev.c_str(), O_RDONLY);
+FrameGrabber::FrameGrabber(string dev) : n_buffers(0) {
+  fd = open(dev.c_str(), O_RDWR | O_NONBLOCK, 0);
   if (fd == -1 ) 
     throw NoSuchVideoDeviceException("open video device \"" + dev + "\" failed");
   
-  // For n-ary buffering
-  cur_frame = -1;
-
   // Get the device capabilities
-  if( ioctl(fd, VIDIOCGCAP, &caps) < 0 ) 
+  if(xioctl(fd, VIDIOC_QUERYCAP, &caps) < 0 ) 
     throw CameraReadException("query capabilities failed");
-  debug("Found camera: " + string(caps.name));
+  debug("Found camera: " + string(caps.card));
 
-  // Read info for all input sources
-  source = 0;
-  for (int i = 0; i < caps.channels; i++ ) {
-    video_channel vc;
-    ioctl(fd, VIDIOCGCHAN, &vc );
-    sources.push_back(vc);
-    debug("Found video source: " + string(vc.name));
+  if(!(cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)) 
+    throw CameraReadException(dev + " is not a video capture device");
+
+  CLEAR(fmt);
+
+  fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB32;
+  fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
+
+  if (xioctl(fd, VIDIOC_S_FMT, &fmt) < 0)
+    throw CameraReadException("Error setting format");
+
+  CLEAR(req);
+
+  req.count               = 4;
+  req.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  req.memory              = V4L2_MEMORY_MMAP;
+  if (xioctl(fd, VIDIOC_REQBUFS, &req) < 0)
+    throw CameraReadException("Device does not support memory mapping");
+
+  if (req.count < 2) 
+    throw CameraReadException("Insufficient memory");
+
+  buffers = calloc(req.count, sizeof (*buffers));
+  
+  for (n_buffers = 0; n_buffers < req.count; ++n_buffers) {
+    struct v4l2_buffer buf;
+    CLEAR (buf);
+    buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory      = V4L2_MEMORY_MMAP;
+    buf.index       = n_buffers;
+
+    if (xioctl(fd, VIDIOC_QUERYBUF, &buf) < 0)
+      throw CameraReadException("Error reading video buffer");
+
+    buffers[n_buffers].length = buf.length;
+    buffers[n_buffers].start = mmap (NULL, buf.length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
+    if (MAP_FAILED == buffers[n_buffers].start)
+      throw CameraReadException("mmap buffer not mmapped");
   }
 
-  // Don't really care about tuning capabilities
-  if(VID_TYPE_TUNER) debug("Your video device can be tuned");
-  // Read info about tuner
-  tuner.tuner = 0;
-  if ((caps.type & VID_TYPE_TUNER ) && ioctl(fd, VIDIOCGTUNER, &tuner) < 0 ) {
-    cerr << "warning: cannot get tuner info (not present?)";
+  for (i = 0; i < n_buffers; ++i) {
+    struct v4l2_buffer buf;
+    CLEAR (buf);
+    buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory      = V4L2_MEMORY_MMAP;
+    buf.index       = i;
+    if (xioctl(fd, VIDIOC_QBUF, &buf) < 0)
+      throw CameraReadException("Error reading video buffer");
   }
+  enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  if (xioctl(fd, VIDIOC_STREAMON, &type) < 0)
+    throw CameraReadException("Error starting video stream");
 
-  if(ioctl(fd, VIDIOCGWIN, &window) < 0) 
-    throw NoSuchVideoDeviceException("set default window attrs failed");
-
-  // Set default window to max size
-  window.x = 0;
-  window.y = 0;
-  window.width = caps.maxwidth;
-  window.height = caps.maxheight;
-  window.chromakey = 0;
-  window.flags = 0;
-  window.clips = NULL;
-  window.clipcount = 0;
-
-  if(ioctl(fd, VIDIOCSWIN, &window) < 0) 
-    throw CameraReadException("set default window attrs failed");
-
-  picture.brightness = 16384;
-  picture.hue        = 0;
-  picture.colour     = 0;
-  picture.contrast   = 8192;
-  picture.whiteness  = 0;
-  picture.depth      = 32;
-  picture.palette    = VIDEO_PALETTE_RGB32;
-  //picture.depth      = 24;
-  //picture.palette    = VIDEO_PALETTE_RGB24;
-
-  if (ioctl(fd, VIDIOCSPICT, &picture) < 0 ) 
-    throw CameraReadException("set picture attributes failed");
-
-  // Get frame buffer info
-  if ( ioctl(fd, VIDIOCGFBUF, &fbuffer) < 0 ) 
-    throw CameraReadException("get framebuffer failed");
-
-  // Get the memory buffer info
-  if ( ioctl(fd, VIDIOCGMBUF, &mbuf) < 0 ) 
-    throw CameraReadException("get memory buffer failed");
-
-  // Memory map the video buffer
-  mb_map = mmap(0, mbuf.size, PROT_READ, MAP_SHARED, fd, 0);
-
-  if ( mb_map == MAP_FAILED )
-    throw CameraReadException("mmap buffer not mmapped");
+  current_buffer = NULL;
 };
 
 FrameGrabber::~FrameGrabber() {
@@ -86,45 +79,18 @@ Frame * FrameGrabber::makeFrame() {
 };
 
 void FrameGrabber::grabFrame(Frame *frame) {
-  int capture_frame = cur_frame + 1;
+  //here
+  struct v4l2_buffer buf;
+  CLEAR (buf);
 
-  // Very first time only
-  if (mbuf.frames > 1 && cur_frame == -1 ) {
-    cur_frame = 1;
+  buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  buf.memory = V4L2_MEMORY_MMAP;
 
-    // Set up capture parameters
-    vmmap.format = picture.palette;
-    vmmap.frame  = cur_frame;
-    vmmap.width  = window.width;
-    vmmap.height = window.height;
+  if (xioctl(fd, VIDIOC_DQBUF, &buf) < 0)
+    throw CameraReadException("Error queuing buffer");
 
-    // Start capture
-    if (ioctl(fd, VIDIOCMCAPTURE, &vmmap) < 0 ) 
-      throw CameraReadException("failed to capture frame");
-  }
+  process_image (buffers[buf.index].start);
 
-  // Start capturing next frame
-  // Wrap counter
-  if ( capture_frame >= mbuf.frames )
-    capture_frame = 0;
-
-  // Set up capture parameters
-  vmmap.format = picture.palette;
-  vmmap.frame  = capture_frame;
-  vmmap.width  = window.width;
-  vmmap.height = window.height;
-
-  // Start capture
-  if (ioctl(fd, VIDIOCMCAPTURE, &vmmap) < 0)
-    throw CameraReadException("failed to capture frame");
-
-  // Wait for end of frame
-  if (ioctl(fd, VIDIOCSYNC, &cur_frame) < 0 ) 
-    throw CameraReadException("failed to sync frame");
-
-  // Save video buffer into our own memory
-  memcpy(frame->data, ((char *) mb_map + mbuf.offsets[cur_frame]), frame->getSize());
-  
-  // Move along to the next one
-  cur_frame = capture_frame;
+  if (xioctl(fd, VIDIOC_QBUF, &buf) < 0)
+    throw CameraReadException("Error dequeuing buffer");
 };
