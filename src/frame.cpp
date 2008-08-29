@@ -1,62 +1,6 @@
 #include "blobber.h"
 
-using namespace std;
-
-int Frame::getSize() {
-  int pixels = width * height;
-  int size = 0;
-
-  switch ( format ) {
-    case VIDEO_PALETTE_RGB24:
-      // 3 bytes per pixel                                                                                            
-      size = pixels * 3;
-      break;
-
-    case VIDEO_PALETTE_RGB32:
-      // 4 bytes (1 int) per pixel                                                                                    
-      size = pixels * 4;
-      break;
-
-    case VIDEO_PALETTE_RGB565:
-      // 2 bytes (16 bits) per pixel                                                                                  
-      size = pixels * 2;
-      break;
-
-    case VIDEO_PALETTE_RGB555:
-      // 2 bytes (15 bits) per pixel                                                                                  
-      size = pixels * 2;
-      break;
-
-    case VIDEO_PALETTE_YUV422:
-      // 1 byte (8 bits) per pixel                                                                                    
-      size = pixels;
-      break;
-
-    default:
-      // Unsupported!                                                                                                 
-      throw UnsupportedFrameFormatException("Unsupported frame type.");
-      size = -1;
-  }
-  return size;
+Frame::Frame(int w, int h, int bpl, int si) : width(w), height(h), bytesperline(bpl), sizeimage(si) {
+  data = malloc(sizeimage); 
 };
 
-void Frame::allocateBuffer() {
-  data = malloc(getSize());
-  switch (format) {
-  case VIDEO_PALETTE_RGB24:
-    debug("supported format found VIDEO_PALETTE_RGB24");
-    break;
-  case VIDEO_PALETTE_RGB32:
-    debug("supported format found VIDEO_PALETTE_RGB32");
-    break;
-  case VIDEO_PALETTE_RGB565:
-    debug("supported format found VIDEO_PALETTE_RGB565");
-    break;
-  case VIDEO_PALETTE_RGB555:
-    debug("supported format found VIDEO_PALETTE_RGB555");
-    break;
-  case VIDEO_PALETTE_YUV422:
-    debug("supported format found VIDEO_PALETTE_YUV422");
-    break;
-  }
-};

@@ -51,7 +51,7 @@ void Camarea::update_screen() {
   if(window) {
     Cairo::RefPtr<Cairo::Context> context = get_window()->create_cairo_context();
     if(hascam) {
-      surface = Cairo::ImageSurface::create((unsigned char *) frame->data, Cairo::FORMAT_RGB24, frame->width, frame->height, fg->window.width * 4); 
+      surface = Cairo::ImageSurface::create((unsigned char *) frame->data, Cairo::FORMAT_RGB24, frame->width, frame->height, frame->bytesperline); 
     } else {
       surface = Cairo::ImageSurface::create_from_png("nocam.png");
     }

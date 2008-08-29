@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include <gtkmm.h>
 #include <cairomm/cairomm.h>
 #include <glib.h>
@@ -14,12 +16,19 @@
 
 #include <linux/fs.h>
 #include <linux/kernel.h>
+#include <linux/types.h>
+
+#ifdef HAVE_V4L1
+#include <linux/videodev.h>
+#endif
+
+#ifdef HAVE_V4L2
 #include <linux/videodev2.h>
+#endif
 
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 
-#include "config.h"
 #include "exception.h"
 #include "types.h"
 #include "utils.h"
