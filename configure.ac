@@ -36,6 +36,10 @@ PKG_CHECK_MODULES([GTK],[gtkmm-2.4 >= 2.8.0],,[
  AC_MSG_ERROR([No GTK C++ library found (version 2.8.0 or higher). You can get one from http://www.gtkmm.org])
 ])
 
+#AC_CHECK_HEADER([linux/videodev2.h], [], [
+# AC_MSG_ERROR([Could not find v4l2 header file - this likely means your kernel wasn't compiled with v4l2 support.  See http://linuxtv.org/v4lwiki/index.php/Main_Page for more info.])
+#])
+
 AC_CONFIG_FILES([
  Makefile
  src/Makefile
