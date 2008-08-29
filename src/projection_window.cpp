@@ -2,7 +2,8 @@
 
 using namespace std;
 
-ProjectionWindow::ProjectionWindow() {
+ProjectionWindow::ProjectionWindow(int cw, int ch) : cam_width(cw), cam_height(ch) {
+  resize(cam_width, cam_height);
 };
 
 bool ProjectionWindow::on_expose_event(GdkEventExpose* event) {
@@ -18,4 +19,11 @@ bool ProjectionWindow::on_expose_event(GdkEventExpose* event) {
   return true;
 };
 
+void ProjectionWindow::draw_line(int source_x, int source_y, int sink_x, int sink_y, COLOR c) {
+
+};
+
+void ProjectionWindow::draw_point(int x, int y, COLOR c) {
+
+};
 

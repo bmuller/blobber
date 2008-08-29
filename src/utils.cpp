@@ -14,3 +14,4 @@ void debug(string msg) {
   cout.flush();
 #endif
 };
+

@@ -15,6 +15,7 @@ class FrameGrabber {
   void*                   mb_map;     ///< Memory-mapped buffer                           
   struct video_mmap       vmmap;      ///< Memory-mapped info   
   FrameGrabber(string dev);
+  ~FrameGrabber();
   Frame * makeFrame();
   void grabFrame(Frame *frame);
 };

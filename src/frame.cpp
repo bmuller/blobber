@@ -42,4 +42,21 @@ int Frame::getSize() {
 
 void Frame::allocateBuffer() {
   data = malloc(getSize());
+  switch (format) {
+  case VIDEO_PALETTE_RGB24:
+    debug("supported format found VIDEO_PALETTE_RGB24");
+    break;
+  case VIDEO_PALETTE_RGB32:
+    debug("supported format found VIDEO_PALETTE_RGB32");
+    break;
+  case VIDEO_PALETTE_RGB565:
+    debug("supported format found VIDEO_PALETTE_RGB565");
+    break;
+  case VIDEO_PALETTE_RGB555:
+    debug("supported format found VIDEO_PALETTE_RGB555");
+    break;
+  case VIDEO_PALETTE_YUV422:
+    debug("supported format found VIDEO_PALETTE_YUV422");
+    break;
+  }
 };

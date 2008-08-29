@@ -6,7 +6,7 @@ private:
   ProjectionWindow proj;
   vector<ModInterface*> mods;
 public:
-  Blopper(string device) : win(device) {
+  Blopper(string device) : win(device), proj(win.area.width, win.area.height) {
     proj.set_transient_for(win);
     proj.show();
     Glib::signal_idle().connect(sigc::mem_fun(*this, &Blopper::on_idle));

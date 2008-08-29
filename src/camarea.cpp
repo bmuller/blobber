@@ -16,6 +16,13 @@ Camarea::Camarea(string _device) : device(_device), hascam(true) {
   }
 };
 
+Camarea::~Camarea() {
+  if(hascam) {
+    delete fg;
+    delete frame; 
+  }
+};
+
 void Camarea::set_device(string _device) { 
   device = _device;
   delete fg;

@@ -3,19 +3,17 @@
 using namespace std;
 
 FrameGrabber::FrameGrabber(string dev) : cur_frame(-1) {
-  fd = open(dev.c_str(), O_RDWR); //O_RDONLY);
+  fd = open(dev.c_str(), O_RDONLY);
   if (fd == -1 ) 
     throw NoSuchVideoDeviceException("open video device \"" + dev + "\" failed");
   
-  // Make sure child processes don't inherit video (close on exec)
-  fcntl(fd, F_SETFD, FD_CLOEXEC );
-
   // For n-ary buffering
   cur_frame = -1;
 
   // Get the device capabilities
   if( ioctl(fd, VIDIOCGCAP, &caps) < 0 ) 
     throw CameraReadException("query capabilities failed");
+  debug("Found camera: " + string(caps.name));
 
   // Read info for all input sources
   source = 0;
@@ -26,14 +24,13 @@ FrameGrabber::FrameGrabber(string dev) : cur_frame(-1) {
     debug("Found video source: " + string(vc.name));
   }
 
-  /* Don't really care about tuning capabilities
+  // Don't really care about tuning capabilities
   if(VID_TYPE_TUNER) debug("Your video device can be tuned");
   // Read info about tuner
   tuner.tuner = 0;
   if ((caps.type & VID_TYPE_TUNER ) && ioctl(fd, VIDIOCGTUNER, &tuner) < 0 ) {
     cerr << "warning: cannot get tuner info (not present?)";
   }
-  */
 
   if(ioctl(fd, VIDIOCGWIN, &window) < 0) 
     throw NoSuchVideoDeviceException("set default window attrs failed");
@@ -50,19 +47,6 @@ FrameGrabber::FrameGrabber(string dev) : cur_frame(-1) {
 
   if(ioctl(fd, VIDIOCSWIN, &window) < 0) 
     throw CameraReadException("set default window attrs failed");
-
-
-  // Set default picture attributes (50%)
-  // these following attrs made the fps very very small
-  /*
-  picture.brightness = US50PC;
-  picture.hue        = US50PC;
-  picture.colour     = US50PC;
-  picture.contrast   = US50PC;
-  picture.whiteness  = US50PC;
-  picture.depth      = 32;
-  picture.palette    = VIDEO_PALETTE_RGB32;
-  */
 
   picture.brightness = 16384;
   picture.hue        = 0;
@@ -92,6 +76,9 @@ FrameGrabber::FrameGrabber(string dev) : cur_frame(-1) {
     throw CameraReadException("mmap buffer not mmapped");
 };
 
+FrameGrabber::~FrameGrabber() {
+  close(fd);
+};
 
 Frame * FrameGrabber::makeFrame() {
   Frame * fr = new Frame(window.width, window.height, picture.palette);
@@ -137,8 +124,7 @@ void FrameGrabber::grabFrame(Frame *frame) {
 
   // Save video buffer into our own memory
   memcpy(frame->data, ((char *) mb_map + mbuf.offsets[cur_frame]), frame->getSize());
-
+  
   // Move along to the next one
   cur_frame = capture_frame;
 };
-

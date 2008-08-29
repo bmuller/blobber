@@ -10,7 +10,7 @@ public:
   Cairo::RefPtr< Cairo::ImageSurface > surface;
  
   Camarea(string _device);
-  ~Camarea() { if(hascam) delete frame; };
+  ~Camarea();
   virtual bool on_motion_notify_event (GdkEventMotion* event);
   virtual bool on_button_press_event(GdkEventButton* event);
   virtual bool on_button_release_event(GdkEventButton* event);

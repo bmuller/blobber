@@ -3,39 +3,8 @@
 using namespace std;
 
 void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
-  int * data = (int *) area.frame->data;
-  /*
-  int location = area.frame->width * area.frame->height / 2;
-  data[location] = 0xff0000;   
-  location = (area.frame->width * area.frame->height / 2) + 1;
-  data[location] = 0xff0000;   
-  location = (area.frame->width * area.frame->height / 2) + 2;
-  data[location] = 0xff0000;   
-
-
-  location = area.frame->width * area.frame->height / 2;
-  data[location] = 0xff0000;   
-  location = (area.frame->width * area.frame->height / 2) + area.frame->width + 1;
-  data[location] = 0xff0000;   
-  location = (area.frame->width * area.frame->height / 2) + area.frame->width + 2;
-  data[location] = 0xff0000;   
-  
-  int location = area.frame->width * area.frame->height - area.frame->width;
-  cout << data[location] << endl; 
-  data[location] = 0xff0000;   
-  location = area.frame->width * area.frame->height + 1  - area.frame->width;
-  data[location] = 0xff0000;   
-  location = area.frame->width * area.frame->height + 2  - area.frame->width;
-  data[location] = 0xff0000;   
-
-  location = area.frame->width * area.frame->height - area.frame->width;
-  data[location] = 0xff0000;   
-  location = area.frame->width * area.frame->height + 1  - area.frame->width;
-  data[location] = 0xff0000;   
-  location = area.frame->width * area.frame->height + 2  - area.frame->width;
-  data[location] = 0xff0000;   
-  */
-
+  unsigned int * data = (unsigned int *) area.frame->data;
+  return;
   //2457616 is size
   //101376 is wxh
   /*
@@ -47,25 +16,28 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
     }
   }
   */
-
-
   //cout << data[(10 * area.frame->width) + 10] << " " << data[(100 * area.frame->width) + 10] << endl;
+  cout << data[0] << " " << data[(100 * area.frame->width) + 10] << endl;
   //data[(10 * area.frame->width) + 10] = 0xB3FF66;
   //data[(100 * area.frame->width) + 10] = 0xB3FF66;
   //return;
-
+  return;
   //int max = 0;
   for(int y=0; y < area.frame->height; y++) {
     for(int x=0; x < area.frame->width; x++) {
       int index = x + (y * area.frame->width);
-      //if(y < 20)
-      //	data[index] = data[index] - 1000000000;
+      //if(data[index] < 0)
+      //data[index] = 0xFF0000;
       if(data[index] > 13800000 && data[index] < 16000000) {
 	//data[index] = 0xB3FF66;
 	points.push_back(index);
 	if((area.frame->width * area.frame->height - area.frame->width) == index)
 	  points.clear();
       }
+
+      if(area.frame->height == (y+1) || 0 == y || area.frame->width == (x+1) || x == 0)
+	data[index] = 0xFF0000;
+
     }
   }
 

@@ -15,3 +15,4 @@ OptionsWindow::OptionsWindow(string device) : exitButton("Exit"), area(device), 
 void OptionsWindow::exit() {
   hide();
 };
+
