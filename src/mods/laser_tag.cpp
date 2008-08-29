@@ -8,11 +8,36 @@ typedef union PIXEL {
 };
 
 void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
+  // following methods are organized by order of speed, fastest to slowest
+
+  unsigned char * data = (unsigned char *) area.frame->data;
+  for(int index=0; index < area.frame->sizeimage; index++) {  
+    if(data[index*4] > 200 && data[index*4+1] > 200 && data[index*4+2] > 200) {
+      data[index*4] = 0;
+      data[index*4+1] = 0;
+      data[index*4+2] = 0;
+    }
+  } 
+  
+
+  // following is second fastest
+  /*
+  unsigned int * data = (unsigned int *) area.frame->data;
+  for(int index=0; index < area.frame->sizeimage; index++) {  
+    if((data[index] & 16777215) > 13158600) // (data[index] & 00000000111111111111111111111111) > 00000000110010001100100011001000-? 200 200 200
+      data[index] = 0;
+  } 
+  */
+ 
+
+  // following is faster than last one
+  /*
   unsigned int * data = (unsigned int *) area.frame->data;
   for(int index=0; index < area.frame->sizeimage; index++) {  
     if((data[index] & 255) > 200 && ((data[index] >> 8) & 255) > 200 && ((data[index] >> 16) & 255) > 200)
       data[index] = 0;
   } 
+  */
 
   // following works but is slow
   /*
