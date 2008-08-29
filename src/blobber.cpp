@@ -28,7 +28,8 @@ public:
   bool on_idle() {
     win.area.update_frame();
     for(unsigned int i=0; i<mods.size(); i++) {
-      mods[i]->update(win.area, proj);
+      if(win.area.hascam) 
+	mods[i]->update(win.area, proj);
     }
     win.area.update_screen();
     return true;
