@@ -11,14 +11,21 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
   // following methods are organized by order of speed, fastest to slowest
 
   unsigned char * data = (unsigned char *) area.frame->data;
-  for(int index=0; index < area.frame->sizeimage; index++) {  
-    if(data[index*4] > 200 && data[index*4+1] > 200 && data[index*4+2] > 200) {
-      data[index*4] = 0;
-      data[index*4+1] = 0;
-      data[index*4+2] = 0;
+  for(int x=area.bounds.left; x<area.bounds.right; x++) {
+    for(int y=area.bounds.top; y<area.bounds.bottom; y++) {
+      int index = x*y;
+      if(data[index*4] > 100 && data[index*4+1] > 100 && data[index*4+2] > 100) {
+	points.push_back(index);
+      }
     }
-  } 
-  
+  }
+
+  for(int i=0; i<points.size(); i++) {
+    int index = points[i];
+    data[index*4] = 0;
+    data[index*4+1] = 0;
+    data[index*4+2] = 0;
+  }
 
   // following is second fastest
   /*

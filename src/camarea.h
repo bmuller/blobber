@@ -8,7 +8,8 @@ public:
   string device;
   bool hascam;
   Cairo::RefPtr< Cairo::ImageSurface > surface;
- 
+  BOUNDS bounds;
+
   Camarea(string _device);
   ~Camarea();
   virtual bool on_motion_notify_event (GdkEventMotion* event);
@@ -18,4 +19,5 @@ public:
   void update_screen();
   void update_frame();
   void set_device(string _device);
+  void set_bounds(BOUNDS &b);
 };

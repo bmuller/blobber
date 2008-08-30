@@ -29,12 +29,20 @@ void Camarea::set_device(string _device) {
   fg = new FrameGrabber(device);
 };
 
+void Camarea::set_bounds(BOUNDS &b) {
+  bounds.copy(b);
+  debug("camarea bounds set");
+};
+
 bool Camarea::on_motion_notify_event (GdkEventMotion* event) { 
 
 };
 
 bool Camarea::on_button_press_event(GdkEventButton* event) { 
   cout << "press x: " << event->x << " y: " << event->y << endl; 
+  unsigned char * data = (unsigned char *) frame->data;
+  int index = (width * event->y) + event->x;
+  cout << "R:" << (int) data[index*4] << " G:" << (int) data[index*4+1] << " B:" << (int) data[index*4+2] << endl;
 };
 
 bool Camarea::on_button_release_event(GdkEventButton* event) { 
