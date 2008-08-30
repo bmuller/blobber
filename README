@@ -1,2 +1,20 @@
+First, you'll need to install gtkmm and make sure v4l support is compiled in your kernel.
+
+To run:
+
+svn co https://svn.butterfat.net/public/blobber/trunk blobber
+cd blobber
+sh autogen.sh --enable-debug
+make
+cd src
+./blobber
+
+******************************************************************************
+TODO:
+    * Camera / projection alignment. This should occur when program starts.
+    * GUI love
+    * Better interface for doing things on the projection screen.
+    * Finish V4L2 support 
+******************************************************************************
 frame size: 
 frame wxh: 352 288
