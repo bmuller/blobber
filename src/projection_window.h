@@ -3,6 +3,7 @@ using namespace std;
 class ProjectionWindow : public Gtk::Window {
  public:
   int height, width;
+  bool is_fullscreen;
   // These are the bounds of the visible projection area - see 
   // http://trac.butterfat.net/public/blobber/wiki/DevDocs
   BOUNDS vprojbounds;
@@ -16,6 +17,7 @@ class ProjectionWindow : public Gtk::Window {
   void set_bounds(BOUNDS &b);
   void set_background(COLOR c);
   void clear(COLOR c=BLACK);
+  bool on_key_press_event(GdkEventKey* eventData);
  protected:
   int cam_height, cam_width;
   // this var tells the window to draw the align graphics (green circles) on expose

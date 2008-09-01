@@ -1,5 +1,3 @@
-ACLOCAL_AMFLAGS=-I ${top_srcdir}/acinclude.d/
-
 INCLUDES = ${GTK_CFLAGS}
 AM_LDFLAGS = ${GTK_LIBS}
 

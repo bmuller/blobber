@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
+#include <math.h>
 
 #include <linux/fs.h>
 #include <linux/kernel.h>
@@ -30,8 +31,8 @@
 #include <sys/ioctl.h>
 
 #include "exception.h"
-#include "types.h"
 #include "utils.h"
+#include "types.h"
 #include "frame.h"
 #include "framegrabber.h"
 #include "projection_window.h"

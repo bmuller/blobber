@@ -1,3 +1,5 @@
+using namespace std;
+
 struct buffer {
   void *                  start;
   size_t                  length;
@@ -8,6 +10,9 @@ struct COLOR {
   COLOR(int r, int g, int b) {
     red=r; green=g; blue=b;
   };
+  double cairo_red() { return float(red) / 255.0; };
+  double cairo_green() { return float(green) / 255.0; };
+  double cairo_blue() { return float(blue) / 255.0; };
 };
 
 #define RED COLOR(255,0,0)
@@ -43,5 +48,22 @@ struct COORD {
   };
   COORD() {
     x = y = 0;
+  };
+  void copy(COORD &c) {
+    x = c.x; y = c.y;
+  };
+  void to_s(string &s) {
+    string xs, ys;
+    num_to_string(x, xs);
+    num_to_string(y, ys);
+    s = "(" + xs + ", " + ys + ")";
+  };
+  double distance_from(COORD c) {
+    double xdistance = fabs(double(c.x - x));
+    double ydistance = fabs(double(c.y - y));
+    return sqrt(pow(xdistance, 2.0) + pow(ydistance, 2.0));
+  };
+  double distance_from(int x, int y) {
+    return distance_from(COORD(x, y));
   };
 };

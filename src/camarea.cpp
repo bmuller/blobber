@@ -39,10 +39,12 @@ bool Camarea::on_motion_notify_event (GdkEventMotion* event) {
 };
 
 bool Camarea::on_button_press_event(GdkEventButton* event) { 
-  cout << "press x: " << event->x << " y: " << event->y << endl; 
+#ifdef DEBUG
+  cout << "press x: " << event->x << " y: " << event->y;
   unsigned char * data = (unsigned char *) frame->data;
   int index = (width * event->y) + event->x;
-  cout << "R:" << (int) data[index*4+2] << " G:" << (int) data[index*4+1] << " B:" << (int) data[index*4] << endl;
+  cout << " R:" << (int) data[index*4+2] << " G:" << (int) data[index*4+1] << " B:" << (int) data[index*4] << endl;
+#endif
 };
 
 bool Camarea::on_button_release_event(GdkEventButton* event) { 

@@ -14,3 +14,16 @@ void debug(string msg) {
   cout.flush();
 #endif
 };
+
+/** convert integer to string */
+void num_to_string(int i, std::string& s) {
+  char c_int[100];
+  sprintf(c_int, "%ld", i);
+  s = std::string(c_int);
+};
+
+void num_to_string(double i, std::string& s) {
+  char c_int[100];
+  sprintf(c_int, "%ld", i);
+  s = std::string(c_int);
+};

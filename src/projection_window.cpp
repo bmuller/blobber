@@ -2,8 +2,24 @@
 
 using namespace std;
 
-ProjectionWindow::ProjectionWindow(int cw, int ch) : cam_width(cw), cam_height(ch), need_alignment_graphics(false) {
+ProjectionWindow::ProjectionWindow(int cw, int ch) : is_fullscreen(false), cam_width(cw), cam_height(ch), need_alignment_graphics(false) {
   resize(cam_width, cam_height);
+};
+
+bool ProjectionWindow::on_key_press_event(GdkEventKey* eventData) {
+  debug("key pressed on projection window");
+  switch(eventData->keyval) {
+  case 32:
+    clear();
+    break;
+  case 102:
+    if(is_fullscreen)
+      unfullscreen();
+    else
+      fullscreen();
+    is_fullscreen = !is_fullscreen;
+    break;
+  };
 };
 
 bool ProjectionWindow::get_context(Cairo::RefPtr<Cairo::Context> &cr) {
@@ -55,14 +71,23 @@ void ProjectionWindow::draw_line(COORD source, COORD sink, COLOR c) {
   if(!get_context(cr))
     return;
 
-  cr->set_source_rgb(c.red, c.green, c.blue);
+  cr->set_source_rgb(c.cairo_red(), c.cairo_green(), c.cairo_blue());
   cr->move_to(projcoords_source.x, projcoords_source.y);
   cr->line_to(projcoords_sink.x, projcoords_sink.y);
+  cr->stroke();
 };
 
 void ProjectionWindow::draw_point(COORD cords, COLOR c) {
-  // this might work?
-  draw_line(cords, cords, c);
+  Cairo::RefPtr<Cairo::Context> cr;
+  if(!get_context(cr))
+    return;
+
+  COORD translated;
+  translate_coordinates(COORD(cords.x, cords.y), translated);
+  cr->set_source_rgb(c.cairo_red(), c.cairo_green(), c.cairo_blue());
+  cr->move_to(translated.x, translated.y);
+  cr->line_to(translated.x+1, translated.y);
+  cr->stroke();
 };
 
 void ProjectionWindow::draw_alignment_graphics() {
@@ -86,7 +111,7 @@ void ProjectionWindow::draw_circle(COORD coords, int radius, COLOR c) {
 
   cr->save();
   cr->arc(coords.x, coords.y, radius, 0.0, 2.0 * M_PI); // full circle
-  cr->set_source_rgb(c.red, c.green, c.blue);
+  cr->set_source_rgb(c.cairo_red(), c.cairo_green(), c.cairo_blue());
   cr->fill_preserve();
   cr->restore();
   cr->stroke();
@@ -98,7 +123,7 @@ void ProjectionWindow::draw_box(int left, int right, int top, int bottom, COLOR 
     return;
 
   cr->save();
-  cr->set_source_rgb(c.red, c.green, c.blue);
+  cr->set_source_rgb(c.cairo_red(), c.cairo_green(), c.cairo_blue());
   cr->set_line_width(10.0);
 
   cr->move_to(left, top);
@@ -113,8 +138,15 @@ void ProjectionWindow::draw_box(int left, int right, int top, int bottom, COLOR 
 
 // see http://trac.butterfat.net/public/blobber/wiki/DevDocs
 void ProjectionWindow::translate_coordinates(COORD camcords, COORD &projcoords) { 
-  projcoords.x = ((camcords.x - vprojbounds.left) / vprojbounds.width()) * width;
-  projcoords.y = ((camcords.y - vprojbounds.top) / vprojbounds.height()) * width;
+  projcoords.x = (int) ((float(camcords.x - vprojbounds.left) / float(vprojbounds.width())) * width);
+  projcoords.y = (int) ((float(camcords.y - vprojbounds.top) / float(vprojbounds.height())) * width);
+  /*
+  cout << "((" << camcords .y << " - " << vprojbounds.top << ") / " << vprojbounds.height() << ") * " << width << endl;
+  string cs, ps;
+  camcords.to_s(cs);
+  projcoords.to_s(ps);
+  debug("Converted " + cs + " to " + ps);
+  */
 };
 
 void ProjectionWindow::clear(COLOR c) {
