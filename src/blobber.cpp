@@ -34,11 +34,13 @@ public:
       if(win.area.hascam) 
 	mods[i]->update(win.area, proj);
     }
-
-    if(!aligned)
-      align();
-    else
-      draw_bounds(visible_bounds);
+    
+    if(win.area.hascam) {
+      if(!aligned)
+	align();
+      else
+	draw_bounds(visible_bounds);
+    }
     win.area.update_screen();
     return true;
   };
