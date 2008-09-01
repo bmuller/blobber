@@ -6,13 +6,23 @@ private:
   ProjectionWindow proj;
   BOUNDS visible_bounds;
   vector<ModInterface*> mods;
-  bool aligned;
+  bool aligned, doalignment;
 public:
-  Blopper(string device) : win(device), proj(win.area.width, win.area.height), aligned(false) {
+  Blopper(string device, bool da=true) : win(device), proj(win.area.width, win.area.height), aligned(false), doalignment(da) {
     proj.set_transient_for(win);
     proj.show();
     Glib::signal_idle().connect(sigc::mem_fun(*this, &Blopper::on_idle));
-    debug("Looking for camera bounds....");
+
+    // if we're not going to be doing an alignment, just set the projection area and camarea bounds to be the 
+    // full visible area of camera
+    if(!doalignment) {
+      debug("Not doing an alignment, assuming camera's visible area is the projected image and nothing else...");
+      BOUNDS b(0, win.area.height, 0, win.area.width);
+      win.area.set_bounds(b);
+      proj.set_bounds(b);
+    } else {
+      debug("Performing alignment.  Looking for camarea bounds...");
+    }
   };
 
   ~Blopper() {
@@ -30,17 +40,21 @@ public:
 
   bool on_idle() {
     win.area.update_frame();
-    for(unsigned int i=0; i<mods.size(); i++) {
-      if(win.area.hascam) 
-	mods[i]->update(win.area, proj);
-    }
-    
-    if(win.area.hascam) {
+   
+    if(win.area.hascam && doalignment) {
       if(!aligned)
 	align();
       else
 	draw_bounds(visible_bounds);
     }
+
+    // (if we are aligned or we don't have to do an alignment) and there is a camera
+    if((aligned || !doalignment) && win.area.hascam) {
+      for(unsigned int i=0; i<mods.size(); i++) {
+	mods[i]->update(win.area, proj);
+      }
+    }
+
     win.area.update_screen();
     return true;
   };
@@ -60,6 +74,7 @@ public:
     b.right = b.bottom = 0;
     unsigned char * data = (unsigned char *) win.area.frame->data;
     for(int index=0; index < (win.area.height*win.area.width); index++) {
+      // looking for blue
       if(data[index*4] > 205 && data[index*4+1] < 190 && data[index*4+2] < 150) {
 	x = index % win.area.width;
 	y = index / win.area.width;
@@ -117,7 +132,7 @@ public:
 
 int main(int argc, char** argv) {
   Gtk::Main kit(argc, argv);
-  Blopper b("/dev/video0");
+  Blopper b("/dev/video0", false);
   LaserTag *lt = new LaserTag();
   b.add_mod(lt);
   b.run();

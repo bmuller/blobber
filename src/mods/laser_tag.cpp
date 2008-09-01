@@ -8,8 +8,10 @@ typedef union PIXEL {
 };
 
 void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
-  // following methods are organized by order of speed, fastest to slowest
+  pw.draw_line(COORD(10,10), COORD(50, 50), BLUE);
 
+  // following methods are organized by order of speed, fastest to slowest
+  /*
   unsigned char * data = (unsigned char *) area.frame->data;
   for(int x=area.bounds.left; x<area.bounds.right; x++) {
     for(int y=area.bounds.top; y<area.bounds.bottom; y++) {
@@ -28,7 +30,7 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
       source = points[i];
     }
   }
-
+  */
   // following is second fastest
   /*
   unsigned int * data = (unsigned int *) area.frame->data;
