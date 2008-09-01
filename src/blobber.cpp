@@ -2,7 +2,7 @@
 
 class Blopper {
 private:
-  OptionsWindow win;
+  CameraWindow win;
   ProjectionWindow proj;
   BOUNDS visible_bounds;
   vector<ModInterface*> mods;

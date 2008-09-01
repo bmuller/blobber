@@ -36,6 +36,7 @@
 #include "framegrabber.h"
 #include "projection_window.h"
 #include "camarea.h"
+#include "camera_window.h"
 #include "options_window.h"
 #include "mods.h"
 
