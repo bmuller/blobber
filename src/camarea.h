@@ -8,6 +8,7 @@ public:
   string device;
   bool hascam;
   Cairo::RefPtr< Cairo::ImageSurface > surface;
+  Cairo::RefPtr< Cairo::ImageSurface > noCam;
   BOUNDS bounds;
 
   Camarea(string _device);

@@ -10,6 +10,7 @@ Camarea::Camarea(string _device) : device(_device), hascam(true) {
     width = frame->width;
     height = frame->height;
   } catch(NoSuchVideoDeviceException &e) {
+    noCam = Cairo::ImageSurface::create_from_png("nocam.png");
     hascam = false;
     width = 352;
     height = 288;    
@@ -60,7 +61,7 @@ void Camarea::update_screen() {
     if(hascam) {
       surface = Cairo::ImageSurface::create((unsigned char *) frame->data, Cairo::FORMAT_RGB24, frame->width, frame->height, frame->bytesperline); 
     } else {
-      surface = Cairo::ImageSurface::create_from_png("nocam.png");
+      surface = noCam;
     }
     context->set_source(surface, 0.0, 0.0);
     context->rectangle (0.0, 0.0, width, height);
