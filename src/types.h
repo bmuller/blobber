@@ -27,4 +27,21 @@ struct BOUNDS {
   void copy(BOUNDS &b) {
     top=b.top; bottom=b.bottom; left=b.left; right=b.right;
   };
+  int width() {
+    return right - left;
+  };
+  int height() {
+    // yup, bottom - top, don't change
+    return bottom - top;
+  };
+};
+
+struct COORD {
+  int x, y;
+  COORD(int _x, int _y) {
+    x = _x; y = _y;
+  };
+  COORD() {
+    x = y = 0;
+  };
 };

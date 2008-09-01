@@ -4,6 +4,7 @@ class Blopper {
 private:
   OptionsWindow win;
   ProjectionWindow proj;
+  BOUNDS visible_bounds;
   vector<ModInterface*> mods;
   bool aligned;
 public:
@@ -11,6 +12,7 @@ public:
     proj.set_transient_for(win);
     proj.show();
     Glib::signal_idle().connect(sigc::mem_fun(*this, &Blopper::on_idle));
+    debug("Looking for camera bounds....");
   };
 
   ~Blopper() {
@@ -33,10 +35,10 @@ public:
 	mods[i]->update(win.area, proj);
     }
 
-    if(!aligned) {
+    if(!aligned)
       align();
-      aligned = true;
-    }
+    else
+      draw_bounds(visible_bounds);
     win.area.update_screen();
     return true;
   };
@@ -56,8 +58,7 @@ public:
     b.right = b.bottom = 0;
     unsigned char * data = (unsigned char *) win.area.frame->data;
     for(int index=0; index < (win.area.height*win.area.width); index++) {
-      // if blue
-      if(data[index*4] > 205 && data[index*4+1] < 150 && data[index*4+2] < 150) {
+      if(data[index*4] > 205 && data[index*4+1] < 190 && data[index*4+2] < 150) {
 	x = index % win.area.width;
 	y = index / win.area.width;
 	if(x > b.right) b.right = x;
@@ -71,9 +72,20 @@ public:
       b.top = b.left = 0;
       b.bottom = win.area.height;
       b.right = win.area.width;
-      debug("Trouble finding camera bounds...");
+    } else {
+      aligned = true;
+      win.area.set_bounds(b);
+      proj.set_bounds(b);
+      visible_bounds.copy(b);
+      proj.hide_alignment_graphics();
+      debug("Found camera bounds!  Go get a beer.");
     }
+  };
 
+  void draw_bounds(BOUNDS b) {
+    unsigned char * data = (unsigned char *) win.area.frame->data;
+
+    // These will place a border on the camera window to show what it "sees"
     for(int index=(b.top*win.area.width+b.left); index<(b.top*win.area.width+b.right); index++) {
       data[index*4] = 0;
       data[index*4+1] = 0;
@@ -97,9 +109,6 @@ public:
       data[index*4+1] = 0;
       data[index*4+2] = 210;
     } 
-
-    win.area.set_bounds(b);
-    proj.hide_alignment_graphics();
   };
 };
 

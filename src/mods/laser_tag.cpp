@@ -15,16 +15,18 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
     for(int y=area.bounds.top; y<area.bounds.bottom; y++) {
       int index = x*y;
       if(data[index*4] > 100 && data[index*4+1] > 100 && data[index*4+2] > 100) {
-	points.push_back(index);
+	points.push_back(COORD(x, y));
       }
     }
   }
 
-  for(int i=0; i<points.size(); i++) {
-    int index = points[i];
-    data[index*4] = 0;
-    data[index*4+1] = 0;
-    data[index*4+2] = 0;
+  pw.clear();
+  if(points.size() > 1) {
+    COORD source = points[0];
+    for(int i=1; i<points.size(); i++) {
+      pw.draw_line(source, points[i], BLUE); 
+      source = points[i];
+    }
   }
 
   // following is second fastest
