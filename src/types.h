@@ -20,6 +20,7 @@ struct COLOR {
 #define BLUE COLOR(0,0,255)
 #define BLACK COLOR(0,0,0)
 #define WHITE COLOR(255,255,255)
+#define LIGHT_BLUE COLOR(50,100,255)
 
 struct BOUNDS {
   int top, bottom, left, right;

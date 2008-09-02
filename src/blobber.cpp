@@ -6,23 +6,18 @@ private:
   ProjectionWindow proj;
   BOUNDS visible_bounds;
   vector<ModInterface*> mods;
-  bool aligned, doalignment;
+  bool aligned;
 public:
-  Blopper(string device, bool da=true) : win(device), proj(win.area.width, win.area.height), aligned(false), doalignment(da) {
+  Blopper(string device) : win(device), proj(win.area.width, win.area.height), aligned(false) {
     proj.set_transient_for(win);
     proj.show();
     Glib::signal_idle().connect(sigc::mem_fun(*this, &Blopper::on_idle));
 
-    // if we're not going to be doing an alignment, just set the projection area and camarea bounds to be the 
+    // until we do an alignment, just set the projection area and camarea bounds to be the 
     // full visible area of camera
-    if(!doalignment) {
-      debug("Not doing an alignment, assuming camera's visible area is the projected image and nothing else...");
-      BOUNDS b(0, win.area.height, 0, win.area.width);
-      win.area.set_bounds(b);
-      proj.set_bounds(b);
-    } else {
-      debug("Performing alignment.  Looking for camarea bounds...");
-    }
+    BOUNDS b(0, win.area.height, 0, win.area.width);
+    win.area.set_bounds(b);
+    proj.set_bounds(b);
   };
 
   ~Blopper() {
@@ -41,15 +36,14 @@ public:
   bool on_idle() {
     win.area.update_frame();
    
-    if(win.area.hascam && doalignment) {
-      if(!aligned)
-	align();
-      else
-	draw_bounds(visible_bounds);
+    if(win.area.hascam && proj.need_alignment) {
+      align();
+    } else if(win.area.hascam && aligned) {
+      draw_bounds(visible_bounds);
     }
 
     // (if we are aligned or we don't have to do an alignment) and there is a camera
-    if((aligned || !doalignment) && win.area.hascam) {
+    if(win.area.hascam) {
       for(unsigned int i=0; i<mods.size(); i++) {
 	mods[i]->update(win.area, proj);
       }
@@ -122,7 +116,7 @@ public:
     } 
 
     for(int index=(b.top*win.area.width+b.right); index<(b.bottom*win.area.width+b.right); index+=win.area.width) {
-      data[index*4] = 210;
+      data[index*4] = 0;
       data[index*4+1] = 0;
       data[index*4+2] = 210;
     } 
@@ -132,7 +126,7 @@ public:
 
 int main(int argc, char** argv) {
   Gtk::Main kit(argc, argv);
-  Blopper b("/dev/video0", false);
+  Blopper b("/dev/video0");
   LaserTag *lt = new LaserTag();
   b.add_mod(lt);
   b.run();

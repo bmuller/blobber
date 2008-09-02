@@ -2,22 +2,33 @@
 
 using namespace std;
 
-ProjectionWindow::ProjectionWindow(int cw, int ch) : is_fullscreen(false), cam_width(cw), cam_height(ch), need_alignment_graphics(false) {
+ProjectionWindow::ProjectionWindow(int cw, int ch) : is_fullscreen(false), cam_width(cw), cam_height(ch), need_alignment(false) {
   resize(cam_width, cam_height);
 };
 
 bool ProjectionWindow::on_key_press_event(GdkEventKey* eventData) {
-  debug("key pressed on projection window");
+#ifdef DEBUG
+  string ks;
+  num_to_string((int) eventData->keyval, ks);
+  debug("key pressed on projection window: "+ks);
+#endif
   switch(eventData->keyval) {
-  case 32:
+  case 32: // spacebar
     clear();
     break;
-  case 102:
+  case 102: // f
     if(is_fullscreen)
       unfullscreen();
     else
       fullscreen();
     is_fullscreen = !is_fullscreen;
+    break;
+  case 65307: // ESC
+    unfullscreen();
+    is_fullscreen = false;
+    break;
+  case 97:
+    need_alignment = true;
     break;
   };
 };
@@ -48,7 +59,7 @@ bool ProjectionWindow::on_expose_event(GdkEventExpose* event) {
 
   set_background(BLACK);
 
-  if(need_alignment_graphics)
+  if(need_alignment)
     draw_alignment_graphics();
   return true;
 };
@@ -95,12 +106,12 @@ void ProjectionWindow::draw_alignment_graphics() {
 };
 
 void ProjectionWindow::show_alignment_graphics() {
-  need_alignment_graphics = true;
+  need_alignment = true;
   draw_alignment_graphics();
 };
 
 void ProjectionWindow::hide_alignment_graphics() {
-  need_alignment_graphics = false;
+  need_alignment = false;
   set_background(BLACK);
 };
 
@@ -139,7 +150,7 @@ void ProjectionWindow::draw_box(int left, int right, int top, int bottom, COLOR 
 // see http://trac.butterfat.net/public/blobber/wiki/DevDocs
 void ProjectionWindow::translate_coordinates(COORD camcords, COORD &projcoords) { 
   projcoords.x = (int) ((float(camcords.x - vprojbounds.left) / float(vprojbounds.width())) * width);
-  projcoords.y = (int) ((float(camcords.y - vprojbounds.top) / float(vprojbounds.height())) * width);
+  projcoords.y = (int) ((float(camcords.y - vprojbounds.top) / float(vprojbounds.height())) * height);
   /*
   cout << "((" << camcords .y << " - " << vprojbounds.top << ") / " << vprojbounds.height() << ") * " << width << endl;
   string cs, ps;

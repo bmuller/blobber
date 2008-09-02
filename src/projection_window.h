@@ -4,6 +4,7 @@ class ProjectionWindow : public Gtk::Window {
  public:
   int height, width;
   bool is_fullscreen;
+  bool need_alignment; 
   // These are the bounds of the visible projection area - see 
   // http://trac.butterfat.net/public/blobber/wiki/DevDocs
   BOUNDS vprojbounds;
@@ -21,7 +22,6 @@ class ProjectionWindow : public Gtk::Window {
  protected:
   int cam_height, cam_width;
   // this var tells the window to draw the align graphics (green circles) on expose
-  bool need_alignment_graphics; 
   bool on_expose_event(GdkEventExpose* event);
   bool get_context(Cairo::RefPtr<Cairo::Context> &cr);
   void draw_alignment_graphics();
