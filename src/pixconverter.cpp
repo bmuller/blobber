@@ -26,12 +26,12 @@ void YUYVtoRGB32::convert(unsigned char* yuyv, unsigned char* rgb32) {
   unsigned char* y;
   unsigned char* r = rgb32;
   for(y = yuyv; y - yuyv < yuyv_bytes; y += 4) { 
-        *r = R_FROMYV ( *y,  *(y+3) );
-    *(r+1) = G_FROMYUV( *y,  *(y+1),  *(y+3) );
+        *r = R_FROMYV ( *y,  *(y+1) );
+    *(r+1) = G_FROMYUV( *y,  *(y+3),  *(y+1) );
     *(r+2) = B_FROMYU ( *y,  *(y+3) );
     *(r+3) = (unsigned char) 0;
-    *(r+4) = R_FROMYV ( *(y+2),  *(y+3) );
-    *(r+5) = G_FROMYUV( *(y+2),  *(y+1),  *(y+3) );
+    *(r+4) = R_FROMYV ( *(y+2),  *(y+1) );
+    *(r+5) = G_FROMYUV( *(y+2),  *(y+3),  *(y+1) );
     *(r+6) = B_FROMYU ( *(y+2),  *(y+3) );
     *(r+7) = (unsigned char) 0;
     r+=8;
