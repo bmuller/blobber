@@ -1,3 +1,4 @@
+#include "pixconverter.h"
 using namespace std;
 
 //class FrameGrabber {}
@@ -30,6 +31,7 @@ class FrameGrabberTwo {
   struct v4l2_requestbuffers req;
   struct buffer *buffers;
   unsigned int n_buffers;
+  YUYVtoRGB32* conv;
   FrameGrabberTwo(string dev);
   ~FrameGrabberTwo();
   Frame * makeFrame();

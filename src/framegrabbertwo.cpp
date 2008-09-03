@@ -3,6 +3,7 @@
 using namespace std;
 
 #include <errno.h>
+
 static int xioctl(int fd, int request, void *arg) {
   int r;
   do r = ioctl (fd, request, arg);
@@ -10,9 +11,15 @@ static int xioctl(int fd, int request, void *arg) {
   return r;
 }
 
+static int tioctl(int fd, int request, void *arg) {
+  int r;
+  do r = ioctl (fd, request, arg);
+  while(-1 == r && EAGAIN == errno);
+  return(r);
+}
 
-FrameGrabber::FrameGrabber(string dev) : n_buffers(0) {
-  fd = open(dev.c_str(), O_RDWR | O_NONBLOCK, 0);
+FrameGrabberTwo::FrameGrabberTwo(string dev) : n_buffers(0) {
+  fd = open(dev.c_str(), O_RDWR, 0); //removed  | O_NONBLOCK to prevent EBUSY's
   if (fd == -1 ) 
     throw NoSuchVideoDeviceException("open video device \"" + dev + "\" failed");
 
@@ -26,14 +33,34 @@ FrameGrabber::FrameGrabber(string dev) : n_buffers(0) {
   if(!(caps.capabilities & V4L2_CAP_VIDEO_CAPTURE)) 
     throw CameraReadException(dev + " is not a video capture device");
 
+  // Get the pixelformat supported by the device
+  v4l2_fmtdesc fmtd;
+  CLEAR(fmtd);
+  fmtd.index              = 0;
+  fmtd.type               = V4L2_BUF_TYPE_VIDEO_CAPTURE; 
+  if( xioctl(fd, VIDIOC_ENUM_FMT, &fmtd) < 0 ) { 
+    cout << errno << endl;
+    throw CameraReadException("query pixelformat failed");
+  }
+
   CLEAR(fmt);
-  fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-  fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB32;
+  fmt.fmt.pix.pixelformat = fmtd.pixelformat;
   fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
+  fmt.fmt.pix.height      = 240;  // These can be changed, but my cam defaults to 120x160
+  fmt.fmt.pix.width       = 320;
+  fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
   if (ioctl(fd, VIDIOC_S_FMT, &fmt) < 0)
     throw CameraReadException("Error setting format");
 
+  switch ( fmt.fmt.pix.pixelformat ) {
+    case V4L2_PIX_FMT_RGB32 : break;
+    case V4L2_PIX_FMT_YUYV  : conv = new YUYVtoRGB32(fmt.fmt.pix.height, fmt.fmt.pix.width); break;
+    default                 : throw CameraReadException("pixel format not supported");
+  }
+
+
+  // Request that the device set up some buffers
   CLEAR(req);
   req.count               = 4;
   req.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -44,6 +71,7 @@ FrameGrabber::FrameGrabber(string dev) : n_buffers(0) {
   if (req.count < 2) 
     throw CameraReadException("Insufficient memory");
 
+  // Map the userspace buffers
   buffers = (buffer *) calloc(req.count, sizeof(*buffers));
   
   for (n_buffers = 0; n_buffers < req.count; ++n_buffers) {
@@ -62,6 +90,7 @@ FrameGrabber::FrameGrabber(string dev) : n_buffers(0) {
       throw CameraReadException("mmap buffer not mmapped");
   }
 
+  // Queue the video buffers
   for(int i = 0; i < n_buffers; ++i) {
     struct v4l2_buffer buf;
     CLEAR (buf);
@@ -71,21 +100,23 @@ FrameGrabber::FrameGrabber(string dev) : n_buffers(0) {
     if (ioctl(fd, VIDIOC_QBUF, &buf) < 0)
       throw CameraReadException("Error reading video buffer");
   }
+  
+  // Start streaming video
   enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
   if (ioctl(fd, VIDIOC_STREAMON, &type) < 0)
     throw CameraReadException("Error starting video stream");
 };
 
-FrameGrabber::~FrameGrabber() {
+FrameGrabberTwo::~FrameGrabberTwo() {
   close(fd);
 };
 
-Frame * FrameGrabber::makeFrame() {
-  Frame * fr = new Frame(fmt.fmt.pix.width, fmt.fmt.pix.height, fmt.fmt.pix.bytesperline, fmt.fmt.pix.sizeimage);
+Frame * FrameGrabberTwo::makeFrame() {
+  Frame * fr = new Frame(fmt.fmt.pix.width, fmt.fmt.pix.height, 4 * fmt.fmt.pix.width, 4 * fmt.fmt.pix.height * fmt.fmt.pix.width);
   return fr;
 };
 
-void FrameGrabber::grabFrame(Frame *frame) {
+void FrameGrabberTwo::grabFrame(Frame *frame) {
   struct v4l2_buffer buf;
   CLEAR(buf); 
   buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -94,11 +125,19 @@ void FrameGrabber::grabFrame(Frame *frame) {
   int res;
   //while ((res = ioctl(fd, VIDIOC_DQBUF, &buf)) < 0 && ((errno == EAGAIN) || (errno == EINTR)));
   //if (res < 0) 
-  if(ioctl(fd, VIDIOC_DQBUF, &buf) < 0);
+  if(tioctl(fd, VIDIOC_DQBUF, &buf) < 0)
     throw CameraReadException("Error dequeuing buffer");
   
-  memcpy(frame->data, buffers[buf.index].start, buf.bytesused);
+  // If YUYV, do conversion
+  if(fmt.fmt.pix.pixelformat == V4L2_PIX_FMT_YUYV) {
+    conv->convert( (unsigned char*) buffers[buf.index].start, (unsigned char*) frame->data );
+  }
+  
+  // If RGB32, copy directly
+  if(fmt.fmt.pix.pixelformat == V4L2_PIX_FMT_RGB32) {
+    memcpy(frame->data, buffers[buf.index].start, buf.bytesused);
+  }
 
   if (ioctl(fd, VIDIOC_QBUF, &buf) < 0)
-      throw CameraReadException("Error dequeuing buffer");
+      throw CameraReadException("Error queuing buffer");
 };
