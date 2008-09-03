@@ -1,9 +1,20 @@
-#include "pixconverter.h"
 using namespace std;
 
-//class FrameGrabber {}
-
 class FrameGrabber {
+ public:
+  virtual Frame * makeFrame() = 0;
+  virtual void grabFrame(Frame *frame) = 0;
+};
+
+class FrameGrabberFactory {
+ public:
+  static FrameGrabber * create(string dev);
+};
+
+
+// v4l 1
+#ifdef HAVE_V4L1
+class FrameGrabberOne : public FrameGrabber {
  public:
   int                     fd;         ///< File handle for open device                                                    
   struct video_capability caps;       ///< Capabilities                                                                   
@@ -17,13 +28,16 @@ class FrameGrabber {
   struct video_mbuf       mbuf;       ///< Memory buffer #frames, offsets                                  
   void*                   mb_map;     ///< Memory-mapped buffer                           
   struct video_mmap       vmmap;      ///< Memory-mapped info   
-  FrameGrabber(string dev);
-  ~FrameGrabber();
+  FrameGrabberOne(string dev);
+  ~FrameGrabberOne();
   Frame * makeFrame();
   void grabFrame(Frame *frame);
 };
+#endif
 
-class FrameGrabberTwo {
+// v4l 2
+#ifdef HAVE_V4L2
+class FrameGrabberTwo : public FrameGrabber {
  public:
   int fd;                            ///< File handle for open device                                                    
   struct v4l2_capability caps;       ///< Capabilities                                                                   
@@ -37,3 +51,4 @@ class FrameGrabberTwo {
   Frame * makeFrame();
   void grabFrame(Frame *frame);
 };
+#endif

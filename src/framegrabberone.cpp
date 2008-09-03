@@ -2,7 +2,7 @@
 
 using namespace std;
 
-FrameGrabber::FrameGrabber(string dev) : cur_frame(-1) {
+FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
   fd = open(dev.c_str(), O_RDONLY);
   if (fd == -1 ) 
     throw NoSuchVideoDeviceException("open video device \"" + dev + "\" failed");
@@ -75,11 +75,11 @@ FrameGrabber::FrameGrabber(string dev) : cur_frame(-1) {
     throw CameraReadException("mmap buffer not mmapped");
 };
 
-FrameGrabber::~FrameGrabber() {
+FrameGrabberOne::~FrameGrabberOne() {
   close(fd);
 };
 
-Frame * FrameGrabber::makeFrame() {
+Frame * FrameGrabberOne::makeFrame() {
   int bpp = 0;
   switch (picture.palette) {
   case VIDEO_PALETTE_RGB24:
@@ -117,7 +117,7 @@ Frame * FrameGrabber::makeFrame() {
   return fr;
 };
 
-void FrameGrabber::grabFrame(Frame *frame) {
+void FrameGrabberOne::grabFrame(Frame *frame) {
   int capture_frame = cur_frame + 1;
 
   // Very first time only

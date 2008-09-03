@@ -31,6 +31,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 
+#include "pixconverter.h" 
 #include "exception.h"
 #include "utils.h"
 #include "types.h"

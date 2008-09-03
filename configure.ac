@@ -42,12 +42,20 @@ nov4l1=true
 AC_CHECK_HEADER([linux/videodev.h], [
   AC_DEFINE([HAVE_V4L1], [1], [have v4l version 1 support])
   nov4l1=false
+  AM_CONDITIONAL(HAVE_V4L1, true)
+],[
+  AM_CONDITIONAL(HAVE_V4L1, false)
 ])
 
-AC_CHECK_HEADER([linux/videodev2.h], [AC_DEFINE([HAVE_V4l2], [1], [have v4l version 2 support])], [
+
+AC_CHECK_HEADER([linux/videodev2.h], [
+  AC_DEFINE([HAVE_V4L2], [1], [have v4l version 2 support])
+  AM_CONDITIONAL(HAVE_V4L2, true)
+], [
   if $nov4l1 ; then
     AC_MSG_ERROR([Could not find v4l (version 1 or 2) header file - this likely means your kernel wasn't compiled with v4l support.  See http://linuxtv.org/v4lwiki/index.php/Main_Page for more info.])
-  fi   
+  fi
+  AM_CONDITIONAL(HAVE_V4L2, false)
 ])
 
 AC_CONFIG_FILES([

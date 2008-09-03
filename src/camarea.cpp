@@ -5,7 +5,7 @@ using namespace std;
 Camarea::Camarea(string _device) : device(_device), hascam(true), mouse_clicked(false), manual_align(false) {
   add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
   try {
-    fg = new FrameGrabber(device);
+    fg = FrameGrabberFactory::create(device);
     frame = fg->makeFrame();
     width = frame->width;
     height = frame->height;
@@ -27,7 +27,11 @@ Camarea::~Camarea() {
 void Camarea::set_device(string _device) { 
   device = _device;
   delete fg;
-  fg = new FrameGrabber(device);
+  delete frame;
+  fg = FrameGrabberFactory::create(device);
+  frame = fg->makeFrame();
+  width = frame->width;
+  height = frame->height;
 };
 
 void Camarea::set_bounds(BOUNDS &b) {
