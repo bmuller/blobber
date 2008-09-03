@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Camarea::Camarea(string _device) : device(_device), hascam(true) {
+Camarea::Camarea(string _device) : device(_device), hascam(true), mouse_clicked(false), manual_align(false) {
   add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
   try {
     fg = new FrameGrabber(device);
@@ -35,20 +35,43 @@ void Camarea::set_bounds(BOUNDS &b) {
 };
 
 bool Camarea::on_motion_notify_event (GdkEventMotion* event) { 
-
+  if(mouse_clicked && hascam) {
+    BOUNDS b;
+    COORD c((int) event->x, (int) event->y);
+    b.from_coords(c, mouse_click);
+    draw_bounds(b);
+  };
 };
 
 bool Camarea::on_button_press_event(GdkEventButton* event) { 
 #ifdef DEBUG
-  cout << "press x: " << event->x << " y: " << event->y;
-  unsigned char * data = (unsigned char *) frame->data;
-  int index = (width * event->y) + event->x;
-  cout << " R:" << (int) data[index*4+2] << " G:" << (int) data[index*4+1] << " B:" << (int) data[index*4] << endl;
+  cout << "camarea mouse press (" << event->x << ", " << event->y << ")";
+  if(hascam) {
+    unsigned char * data = (unsigned char *) frame->data;
+    int index = (width * (int) event->y) + (int) event->x;
+    cout << " R:" << (int) data[index*4+2] << " G:" << (int) data[index*4+1] << " B:" << (int) data[index*4] << endl;
+  } else {
+    cout << endl;
+  }
+  cout.flush();
 #endif
+  if(hascam) {
+    mouse_clicked = true;
+    mouse_click.x = (int) event->x;
+    mouse_click.y = (int) event->y;
+  }
 };
 
 bool Camarea::on_button_release_event(GdkEventButton* event) { 
-  cout << "release x: " << event->x << " y: " << event->y << endl; 
+#ifdef DEBUG
+  cout << "camarea mouse release (" << event->x << ", " << event->y << ")" << endl; 
+  cout.flush();
+#endif
+  if(hascam) {
+    COORD c((int) event->x, (int) event->y);
+    bounds.from_coords(c, mouse_click);
+    manual_align = true;
+  }
 };
 
 void Camarea::update_frame() {
@@ -72,3 +95,32 @@ void Camarea::update_screen() {
   }
 };
 
+
+void Camarea::draw_bounds(BOUNDS &b) {
+  unsigned char * data = (unsigned char *) frame->data;
+
+  // These will place a border on the camera window to show what it "sees"                                                                                          
+  for(int index=(b.top*width+b.left); index<(b.top*width+b.right); index++) {
+    data[index*4] = 0;
+    data[index*4+1] = 0;
+    data[index*4+2] = 210;
+  }
+
+  for(int index=(b.bottom*width+b.left); index<(b.bottom*width+b.right); index++) {
+    data[index*4] = 0;
+    data[index*4+1] = 0;
+    data[index*4+2] = 210;
+  }
+
+  for(int index=(b.top*width+b.left); index<(b.bottom*width+b.left); index+=width) {
+    data[index*4] = 0;
+    data[index*4+1] = 0;
+    data[index*4+2] = 210;
+  }
+
+  for(int index=(b.top*width+b.right); index<(b.bottom*width+b.right); index+=width) {
+    data[index*4] = 0;
+    data[index*4+1] = 0;
+    data[index*4+2] = 210;
+  }
+};

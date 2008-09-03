@@ -22,26 +22,6 @@ struct COLOR {
 #define WHITE COLOR(255,255,255)
 #define LIGHT_BLUE COLOR(50,100,255)
 
-struct BOUNDS {
-  int top, bottom, left, right;
-  BOUNDS() {
-    top = bottom = left = right = 0;
-  };
-  BOUNDS(int t, int b, int l, int r) {
-    top=t; bottom=b; left=l; right=r;
-  };  
-  void copy(BOUNDS &b) {
-    top=b.top; bottom=b.bottom; left=b.left; right=b.right;
-  };
-  int width() {
-    return right - left;
-  };
-  int height() {
-    // yup, bottom - top, don't change
-    return bottom - top;
-  };
-};
-
 struct COORD {
   int x, y;
   COORD(int _x, int _y) {
@@ -68,3 +48,36 @@ struct COORD {
     return distance_from(COORD(x, y));
   };
 };
+
+struct BOUNDS {
+  int top, bottom, left, right;
+  BOUNDS() {
+    top = bottom = left = right = 0;
+  };
+  BOUNDS(int t, int b, int l, int r) {
+    top=t; bottom=b; left=l; right=r;
+  };  
+  void copy(BOUNDS &b) {
+    top=b.top; bottom=b.bottom; left=b.left; right=b.right;
+  };
+  int width() {
+    return right - left;
+  };
+  int height() {
+    // yup, bottom - top, don't change
+    return bottom - top;
+  };
+  void from_coords(COORD &one, COORD &two) {
+    top = min(one.y, two.y);
+    bottom = max(one.y, two.y);
+    left = min(one.x, two.x);
+    right = max(one.x, two.x);    
+  };
+  void update(COORD &c) {
+    top = min(top, c.y);
+    bottom = max(bottom, c.y);
+    left = min(left, c.x);
+    right = max(right, c.x);    
+  };
+};
+

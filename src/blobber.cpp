@@ -9,8 +9,10 @@ private:
   bool aligned;
 public:
   Blopper(string device) : win(device), proj(win.area.width, win.area.height), aligned(false) {
-    proj.set_transient_for(win);
-    proj.show();
+    if(win.area.hascam) {
+      proj.set_transient_for(win);
+      proj.show();
+    }
     Glib::signal_idle().connect(sigc::mem_fun(*this, &Blopper::on_idle));
 
     // until we do an alignment, just set the projection area and camarea bounds to be the 
@@ -35,11 +37,19 @@ public:
 
   bool on_idle() {
     win.area.update_frame();
-   
-    if(win.area.hascam && proj.need_alignment) {
+
+    if(win.area.hascam && win.area.manual_align) {
+      debug("manually setting camera's bounds");
+      aligned = true;
+      proj.set_bounds(win.area.bounds);
+      visible_bounds.copy(win.area.bounds);
+      win.area.manual_align = false; // so we don't keep doing this over and over
+    } else if(win.area.hascam && proj.need_alignment) {
       align();
-    } else if(win.area.hascam && aligned) {
-      draw_bounds(visible_bounds);
+    } 
+
+    if(win.area.hascam && aligned) {
+      win.area.draw_bounds(visible_bounds);
     }
 
     // (if we are aligned or we don't have to do an alignment) and there is a camera
@@ -62,7 +72,7 @@ public:
     proj.show_alignment_graphics();
 
     BOUNDS b;
-    int x, y;
+    COORD coord;
     b.top = win.area.height;
     b.left = win.area.width;
     b.right = b.bottom = 0;
@@ -70,12 +80,9 @@ public:
     for(int index=0; index < (win.area.height*win.area.width); index++) {
       // looking for blue
       if(data[index*4] > 205 && data[index*4+1] < 190 && data[index*4+2] < 150) {
-	x = index % win.area.width;
-	y = index / win.area.width;
-	if(x > b.right) b.right = x;
-	if(x < b.left) b.left = x;
-	if(y < b.top) b.top = y;
-	if(y > b.bottom) b.bottom = y;
+	coord.x = index % win.area.width;
+	coord.y = index / win.area.width;
+	b.update(coord);
       }
     }
 
@@ -91,35 +98,6 @@ public:
       proj.hide_alignment_graphics();
       debug("Found camera bounds!  Go get a beer.");
     }
-  };
-
-  void draw_bounds(BOUNDS b) {
-    unsigned char * data = (unsigned char *) win.area.frame->data;
-
-    // These will place a border on the camera window to show what it "sees"
-    for(int index=(b.top*win.area.width+b.left); index<(b.top*win.area.width+b.right); index++) {
-      data[index*4] = 0;
-      data[index*4+1] = 0;
-      data[index*4+2] = 210;
-    }
-
-    for(int index=(b.bottom*win.area.width+b.left); index<(b.bottom*win.area.width+b.right); index++) {
-      data[index*4] = 0;
-      data[index*4+1] = 0;
-      data[index*4+2] = 210;
-    } 
-
-    for(int index=(b.top*win.area.width+b.left); index<(b.bottom*win.area.width+b.left); index+=win.area.width) {
-      data[index*4] = 0;
-      data[index*4+1] = 0;
-      data[index*4+2] = 210;
-    } 
-
-    for(int index=(b.top*win.area.width+b.right); index<(b.bottom*win.area.width+b.right); index+=win.area.width) {
-      data[index*4] = 0;
-      data[index*4+1] = 0;
-      data[index*4+2] = 210;
-    } 
   };
 };
 
