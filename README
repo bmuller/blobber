@@ -16,5 +16,8 @@ TODO:
     * Better interface for doing things on the projection screen.
     * Finish V4L2 support 
 ******************************************************************************
+Works with:
+ID 046d:0870 Logitech, Inc. QuickCam Express
+******************************************************************************
 frame size: 
 frame wxh: 352 288
