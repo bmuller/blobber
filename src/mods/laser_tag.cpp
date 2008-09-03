@@ -2,11 +2,6 @@
 
 using namespace std;
 
-typedef union PIXEL {
-  unsigned long pixeldata;
-  __u8 rgbo[4];
-};
-
 void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
   unsigned char * data = (unsigned char *) area.frame->data;
   
@@ -22,12 +17,9 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
       int index = x+(y*area.width);
       if(data[index*4] > blue && data[index*4+1] > green && data[index*4+2] > red) {
 	if(lastpoint.x!=0 && lastpoint.y!=0 && lastpoint.distance_from(x, y) <= 15.0)
-	  pw.draw_line(lastpoint, COORD(x, y), LIGHT_BLUE);
+	  pw.draw_line(lastpoint, COORD(x, y), pw.colors[pw.preferred_color], 5.0);
 	lastpoint.x = x;
 	lastpoint.y = y;
-	data[index*4] = 0;
-	data[index*4+1] = 0;
-	data[index*4+2] = 0;
 	return;
       }
 

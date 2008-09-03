@@ -35,12 +35,14 @@ void Camarea::set_bounds(BOUNDS &b) {
 };
 
 bool Camarea::on_motion_notify_event (GdkEventMotion* event) { 
+  /* doesn't actually work - not sure it matters
   if(mouse_clicked && hascam) {
     BOUNDS b;
     COORD c((int) event->x, (int) event->y);
     b.from_coords(c, mouse_click);
     draw_bounds(b);
   };
+  */
 };
 
 bool Camarea::on_button_press_event(GdkEventButton* event) { 
@@ -67,11 +69,12 @@ bool Camarea::on_button_release_event(GdkEventButton* event) {
   cout << "camarea mouse release (" << event->x << ", " << event->y << ")" << endl; 
   cout.flush();
 #endif
-  if(hascam) {
-    COORD c((int) event->x, (int) event->y);
+  COORD c((int) event->x, (int) event->y);
+  if(hascam && c.distance_from(mouse_click) > 2) {
     bounds.from_coords(c, mouse_click);
     manual_align = true;
   }
+  mouse_clicked = false;
 };
 
 void Camarea::update_frame() {

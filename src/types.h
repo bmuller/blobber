@@ -7,9 +7,18 @@ struct buffer {
 
 struct COLOR {
   int red, green, blue;
+  COLOR() {
+    red = green = blue = 0;
+  };
   COLOR(int r, int g, int b) {
     red=r; green=g; blue=b;
   };
+  COLOR(const COLOR &c) {
+    copy(c);
+  };
+  void copy(const COLOR &c) {
+    red=c.red; green=c.green; blue=c.blue;
+  }
   double cairo_red() { return float(red) / 255.0; };
   double cairo_green() { return float(green) / 255.0; };
   double cairo_blue() { return float(blue) / 255.0; };
