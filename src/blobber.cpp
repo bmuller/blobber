@@ -106,7 +106,9 @@ int main(int argc, char** argv) {
   Gtk::Main kit(argc, argv);
   Blopper b("/dev/video0");
   LaserTag *lt = new LaserTag();
-  b.add_mod(lt);
+  b.add_mod(
+  //GreenScreen *gs = new GreenScreen("stone-640x480.jpg");
+  //b.add_mod(gs);
   b.run();
   return 0;
 }

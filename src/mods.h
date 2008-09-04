@@ -13,3 +13,15 @@ class LaserTag : public ModInterface {
  protected:
   COORD lastpoint;
 };
+
+
+class GreenScreen : public ModInterface {
+ public:
+  GreenScreen(const std::string filename);
+  ~GreenScreen();
+  void update(Camarea &area, ProjectionWindow &pw);
+ protected:
+  Gtk::Image image;
+  unsigned char green_red_diff;
+  unsigned char green_blue_diff;
+};

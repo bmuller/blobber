@@ -46,8 +46,8 @@ FrameGrabberTwo::FrameGrabberTwo(string dev) : n_buffers(0) {
   CLEAR(fmt);
   fmt.fmt.pix.pixelformat = fmtd.pixelformat;
   fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
-  fmt.fmt.pix.height      = 240;  // These can be changed, but my cam defaults to 120x160
-  fmt.fmt.pix.width       = 320;
+  fmt.fmt.pix.height      = 480;  // These can be changed, but my cam defaults to 120x160
+  fmt.fmt.pix.width       = 640;
   fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 
   if (ioctl(fd, VIDIOC_S_FMT, &fmt) < 0)
