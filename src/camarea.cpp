@@ -10,6 +10,7 @@ Camarea::Camarea(string _device) : device(_device), hascam(true), mouse_clicked(
     width = frame->width;
     height = frame->height;
   } catch(NoSuchVideoDeviceException &e) {
+    debug("No video device found");
     noCam = Cairo::ImageSurface::create_from_png("nocam.png");
     hascam = false;
     width = 352;
@@ -82,8 +83,39 @@ bool Camarea::on_button_release_event(GdkEventButton* event) {
 };
 
 void Camarea::update_frame() {
-  if(hascam)
-    fg->grabFrame(frame); 
+  if(!hascam)
+    return;
+
+  fg->grabFrame(frame);
+  unsigned char * data = (unsigned char *) frame->data; 
+
+  poi.clear();
+  // set points of interests for modules
+  for(int x=bounds.left; x<bounds.right; x++) {
+    for(int y=bounds.top; y<bounds.bottom; y++) {
+      int index = x+(y*width);
+      COLOR pixelcolor(data[index*4+2], data[index*4+1], data[index*4]);
+      update_poi(pixelcolor, COORD(x, y));
+    }
+  }
+
+};
+
+void Camarea::update_poi(COLOR &color, COORD coord) {
+  std::map<string, vector<CRANGE> >::iterator iter;
+
+  // for each module
+  for(iter = poi_criteria.begin(); iter != poi_criteria.end(); iter++ ) {
+    string modname = iter->first;
+    vector<CRANGE> criteria = iter->second;
+	
+    // for each criteria each module has set
+    for(unsigned int i=0; i<criteria.size(); i++) {
+      if(criteria[i].contains(color))
+	poi[modname].push_back(coord);
+    }
+  }
+
 };
 
 void Camarea::update_screen() {
@@ -130,4 +162,12 @@ void Camarea::draw_bounds(BOUNDS &b) {
     data[index*4+1] = 0;
     data[index*4+2] = 210;
   }
+};
+
+void Camarea::register_poi_criteria(string modname, CRANGE range) {
+  poi_criteria[modname].push_back(range);
+};
+
+void Camarea::get_poi(string modname, vector<COORD> &modpoi) {
+  modpoi = poi[modname];
 };

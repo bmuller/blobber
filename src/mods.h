@@ -1,15 +1,20 @@
 class ModInterface {
  public:
   string name;
-  ModInterface(string n) : name(n) { debug("Module \"" + n + "\" just created"); };
+  ModInterface(string n);
   virtual void update(Camarea &area, ProjectionWindow &pw) = 0;
   virtual void clear() {};
+  virtual void init_poi(Camarea &area) {};
+ protected:
+  void register_poi_criteria(Camarea &area, CRANGE crange);
+  void get_poi(Camarea &area, vector<COORD> &modpoi);
 };
 
 class LaserTag : public ModInterface {
  public:
-  LaserTag() : ModInterface("LaserTag") { lastpoint.x = 0; lastpoint.y = 0; };
+  LaserTag();
   void update(Camarea &area, ProjectionWindow &pw);
+  void init_poi(Camarea &area);
  protected:
   COORD lastpoint;
 };

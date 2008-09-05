@@ -8,6 +8,11 @@ class Camarea : public Gtk::DrawingArea {
   Cairo::RefPtr< Cairo::ImageSurface > noCam;
   COORD mouse_click;
   bool mouse_clicked;
+  // points of interest for the modules
+  std::map<string, vector<COORD> > poi;
+  // modules register criteria for defining a poi
+  std::map<string, vector<CRANGE> > poi_criteria;
+  void update_poi(COLOR &color, COORD coord);
 
  public:
   bool hascam, manual_align;
@@ -25,4 +30,6 @@ class Camarea : public Gtk::DrawingArea {
   void set_device(string _device);
   void set_bounds(BOUNDS &b);
   void draw_bounds(BOUNDS &b);
+  void register_poi_criteria(string modname, CRANGE range);
+  void get_poi(string modname, vector<COORD> &poi);
 };

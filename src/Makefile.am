@@ -4,7 +4,8 @@ AM_LDFLAGS = ${GTK_LIBS}
 bin_PROGRAMS = blobber
 
 blobber_SOURCES = blobber.cpp camarea.cpp frame.cpp options_window.cpp framegrabber_factory.cpp \
-	projection_window.cpp utils.cpp mods/laser_tag.cpp mods/green_screen.cpp camera_window.cpp pixconverter.cpp 
+	mods_interface.cpp projection_window.cpp utils.cpp camera_window.cpp pixconverter.cpp \
+	mods/laser_tag.cpp mods/green_screen.cpp
 
 if HAVE_V4L1
 blobber_SOURCES += framegrabberone.cpp

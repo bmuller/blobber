@@ -2,30 +2,24 @@
 
 using namespace std;
 
-void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
-  unsigned char * data = (unsigned char *) area.frame->data;
-  
+LaserTag::LaserTag() : ModInterface("LaserTag") { 
+  lastpoint.x = 0; 
+  lastpoint.y = 0; 
+};
+
+void LaserTag::init_poi(Camarea &area) {
   // adjust these as necessary for different light/laser sources.  Any pixel
   // with all three above the thresholds you set will be considered the input.
-  int red = 100;
-  int green = 100;
-  int blue = 100;
+  register_poi_criteria(area, CRANGE(COLOR(60, 0, 0)));
+};
 
-  for(int x=area.bounds.left; x<area.bounds.right; x++) {
-    for(int y=area.bounds.top; y<area.bounds.bottom; y++) {
-
-      int index = x+(y*area.width);
-      if(data[index*4] > blue && data[index*4+1] > green && data[index*4+2] > red) {
-	if(lastpoint.x!=0 && lastpoint.y!=0 && lastpoint.distance_from(x, y) <= 15.0)
-	  pw.draw_line(lastpoint, COORD(x, y), pw.colors[pw.preferred_color], 5.0);
-	lastpoint.x = x;
-	lastpoint.y = y;
-	return;
-      }
-
-    }
-  }
-
-
+void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
+  vector<COORD> poi;
+  get_poi(area, poi);
+  for(unsigned int i=0; i<poi.size(); i++) {
+    if(lastpoint.x!=0 && lastpoint.y!=0 && lastpoint.distance_from(poi[i]) <= 15.0)
+      pw.draw_line(lastpoint, poi[i], pw.colors[pw.preferred_color], 5.0);    
+    lastpoint.copy(poi[i]);
+  };
 };
 

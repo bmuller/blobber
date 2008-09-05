@@ -31,6 +31,24 @@ struct COLOR {
 #define WHITE COLOR(255,255,255)
 #define LIGHT_BLUE COLOR(50,100,255)
 
+// color range
+struct CRANGE {
+  COLOR lower, upper;
+  CRANGE(COLOR l, COLOR u) {
+    lower.copy(l); 
+    upper.copy(u);
+  };
+  CRANGE(COLOR l) {
+    lower.copy(l);
+    upper.copy(WHITE);
+  };
+  bool contains(COLOR &c) {
+    return c.red >= lower.red && c.red <= upper.red && \
+      c.green >= lower.green && c.green <= upper.green && \
+      c.blue >= lower.blue && c.blue <= upper.blue;
+  }
+};
+
 struct COORD {
   int x, y;
   COORD(int _x, int _y) {
