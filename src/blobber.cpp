@@ -9,7 +9,6 @@ private:
   bool aligned;
 public:
   Blopper(string device) : win(device), proj(win.area.width, win.area.height), aligned(false) {
-    cout << "action movie: " << win.area.width << "  " << win.area.height << endl;
     if(win.area.hascam) {
       proj.set_transient_for(win);
       proj.show();
@@ -33,7 +32,7 @@ public:
 
   void add_mod(ModInterface * mi) {
     debug("Module " + mi->name + " loaded...");
-    mi->init_poi(win.area);
+    mi->init(win.area, proj);
     mods.push_back(mi);
   };
 
@@ -109,6 +108,8 @@ int main(int argc, char** argv) {
   Blopper b("/dev/video0");
   LaserTag *lt = new LaserTag();
   b.add_mod(lt);
+  ProjectionOptions *po = new ProjectionOptions();
+  b.add_mod(po);
   //GreenScreen *gs = new GreenScreen("stone-640x480.jpg");
   //b.add_mod(gs);
   b.run();

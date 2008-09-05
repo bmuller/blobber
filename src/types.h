@@ -30,6 +30,7 @@ struct COLOR {
 #define BLACK COLOR(0,0,0)
 #define WHITE COLOR(255,255,255)
 #define LIGHT_BLUE COLOR(50,100,255)
+#define GREY COLOR(200,200,200)
 
 // color range
 struct CRANGE {
