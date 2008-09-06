@@ -61,6 +61,9 @@ public:
     }
 
     win.area.update_screen();
+
+    // if an expose event occured, reset
+    proj.i_exposed_myself = false;
     return true;
   };
 

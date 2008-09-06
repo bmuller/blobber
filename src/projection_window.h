@@ -6,6 +6,7 @@ class ProjectionWindow : public Gtk::Window {
   vector<COLOR> colors;
   bool is_fullscreen;
   bool need_alignment; 
+  bool i_exposed_myself;
   // These are the bounds of the visible projection area - see 
   // http://trac.butterfat.net/public/blobber/wiki/DevDocs
   BOUNDS vprojbounds;

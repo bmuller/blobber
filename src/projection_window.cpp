@@ -10,6 +10,7 @@ ProjectionWindow::ProjectionWindow(int cw, int ch) : is_fullscreen(false), cam_w
   colors.push_back(WHITE);
   colors.push_back(LIGHT_BLUE);
   preferred_color = 4;
+  i_exposed_myself = false;
 };
 
 bool ProjectionWindow::on_key_press_event(GdkEventKey* eventData) {
@@ -80,6 +81,7 @@ void ProjectionWindow::set_bounds(BOUNDS &b) {
 
 bool ProjectionWindow::on_expose_event(GdkEventExpose* event) {
   debug("projection window expose event");
+  i_exposed_myself = true;
   Cairo::RefPtr<Cairo::Context> cr;
   if(!get_context(cr))
     return true;
@@ -160,7 +162,7 @@ void ProjectionWindow::draw_box(int left, int right, int top, int bottom, COLOR 
   if(!get_context(cr))
     return;
 
-  cr->save();
+  //cr->save();
   set_color(cr, c);
   cr->set_line_width(10.0);
 
@@ -170,7 +172,7 @@ void ProjectionWindow::draw_box(int left, int right, int top, int bottom, COLOR 
   cr->line_to(left, bottom);
   cr->line_to(left, top);
   
-  cr->restore();
+  //cr->restore();
   cr->stroke();
 };
 

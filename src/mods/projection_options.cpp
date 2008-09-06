@@ -21,5 +21,8 @@ void ProjectionOptions::update(Camarea &area, ProjectionWindow &pw) {
     if(poi[i].x > (area.width - 10) && poi[i].y > (area.height - 10))
       pw.clear();
   };
+
+  if(pw.i_exposed_myself)
+    pw.draw_box(area.width-10, area.height-10, area.width, area.height, WHITE);
 };
 
