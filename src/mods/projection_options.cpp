@@ -8,7 +8,14 @@ void ProjectionOptions::init(Camarea &area, ProjectionWindow &pw) {
   register_poi_criteria(area, CRANGE(COLOR(60, 0, 0)));
 
   // draw clear screen box
-  pw.draw_box(area.width-10, area.height-10, area.width, area.height, GREY);
+  projection_window_exposed(pw);
+};
+
+
+void ProjectionOptions::projection_window_exposed(ProjectionWindow &pw) {
+  // draw clear screen box
+  COORD c(pw.width-20, pw.height-20);
+  pw.draw_box(c, 15, 15, GREY);
 };
 
 
@@ -18,11 +25,8 @@ void ProjectionOptions::update(Camarea &area, ProjectionWindow &pw) {
   
   for(unsigned int i=0; i<poi.size(); i++) {
     // handle clear screen
-    if(poi[i].x > (area.width - 10) && poi[i].y > (area.height - 10))
+    if(poi[i].x > (pw.width - 20) && poi[i].y > (pw.height - 20))
       pw.clear();
   };
-
-  if(pw.i_exposed_myself)
-    pw.draw_box(area.width-10, area.height-10, area.width, area.height, WHITE);
 };
 

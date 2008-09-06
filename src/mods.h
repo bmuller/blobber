@@ -5,6 +5,7 @@ class ModInterface {
   virtual void update(Camarea &area, ProjectionWindow &pw) = 0;
   virtual void clear() {};
   virtual void init(Camarea &area, ProjectionWindow &pw) {};
+  virtual void projection_window_exposed(ProjectionWindow &pw) {};
  protected:
   void register_poi_criteria(Camarea &area, CRANGE crange);
   void get_poi(Camarea &area, vector<COORD> &modpoi);
@@ -13,9 +14,10 @@ class ModInterface {
 
 class ProjectionOptions : public ModInterface {
  public:
-  ProjectionOptions() : ModInterface("LaserTag") {};
+  ProjectionOptions() : ModInterface("ProjectionOptions") {};
   void update(Camarea &area, ProjectionWindow &pw);
   void init(Camarea &area, ProjectionWindow &pw);
+  void projection_window_exposed(ProjectionWindow &pw);
 };
 
 

@@ -157,22 +157,14 @@ void ProjectionWindow::draw_circle(COORD coords, int radius, COLOR c) {
   cr->stroke();
 };
 
-void ProjectionWindow::draw_box(int left, int right, int top, int bottom, COLOR c) {
+void ProjectionWindow::draw_box(COORD coord, int width, int height, COLOR c) {
   Cairo::RefPtr<Cairo::Context> cr;
   if(!get_context(cr))
     return;
 
-  //cr->save();
   set_color(cr, c);
-  cr->set_line_width(10.0);
-
-  cr->move_to(left, top);
-  cr->line_to(right, top);
-  cr->line_to(right, bottom);
-  cr->line_to(left, bottom);
-  cr->line_to(left, top);
-  
-  //cr->restore();
+  cr->set_line_width(1.0);
+  cr->rectangle(coord.x, coord.y, width, height);
   cr->stroke();
 };
 

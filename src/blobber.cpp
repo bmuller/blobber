@@ -53,7 +53,15 @@ public:
       win.area.draw_bounds(visible_bounds);
     }
 
-    // (if we are aligned or we don't have to do an alignment) and there is a camera
+    // if an expose event occured in project window alert modules
+    if(win.area.hascam && proj.i_exposed_myself) {
+      for(unsigned int i=0; i<mods.size(); i++) {
+	mods[i]->projection_window_exposed(proj);
+      }
+      proj.i_exposed_myself = false;
+    }
+
+    // if there is a camera
     if(win.area.hascam) {
       for(unsigned int i=0; i<mods.size(); i++) {
 	mods[i]->update(win.area, proj);
@@ -61,9 +69,6 @@ public:
     }
 
     win.area.update_screen();
-
-    // if an expose event occured, reset
-    proj.i_exposed_myself = false;
     return true;
   };
 

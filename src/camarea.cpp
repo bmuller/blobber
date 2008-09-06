@@ -94,7 +94,7 @@ void Camarea::update_frame() {
   for(int x=bounds.left; x<bounds.right; x++) {
     for(int y=bounds.top; y<bounds.bottom; y++) {
       int index = x+(y*width);
-      COLOR pixelcolor(data[index*4+2], data[index*4+1], data[index*4]);
+      COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
       update_poi(pixelcolor, COORD(x, y));
     }
   }
