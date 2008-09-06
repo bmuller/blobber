@@ -2,6 +2,10 @@
 
 using namespace std;
 
+ProjectionOptions::ProjectionOptions() : ModInterface("ProjectionOptions") {
+  colors_showing_count = 0;
+};
+
 void ProjectionOptions::init(Camarea &area, ProjectionWindow &pw) {
   // adjust these as necessary for different light/laser sources.  Any pixel
   // with the threshold you set will be considered in the input.
@@ -16,6 +20,15 @@ void ProjectionOptions::projection_window_exposed(ProjectionWindow &pw) {
   // draw clear screen box
   COORD c(pw.width-20, pw.height-20);
   pw.draw_box(c, 15, 15, GREY);
+  
+  if(colors_showing_count == 0) {
+    // draw "show colors" box
+    pw.draw_box(COORD(pw.width-20, 10), 15, 15, GREY);
+  } else {
+    int size = pw.height / (pw.colors.size() + 1);
+    for(unsigned int i=0; i<pw.colors.size(); i++) 
+      pw.draw_box(COORD(pw.width-20, i*size-5), 15, size-5, pw.colors[i], (i != pw.preferred_color));  
+  }
 };
 
 
@@ -25,8 +38,23 @@ void ProjectionOptions::update(Camarea &area, ProjectionWindow &pw) {
   
   for(unsigned int i=0; i<poi.size(); i++) {
     // handle clear screen
-    if(poi[i].x > (pw.width - 20) && poi[i].y > (pw.height - 20))
-      pw.clear();
+    if(poi[i].x > (pw.width - 20) && poi[i].y > (pw.height - 20)) {
+      pw.clear();   
+      projection_window_exposed(pw);
+    } else if(poi[i].x > (pw.width - 20) && poi[i].y < 35 && colors_showing_count == 0) {
+      // handle show colors box
+      colors_showing_count = 1;
+      projection_window_exposed(pw);
+    }
   };
+
+  if(colors_showing_count > 0)
+    colors_showing_count++;
+  if(colors_showing_count == 50) {
+    colors_showing_count = 0;
+    // clear colors boxes
+    pw.draw_box(COORD(pw.width-25, 0), 20, pw.height, BLACK, true);
+    projection_window_exposed(pw);
+  }
 };
 

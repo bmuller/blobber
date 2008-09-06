@@ -157,7 +157,7 @@ void ProjectionWindow::draw_circle(COORD coords, int radius, COLOR c) {
   cr->stroke();
 };
 
-void ProjectionWindow::draw_box(COORD coord, int width, int height, COLOR c) {
+void ProjectionWindow::draw_box(COORD coord, int width, int height, COLOR c, bool fill) {
   Cairo::RefPtr<Cairo::Context> cr;
   if(!get_context(cr))
     return;
@@ -165,6 +165,8 @@ void ProjectionWindow::draw_box(COORD coord, int width, int height, COLOR c) {
   set_color(cr, c);
   cr->set_line_width(1.0);
   cr->rectangle(coord.x, coord.y, width, height);
+  if(fill)
+    cr->fill_preserve();
   cr->stroke();
 };
 
