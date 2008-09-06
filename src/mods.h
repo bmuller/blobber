@@ -36,7 +36,7 @@ class GreenScreen : public ModInterface {
   ~GreenScreen();
   void update(Camarea &area, ProjectionWindow &pw);
  protected:
-  Gtk::Image image;
+  Glib::RefPtr<Gdk::Pixbuf> image;
   unsigned char green_red_diff;
   unsigned char green_blue_diff;
 };

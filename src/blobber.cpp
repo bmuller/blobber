@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
   b.add_mod(lt);
   ProjectionOptions *po = new ProjectionOptions();
   b.add_mod(po);
-  //GreenScreen *gs = new GreenScreen("stone-640x480.jpg");
+  //GreenScreen *gs = new GreenScreen("mods/stone-640x480.jpg");
   //b.add_mod(gs);
   b.run();
   return 0;

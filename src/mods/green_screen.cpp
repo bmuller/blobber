@@ -4,8 +4,13 @@
 using namespace std;
 
 GreenScreen::GreenScreen(const std::string filename)  : 
-  ModInterface("GreenScreen"),
-  image(filename) {}
+  ModInterface("GreenScreen") {
+  try { image = Gdk::Pixbuf::create_from_file(filename); }
+  catch(Glib::FileError err) { 
+    cout << filename << " File not found!" << endl; 
+    exit(1);
+  }  
+}
 
 GreenScreen::~GreenScreen() {}
 
@@ -13,7 +18,7 @@ void GreenScreen::update(Camarea &area, ProjectionWindow &pw) {
   green_red_diff = 35; 
   green_blue_diff = 25; 
   unsigned char * data;
-  Glib::RefPtr<Gdk::Pixbuf> buf = image.get_pixbuf();
+  Glib::RefPtr<Gdk::Pixbuf> buf = image;
   guint8 * image_data = buf->get_pixels();
 
   for( data = (unsigned char *) area.frame->data; 
