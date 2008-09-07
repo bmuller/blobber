@@ -111,8 +111,10 @@ void Camarea::update_poi(COLOR &color, COORD coord) {
 	
     // for each criteria each module has set
     for(unsigned int i=0; i<criteria.size(); i++) {
-      if(criteria[i].contains(color))
-	poi[modname].push_back(coord);
+      if(criteria[i].contains(color)) {
+	PIXEL p(color, coord);
+	poi[modname].push_back(p);
+      }
     }
   }
 
@@ -168,6 +170,6 @@ void Camarea::register_poi_criteria(string modname, CRANGE range) {
   poi_criteria[modname].push_back(range);
 };
 
-void Camarea::get_poi(string modname, vector<COORD> &modpoi) {
+void Camarea::get_poi(string modname, vector<PIXEL> &modpoi) {
   modpoi = poi[modname];
 };

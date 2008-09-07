@@ -113,3 +113,11 @@ struct BOUNDS {
   };
 };
 
+struct PIXEL {
+  COLOR color;
+  COORD coord;
+  PIXEL(COLOR _color, COORD _coord) {
+    color.copy(_color);
+    coord.copy(_coord);
+  };
+};

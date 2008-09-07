@@ -33,25 +33,25 @@ void ProjectionOptions::projection_window_exposed(ProjectionWindow &pw) {
 
 
 void ProjectionOptions::update(Camarea &area, ProjectionWindow &pw) {
-  vector<COORD> poi;
+  vector<PIXEL> poi;
   get_poi(area, poi);
   
   for(unsigned int i=0; i<poi.size(); i++) {
     // handle clear screen
-    if(poi[i].x > (pw.width - 20) && poi[i].y > (pw.height - 20)) {
+    if(poi[i].coord.x > (pw.width - 20) && poi[i].coord.y > (pw.height - 20)) {
       pw.clear();   
       projection_window_exposed(pw);
-    } else if(poi[i].x > (pw.width - 20) && poi[i].y < 35 && colors_showing_count == 0) {
+    } else if(poi[i].coord.x > (pw.width - 20) && poi[i].coord.y < 35 && colors_showing_count == 0) {
       // handle show colors box
       colors_showing_count = 1;
       projection_window_exposed(pw);
-    } else if(poi[i].x > (pw.width - 20) && colors_showing_count > 0) {
+    } else if(poi[i].coord.x > (pw.width - 20) && colors_showing_count > 0) {
       
       // picking a color
       int size = pw.height / (pw.colors.size() + 1);
       for(unsigned int ci=0; ci<pw.colors.size(); ci++) {
 	BOUNDS b(ci*size+5, (ci*size+5)+(size-5), pw.width-20, pw.width-5);
-	if(b.contains(poi[i])) {
+	if(b.contains(poi[i].coord)) {
 	  pw.preferred_color = ci;
 	  colors_showing_count = 1;
 	  pw.draw_box(COORD(pw.width-25, 0), 25, pw.height, BLACK, true);
