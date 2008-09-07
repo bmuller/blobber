@@ -22,16 +22,19 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
   if(poi.size() == 0)
     missing_counter++;
   else {
-    if(lastpoint.x!=0 && lastpoint.y!=0 && missing_counter < 3)
+    //points.push_back(poi[0]);
+    if(lastpoint.x!=0 && lastpoint.y!=0 && missing_counter < 2)
       pw.draw_line(lastpoint, poi[0], pw.colors[pw.preferred_color], 1.0);    
     lastpoint.copy(poi[0]);
   }
 
-  /*
-  for(unsigned int i=0; i<poi.size(); i++) {
-    if(lastpoint.x!=0 && lastpoint.y!=0 && missing_counter < 3)
-      pw.draw_line(lastpoint, poi[i], pw.colors[pw.preferred_color], 1.0);    
-    lastpoint.copy(poi[i]);
+  /* Trying to smooth line out
+  if(points.size() == 3) {
+    points.push_back(points[points.size() - 1]);
+    pw.draw_curve(points, pw.colors[pw.preferred_color]);
+    COORD last = points[points.size() - 1];
+    points.clear();
+    points.push_back(last);
   };
   */
 

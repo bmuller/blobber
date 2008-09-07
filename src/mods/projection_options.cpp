@@ -27,7 +27,7 @@ void ProjectionOptions::projection_window_exposed(ProjectionWindow &pw) {
   } else {
     int size = pw.height / (pw.colors.size() + 1);
     for(unsigned int i=0; i<pw.colors.size(); i++) 
-      pw.draw_box(COORD(pw.width-20, i*size-5), 15, size-5, pw.colors[i], (i != pw.preferred_color));  
+      pw.draw_box(COORD(pw.width-20, i*size+5), 15, size-5, pw.colors[i], (i != pw.preferred_color));  
   }
 };
 
@@ -45,15 +45,29 @@ void ProjectionOptions::update(Camarea &area, ProjectionWindow &pw) {
       // handle show colors box
       colors_showing_count = 1;
       projection_window_exposed(pw);
+    } else if(poi[i].x > (pw.width - 20) && colors_showing_count > 0) {
+      
+      // picking a color
+      int size = pw.height / (pw.colors.size() + 1);
+      for(unsigned int ci=0; ci<pw.colors.size(); ci++) {
+	BOUNDS b(ci*size+5, (ci*size+5)+(size-5), pw.width-20, pw.width-5);
+	if(b.contains(poi[i])) {
+	  pw.preferred_color = ci;
+	  colors_showing_count = 1;
+	  pw.draw_box(COORD(pw.width-25, 0), 25, pw.height, BLACK, true);
+	  projection_window_exposed(pw);
+	}
+      }
+      
     }
-  };
+  }
 
   if(colors_showing_count > 0)
     colors_showing_count++;
   if(colors_showing_count == 50) {
     colors_showing_count = 0;
     // clear colors boxes
-    pw.draw_box(COORD(pw.width-25, 0), 20, pw.height, BLACK, true);
+    pw.draw_box(COORD(pw.width-25, 0), 25, pw.height, BLACK, true);
     projection_window_exposed(pw);
   }
 };

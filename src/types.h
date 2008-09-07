@@ -31,6 +31,7 @@ struct COLOR {
 #define WHITE COLOR(255,255,255)
 #define LIGHT_BLUE COLOR(50,100,255)
 #define GREY COLOR(200,200,200)
+#define BROWN COLOR(102,51,0)
 
 // color range
 struct CRANGE {
@@ -106,6 +107,9 @@ struct BOUNDS {
     bottom = max(bottom, c.y);
     left = min(left, c.x);
     right = max(right, c.x);    
+  };
+  bool contains(COORD &c) {
+    return c.x > left && c.x < right && c.y > top && c.y < bottom;
   };
 };
 

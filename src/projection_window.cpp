@@ -9,6 +9,7 @@ ProjectionWindow::ProjectionWindow(int cw, int ch) : is_fullscreen(false), cam_w
   colors.push_back(GREEN);
   colors.push_back(WHITE);
   colors.push_back(LIGHT_BLUE);
+  colors.push_back(BROWN);
   preferred_color = 4;
   i_exposed_myself = false;
 };
@@ -116,6 +117,28 @@ void ProjectionWindow::draw_line(COORD source, COORD sink, COLOR c, double line_
   cr->line_to(projcoords_sink.x, projcoords_sink.y);
   cr->stroke();
 };
+
+
+void ProjectionWindow::draw_curve(vector<COORD> points, COLOR c, double line_width) {
+  Cairo::RefPtr<Cairo::Context> cr;
+  if(!get_context(cr) || points.size()!=4)
+    return;
+
+  cr->set_line_width(line_width);
+  set_color(cr, c);
+
+  COORD convcoord;
+  translate_coordinates(points[0], convcoord);
+  cr->move_to(convcoord.x, convcoord.y);
+  
+  COORD first, second, third;
+  translate_coordinates(points[1], first);
+  translate_coordinates(points[2], second);
+  translate_coordinates(points[3], third);
+  cr->curve_to(first.x, first.y, second.x, second.y, third.x, third.y);
+  cr->stroke();
+};
+
 
 void ProjectionWindow::draw_point(COORD cords, COLOR c) {
   Cairo::RefPtr<Cairo::Context> cr;
