@@ -1,6 +1,6 @@
 AC_INIT([blobber], [0.0], [bmuller@butterfat.net])
 AC_DEFINE([PACKAGE_URL],["http://trac.butterfat.net/public/blobber"],[project url])
-AM_CONFIG_HEADER(src/config.h)
+AM_CONFIG_HEADER(blobber/config.h)
 AM_INIT_AUTOMAKE()
 
 AC_PROG_CXX
@@ -60,7 +60,7 @@ AC_CHECK_HEADER([linux/videodev2.h], [
 
 AC_CONFIG_FILES([
  Makefile
- src/Makefile
+ blobber/Makefile
 ])
 AC_OUTPUT
 
