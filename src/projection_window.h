@@ -26,12 +26,13 @@ class ProjectionWindow : public Gtk::Window {
   bool on_key_press_event(GdkEventKey* eventData);
   void show_message(string msg, COLOR c=WHITE);
   void set_color(Cairo::RefPtr<Cairo::Context> cr, COLOR c);
+
+  // translate coordinates from camera coordinates to projection window coordinates
+  void translate_coordinates(COORD camcords, COORD &projcoords);
  protected:
   int cam_height, cam_width;
   // this var tells the window to draw the align graphics (green circles) on expose
   bool on_expose_event(GdkEventExpose* event);
   bool get_context(Cairo::RefPtr<Cairo::Context> &cr);
   void draw_alignment_graphics();
-  // translate coordinates from camera coordinates to projection window coordinates
-  void translate_coordinates(COORD camcords, COORD &projcoords);
 };

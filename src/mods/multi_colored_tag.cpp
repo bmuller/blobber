@@ -23,9 +23,10 @@ void MultiColoredTag::update(Camarea &area, ProjectionWindow &pw) {
     missing_counter++;
   else {
     if(lastpoint.x!=0 && lastpoint.y!=0 && missing_counter < 2) {
-      COLOR c;
-
-      pw.draw_line(lastpoint, poi[0].coord, pw.colors[pw.preferred_color], 1.0);    
+      if((poi[0].color.blue - poi[0].color.green) >= 10)
+	pw.draw_line(lastpoint, poi[0].coord, BLUE, 1.0);
+      else if((poi[0].color.green - poi[0].color.blue) >= 10)    
+	pw.draw_line(lastpoint, poi[0].coord, GREEN, 1.0);
     }
     lastpoint.copy(poi[0].coord);
   }

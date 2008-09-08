@@ -24,7 +24,7 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
   else {
     //points.push_back(poi[0]);
     if(lastpoint.x!=0 && lastpoint.y!=0 && missing_counter < 2)
-      pw.draw_line(lastpoint, poi[0].coord, pw.colors[pw.preferred_color], 1.0);    
+      pw.draw_line(lastpoint, poi[0].coord, pw.colors[pw.preferred_color], 5.0);    
     lastpoint.copy(poi[0].coord);
   }
 

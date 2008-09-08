@@ -114,14 +114,18 @@ public:
 int main(int argc, char** argv) {
   Gtk::Main kit(argc, argv);
   Blopper b("/dev/video0");
+
   //MultiColoredTag *mct = new MultiColoredTag();
   //b.add_mod(mct);
-  //MultiLaserTag *mlt = new MultiLaserTag();
-  //b.add_mod(mlt);
-  LaserTag *lt = new LaserTag();
-  b.add_mod(lt);
+
+  MultiLaserTag *mlt = new MultiLaserTag();
+  b.add_mod(mlt);
+
+  //LaserTag *lt = new LaserTag();
+  //b.add_mod(lt);
   ProjectionOptions *po = new ProjectionOptions();
   b.add_mod(po);
+
   //GreenScreen *gs = new GreenScreen("mods/stone-640x480.jpg");
   //b.add_mod(gs);
   b.run();
