@@ -5,22 +5,30 @@
 
 using namespace std;
 
-int main() {
+TestParent * getit() {
   Glib::Module module("./test");
   if(module) {
     cout << "found module" << endl;
-    //void* test = 0;
     TestParent* (*get_plugin) () ;
     bool found = module.get_symbol("get_module", (void *&) get_plugin);
     if(found) {
-      TestParent *t = get_plugin();  
-      t->say_hi();
+      module.make_resident();
+      return get_plugin();  
     } else {
       cout << "symbol not found\n";
     }
-
   } else {
     cout << Glib::Module::get_last_error() << endl;
   }
   return 0;
 }
+
+
+int main() {
+  TestParent *t = getit();
+  if(t)
+    t->say_hi();
+  delete t;
+};
+
+
