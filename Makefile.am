@@ -1,4 +1,4 @@
-SUBDIRS = blobber
+SUBDIRS = blobber modules
 
 HEADERDIR = blobber
 nobase_include_HEADERS = $(HEADERDIR)/blobber.h $(HEADERDIR)/camera_window.h $(HEADERDIR)/exception.h \
@@ -8,3 +8,4 @@ nobase_include_HEADERS = $(HEADERDIR)/blobber.h $(HEADERDIR)/camera_window.h $(H
 			 $(HEADERDIR)/mod_utils.h
 
 dist_pkgdata_DATA = blobber/nocam.png
+

@@ -1,4 +1,4 @@
-#include "../blobber.h"
+#include "green_screen.h"
 #include <fstream>
 
 using namespace std;

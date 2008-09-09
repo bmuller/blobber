@@ -61,7 +61,9 @@ AC_CHECK_HEADER([linux/videodev2.h], [
 AC_CONFIG_FILES([
  Makefile
  blobber/Makefile
- blobber/mods/Makefile
+ modules/Makefile
+ modules/laser_tag/Makefile
+ modules/green_screen/Makefile
 ])
 AC_OUTPUT
 

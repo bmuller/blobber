@@ -7,7 +7,6 @@ LaserTag::LaserTag() : ModInterface("LaserTag"), missing_counter(0) {
   lastpoint.y = 0; 
 };
 
-
 void LaserTag::init(Camarea &area, ProjectionWindow &pw) {
   // adjust these as necessary for different light/laser sources.  Any pixel
   // with the threshold you set will be considered in the input.
@@ -37,11 +36,13 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
     points.push_back(last);
   };
   */
-
   if(poi.size() != 0)
     missing_counter = 0;
 };
 
+
 extern "C" {
-  ModInterface *get_module() { return new LaserTag(); };
+  ModInterface *get_module() { 
+    return new LaserTag(); 
+  };
 };

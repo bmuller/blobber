@@ -5,7 +5,7 @@ using namespace std;
 ModInterface * load_module(string modname) {
   modname = "lib" + modname;
   debug("looking in " + string(LIBDIR) + " for module " + modname);
-  Glib::Module module(string(LIBDIR) + '/' + modname, Glib::MODULE_BIND_MASK);
+  Glib::Module module(string(LIBDIR) + '/' + modname);  
   if(module) {
     debug("sucessfully loaded module " + modname);
     ModInterface* (*get_module) () ;
