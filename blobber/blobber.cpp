@@ -118,13 +118,13 @@ int main(int argc, char** argv) {
   //MultiColoredTag *mct = new MultiColoredTag();
   //b.add_mod(mct);
 
-  MultiLaserTag *mlt = new MultiLaserTag();
-  b.add_mod(mlt);
+  //MultiLaserTag *mlt = new MultiLaserTag();
+  //b.add_mod(mlt);
 
   //LaserTag *lt = new LaserTag();
   //b.add_mod(lt);
-  ProjectionOptions *po = new ProjectionOptions();
-  b.add_mod(po);
+  //ProjectionOptions *po = new ProjectionOptions();
+  //b.add_mod(po);
 
   //GreenScreen *gs = new GreenScreen("mods/stone-640x480.jpg");
   //b.add_mod(gs);

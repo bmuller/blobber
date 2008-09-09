@@ -6,6 +6,6 @@ class Frame {
   int sizeimage;
   void *data;
   Frame(int w, int h, int bpl, int si);
-  ~Frame() { debug("Freeing frame pixel data"); free(data); };
+  ~Frame();
 };
 

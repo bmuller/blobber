@@ -11,7 +11,6 @@ class ModInterface {
   void get_poi(Camarea &area, vector<PIXEL> &modpoi);
 };
 
-
 class ProjectionOptions : public ModInterface {
  public:
   ProjectionOptions();

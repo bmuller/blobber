@@ -61,6 +61,7 @@ AC_CHECK_HEADER([linux/videodev2.h], [
 AC_CONFIG_FILES([
  Makefile
  blobber/Makefile
+ blobber/mods/Makefile
 ])
 AC_OUTPUT
 
