@@ -128,6 +128,10 @@ int main(int argc, char** argv) {
 
   //GreenScreen *gs = new GreenScreen("mods/stone-640x480.jpg");
   //b.add_mod(gs);
+
+  ModInterface *mod = load_module("lasertag");
+  b.add_mod(mod);
+
   b.run();
   return 0;
 }

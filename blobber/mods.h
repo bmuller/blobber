@@ -10,7 +10,7 @@ class ModInterface {
   void register_poi_criteria(Camarea &area, CRANGE crange);
   void get_poi(Camarea &area, vector<PIXEL> &modpoi);
 };
-
+/*
 class ProjectionOptions : public ModInterface {
  public:
   ProjectionOptions();
@@ -64,3 +64,4 @@ class GreenScreen : public ModInterface {
   unsigned char green_red_diff;
   unsigned char green_blue_diff;
 };
+*/

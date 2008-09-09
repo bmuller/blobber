@@ -21,3 +21,8 @@ class CameraReadException : public BlobberException {
  public:
   CameraReadException(std::string s) : BlobberException(s) {};
 };  
+
+class ModuleLoadException : public BlobberException {
+ public:
+  ModuleLoadException(std::string s) : BlobberException(s) {};
+};

@@ -11,7 +11,7 @@ Camarea::Camarea(string _device) : device(_device), hascam(true), mouse_clicked(
     height = frame->height;
   } catch(NoSuchVideoDeviceException &e) {
     debug("No video device found");
-    noCam = Cairo::ImageSurface::create_from_png("nocam.png");
+    noCam = Cairo::ImageSurface::create_from_png(string(DATAROOTDIR) + string("/nocam.png"));
     hascam = false;
     width = 352;
     height = 288;    
