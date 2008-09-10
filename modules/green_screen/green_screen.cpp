@@ -3,8 +3,8 @@
 
 using namespace std;
 
-GreenScreen::GreenScreen(const std::string filename)  : 
-  ModInterface("GreenScreen") {
+GreenScreen::GreenScreen() : ModInterface("GreenScreen") {
+  string filename = string(DATAROOTDIR) + "/green_screen/stone-640x480.jpg";
   try { image = Gdk::Pixbuf::create_from_file(filename); }
   catch(Glib::FileError err) { 
     cout << filename << " File not found!" << endl; 
@@ -34,3 +34,6 @@ void GreenScreen::update(Camarea &area, ProjectionWindow &pw) {
   }
 };
 
+extern "C" { 
+  ModInterface *get_module() { return new GreenScreen(); }; 
+};

@@ -42,8 +42,8 @@
 #include "camarea.h"
 #include "camera_window.h"
 #include "options_window.h"
-#include "mods.h"
-#include "mod_utils.h"
+#include "mod_interface.h"
+
 
 
 #define CLEAR(x) memset (&(x), 0, sizeof (x))

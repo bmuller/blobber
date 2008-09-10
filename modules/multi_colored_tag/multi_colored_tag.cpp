@@ -35,3 +35,6 @@ void MultiColoredTag::update(Camarea &area, ProjectionWindow &pw) {
     missing_counter = 0;
 };
 
+extern "C" {
+  ModInterface *get_module() { return new MultiColoredTag(); };
+};

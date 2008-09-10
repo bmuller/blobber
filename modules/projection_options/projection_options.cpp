@@ -75,3 +75,6 @@ void ProjectionOptions::update(Camarea &area, ProjectionWindow &pw) {
   }
 };
 
+extern "C" {
+  ModInterface *get_module() { return new ProjectionOptions(); };
+};

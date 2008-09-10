@@ -1,5 +1,6 @@
 INCLUDES = ${GTK_CFLAGS} -I${top_srcdir}/blobber
 AM_LDFLAGS = ${GTK_LIBS} -lblobber -L${top_srcdir}/blobber
+AM_CPPFLAGS = -DLIBDIR='"$(libdir)/blobber"' -DDATAROOTDIR='"$(datarootdir)/blobber"'
 
 pkglib_LTLIBRARIES = libgreenscreen.la liblasertag.la libprojectionoptions.la \
 		     libmultilasertag.la libmulticoloredtag.la

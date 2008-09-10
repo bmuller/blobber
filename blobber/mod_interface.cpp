@@ -1,8 +1,18 @@
 #include "blobber.h"
 
-using namespace std;
+ModInterface::ModInterface(string n) : name(n) { 
+  debug("Module \"" + n + "\" just created"); 
+};
 
-ModInterface * load_module(string modname) {
+void ModInterface::register_poi_criteria(Camarea &area, CRANGE crange) {
+  area.register_poi_criteria(name, crange);
+};
+
+void ModInterface::get_poi(Camarea &area, vector<PIXEL> &modpoi) {
+  area.get_poi(name, modpoi);
+};
+
+ModInterface * ModInterface::load_module(string modname) {
   modname = "lib" + modname;
   debug("looking in " + string(LIBDIR) + " for module " + modname);
   Glib::Module module(string(LIBDIR) + '/' + modname);  

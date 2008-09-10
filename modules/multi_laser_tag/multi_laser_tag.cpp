@@ -35,7 +35,10 @@ void MultiLaserTag::update(Camarea &area, ProjectionWindow &pw) {
   }
 
 
-  lastpoints = poi;
-  
+  lastpoints = poi; 
+};
+
+extern "C" {
+  ModInterface *get_module() { return new MultiLaserTag(); };
 };
 

@@ -2,7 +2,7 @@
 
 class GreenScreen : public ModInterface {
  public:
-  GreenScreen(const std::string filename);
+  GreenScreen();
   ~GreenScreen();
   void update(Camarea &area, ProjectionWindow &pw);
  protected:
