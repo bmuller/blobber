@@ -62,6 +62,7 @@ AC_CONFIG_FILES([
  Makefile
  blobber/Makefile
  modules/Makefile
+ libblobber.pc
 ])
 AC_OUTPUT
 

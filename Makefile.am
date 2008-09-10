@@ -1,5 +1,8 @@
 SUBDIRS = blobber modules
 
+pkgconfigdir=${libdir}/pkgconfig
+pkgconfig_DATA=libblobber.pc
+
 HEADERDIR = blobber
 nobase_include_HEADERS = $(HEADERDIR)/blobber.h $(HEADERDIR)/camera_window.h $(HEADERDIR)/exception.h \
 			 $(HEADERDIR)/frame.h $(HEADERDIR)/options_window.h $(HEADERDIR)/projection_window.h \
