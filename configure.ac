@@ -62,8 +62,6 @@ AC_CONFIG_FILES([
  Makefile
  blobber/Makefile
  modules/Makefile
- modules/laser_tag/Makefile
- modules/green_screen/Makefile
 ])
 AC_OUTPUT
 

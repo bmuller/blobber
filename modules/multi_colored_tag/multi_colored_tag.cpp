@@ -1,4 +1,4 @@
-#include "../blobber.h"
+#include "multi_colored_tag.h"
 
 using namespace std;
 

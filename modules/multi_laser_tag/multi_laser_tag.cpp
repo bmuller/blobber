@@ -1,4 +1,4 @@
-#include "../blobber.h"
+#include "multi_laser_tag.h"
 
 using namespace std;
 
