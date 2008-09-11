@@ -1,5 +1,7 @@
 #include "blobber.h"
 
+using namespace blobber;
+
 class LaserTag : public ModInterface {
  public:
   LaserTag();

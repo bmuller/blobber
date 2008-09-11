@@ -18,6 +18,8 @@
 
 #include "blobber.h"
 
+namespace blobber {
+
 using namespace std;
 
 CameraWindow::CameraWindow(string device) : exitButton("Exit"), area(device), table(2, 15) { 
@@ -95,4 +97,6 @@ void CameraWindow::about()
 void CameraWindow::options()
 {
   cout << "waaaaaaaaa\n";
+};
+
 };

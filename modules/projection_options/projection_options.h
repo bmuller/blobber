@@ -1,5 +1,7 @@
 #include "blobber.h"
 
+using namespace blobber;
+
 class ProjectionOptions : public ModInterface {
  public:
   ProjectionOptions();

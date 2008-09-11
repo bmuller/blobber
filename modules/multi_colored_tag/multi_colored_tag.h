@@ -1,5 +1,7 @@
 #include "blobber.h"
 
+using namespace blobber;
+
 class MultiColoredTag : public ModInterface {
  public:
   MultiColoredTag();

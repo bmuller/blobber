@@ -1,3 +1,6 @@
+
+namespace blobber {
+
 using namespace std;
 
 class FrameGrabber {
@@ -52,3 +55,5 @@ class FrameGrabberTwo : public FrameGrabber {
   void grabFrame(Frame *frame);
 };
 #endif
+
+};

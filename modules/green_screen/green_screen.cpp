@@ -19,6 +19,7 @@
 #include "green_screen.h"
 #include <fstream>
 
+using namespace blobber;
 using namespace std;
 
 GreenScreen::GreenScreen() : ModInterface("GreenScreen") {

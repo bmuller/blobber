@@ -18,6 +18,8 @@
 
 #include "blobber.h"
 
+namespace blobber {
+
 using namespace std;
 
 FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
@@ -177,4 +179,6 @@ void FrameGrabberOne::grabFrame(Frame *frame) {
 
   // Move along to the next one
   cur_frame = capture_frame;
+};
+
 };

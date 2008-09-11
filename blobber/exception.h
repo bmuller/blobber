@@ -1,4 +1,6 @@
 
+namespace blobber {
+
 class BlobberException : public std::exception {
  public:
   std::string _w;
@@ -25,4 +27,6 @@ class CameraReadException : public BlobberException {
 class ModuleLoadException : public BlobberException {
  public:
   ModuleLoadException(std::string s) : BlobberException(s) {};
+};
+
 };

@@ -1,4 +1,6 @@
 
+namespace blobber {
+
 using namespace std;
 
 class CameraWindow : public Gtk::Window {
@@ -14,5 +16,7 @@ protected:
   Gtk::VBox m_Box;
   Glib::RefPtr<Gtk::UIManager> m_UIManager;
   Glib::RefPtr<Gtk::ActionGroup> m_ActionGroup;
+
+};
 
 };

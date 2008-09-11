@@ -1,4 +1,6 @@
 
+namespace blobber {
+
 #define CLIP(color) (unsigned char)(((color)>0xFF)?0xff:(((color)<0)?0:(color)))
 
 class YUYVtoRGB32 {
@@ -17,6 +19,6 @@ class YUYVtoRGB32 {
   inline unsigned char B_FROMYU(unsigned char y, unsigned char u) { return CLIP((y) + LutBu[(u)]); }
 };
 
-
+};
   
     

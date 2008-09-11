@@ -18,9 +18,9 @@
 
 #include "blobber.h"
 
-using namespace std;
+namespace blobber {
 
-#include <errno.h>
+using namespace std;
 
 static int xioctl(int fd, int request, void *arg) {
   int r;
@@ -158,4 +158,6 @@ void FrameGrabberTwo::grabFrame(Frame *frame) {
 
   if (ioctl(fd, VIDIOC_QBUF, &buf) < 0)
       throw CameraReadException("Error queuing buffer");
+};
+
 };

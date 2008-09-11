@@ -1,5 +1,7 @@
 #include "blobber.h"
 
+using namespace blobber;
+
 class GreenScreen : public ModInterface {
  public:
   GreenScreen();

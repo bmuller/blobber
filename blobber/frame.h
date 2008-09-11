@@ -1,3 +1,5 @@
+namespace blobber {
+
 class Frame { 
  public:
   int width;
@@ -9,3 +11,4 @@ class Frame {
   ~Frame();
 };
 
+};

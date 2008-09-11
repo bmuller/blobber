@@ -1,5 +1,7 @@
 #include "blobber.h"
 
+using namespace blobber;
+
 class MultiLaserTag : public ModInterface {
  public:
   MultiLaserTag();

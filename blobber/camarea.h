@@ -1,3 +1,6 @@
+
+namespace blobber {
+
 using namespace std;
 
 class Camarea : public Gtk::DrawingArea {
@@ -32,4 +35,6 @@ class Camarea : public Gtk::DrawingArea {
   void draw_bounds(BOUNDS &b);
   void register_poi_criteria(string modname, CRANGE range);
   void get_poi(string modname, vector<PIXEL> &poi);
+};
+
 };

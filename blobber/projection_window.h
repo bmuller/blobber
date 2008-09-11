@@ -1,3 +1,5 @@
+
+namespace blobber {
 using namespace std;
 
 class ProjectionWindow : public Gtk::Window {
@@ -35,4 +37,5 @@ class ProjectionWindow : public Gtk::Window {
   bool on_expose_event(GdkEventExpose* event);
   bool get_context(Cairo::RefPtr<Cairo::Context> &cr);
   void draw_alignment_graphics();
+};
 };

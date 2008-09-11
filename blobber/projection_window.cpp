@@ -18,6 +18,7 @@
 
 #include "blobber.h"
 
+namespace blobber {
 using namespace std;
 
 ProjectionWindow::ProjectionWindow(int cw, int ch) : is_fullscreen(false), cam_width(cw), cam_height(ch), need_alignment(false) {
@@ -219,4 +220,6 @@ void ProjectionWindow::translate_coordinates(COORD camcords, COORD &projcoords) 
 
 void ProjectionWindow::clear(COLOR c) {
   set_background(c);
+};
+
 };

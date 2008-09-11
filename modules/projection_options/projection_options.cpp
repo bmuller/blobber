@@ -19,6 +19,7 @@
 #include "projection_options.h"
 
 using namespace std;
+using namespace blobber;
 
 ProjectionOptions::ProjectionOptions() : ModInterface("ProjectionOptions") {
   colors_showing_count = 0;

@@ -18,6 +18,7 @@
 
 #include "blobber.h"
 
+namespace blobber {
 using namespace std;
 
 void debug(string msg) {
@@ -44,4 +45,5 @@ void num_to_string(double i, std::string& s) {
   char c_int[100];
   sprintf(c_int, "%ld", i);
   s = std::string(c_int);
+};
 };

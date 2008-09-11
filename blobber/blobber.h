@@ -3,6 +3,7 @@
 #include <gtkmm.h>
 #include <cairomm/cairomm.h>
 #include <glib.h>
+#include <errno.h>
 
 #include <iostream>
 #include <string>
@@ -44,6 +45,5 @@
 #include "options_window.h"
 #include "mod_interface.h"
 
-
-
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
+

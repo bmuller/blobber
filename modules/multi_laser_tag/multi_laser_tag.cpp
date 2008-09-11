@@ -19,6 +19,7 @@
 #include "multi_laser_tag.h"
 
 using namespace std;
+using namespace blobber;
 
 MultiLaserTag::MultiLaserTag() : ModInterface("MultiLaserTag") { 
 

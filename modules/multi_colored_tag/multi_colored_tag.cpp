@@ -19,6 +19,7 @@
 #include "multi_colored_tag.h"
 
 using namespace std;
+using namespace blobber;
 
 MultiColoredTag::MultiColoredTag() : ModInterface("MultiColoredTag"), missing_counter(0) { 
   lastpoint.x = 0; 

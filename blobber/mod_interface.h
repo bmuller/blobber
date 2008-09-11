@@ -1,3 +1,6 @@
+
+namespace blobber {
+
 class ModInterface {
  public:
   string name;
@@ -12,5 +15,6 @@ class ModInterface {
   void get_poi(Camarea &area, vector<PIXEL> &modpoi);
 };
 
+};
 
 

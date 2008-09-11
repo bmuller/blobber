@@ -18,55 +18,57 @@
 
 #include "blobber.h"
 
-using namespace std;
+namespace blobber {
 
-Camarea::Camarea(string _device) : device(_device), hascam(true), mouse_clicked(false), manual_align(false) {
-  add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
-  try {
+  using namespace std;
+
+  Camarea::Camarea(string _device) : device(_device), hascam(true), mouse_clicked(false), manual_align(false) {
+    add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
+    try {
+      fg = FrameGrabberFactory::create(device);
+      frame = fg->makeFrame();
+      width = frame->width;
+      height = frame->height;
+    } catch(NoSuchVideoDeviceException &e) {
+      debug("No video device found");
+      noCam = Cairo::ImageSurface::create_from_png(string(DATAROOTDIR) + string("/nocam.png"));
+      hascam = false;
+      width = 352;
+      height = 288;    
+    }
+  };
+
+  Camarea::~Camarea() {
+    if(hascam) {
+      delete fg;
+      delete frame; 
+    }
+  };
+
+  void Camarea::set_device(string _device) { 
+    device = _device;
+    delete fg;
+    delete frame;
     fg = FrameGrabberFactory::create(device);
     frame = fg->makeFrame();
     width = frame->width;
     height = frame->height;
-  } catch(NoSuchVideoDeviceException &e) {
-    debug("No video device found");
-    noCam = Cairo::ImageSurface::create_from_png(string(DATAROOTDIR) + string("/nocam.png"));
-    hascam = false;
-    width = 352;
-    height = 288;    
-  }
-};
-
-Camarea::~Camarea() {
-  if(hascam) {
-    delete fg;
-    delete frame; 
-  }
-};
-
-void Camarea::set_device(string _device) { 
-  device = _device;
-  delete fg;
-  delete frame;
-  fg = FrameGrabberFactory::create(device);
-  frame = fg->makeFrame();
-  width = frame->width;
-  height = frame->height;
-};
-
-void Camarea::set_bounds(BOUNDS &b) {
-  bounds.copy(b);
-};
-
-bool Camarea::on_motion_notify_event (GdkEventMotion* event) { 
-  /* doesn't actually work - not sure it matters
-  if(mouse_clicked && hascam) {
-    BOUNDS b;
-    COORD c((int) event->x, (int) event->y);
-    b.from_coords(c, mouse_click);
-    draw_bounds(b);
   };
-  */
-};
+  
+  void Camarea::set_bounds(BOUNDS &b) {
+    bounds.copy(b);
+  };
+
+  bool Camarea::on_motion_notify_event (GdkEventMotion* event) { 
+    /* doesn't actually work - not sure it matters
+       if(mouse_clicked && hascam) {
+       BOUNDS b;
+       COORD c((int) event->x, (int) event->y);
+       b.from_coords(c, mouse_click);
+       draw_bounds(b);
+       };
+    */
+  };
 
 bool Camarea::on_button_press_event(GdkEventButton* event) { 
 #ifdef DEBUG
@@ -190,4 +192,6 @@ void Camarea::register_poi_criteria(string modname, CRANGE range) {
 
 void Camarea::get_poi(string modname, vector<PIXEL> &modpoi) {
   modpoi = poi[modname];
+};
+
 };

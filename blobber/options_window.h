@@ -1,4 +1,5 @@
 
+namespace blobber {
 using namespace std;
 
 class OptionsWindow : public Gtk::Window {
@@ -9,4 +10,5 @@ public:
 protected:
   Gtk::Button exitButton;
   Gtk::Table table;
+};
 };

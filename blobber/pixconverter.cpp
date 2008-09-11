@@ -16,8 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "pixconverter.h"
+#include "blobber.h"
 
+namespace blobber {
 YUYVtoRGB32::YUYVtoRGB32(unsigned int height, unsigned int width) :
   yuyv_bytes(height * width * 2) {
   LutRv = new int[256];
@@ -30,7 +31,7 @@ YUYVtoRGB32::YUYVtoRGB32(unsigned int height, unsigned int width) :
     LutGu[i] = (128 - i) * 714 / 1000;
     LutGv[i] = (128-i) * 344 / 1000;
   }
-}
+};
 
 
 YUYVtoRGB32::~YUYVtoRGB32() {
@@ -38,7 +39,7 @@ YUYVtoRGB32::~YUYVtoRGB32() {
   delete [] LutGu;
   delete [] LutGv;
   delete [] LutBu;
-}
+};
 
 void YUYVtoRGB32::convert(unsigned char* yuyv, unsigned char* rgb32) {
   unsigned char* y;
@@ -54,4 +55,6 @@ void YUYVtoRGB32::convert(unsigned char* yuyv, unsigned char* rgb32) {
     *(r+7) = (unsigned char) 0;
     r+=8;
   }  
-}
+};
+
+};

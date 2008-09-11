@@ -18,6 +18,8 @@
 
 #include "blobber.h"
 
+namespace blobber {
+
 ModInterface::ModInterface(string n) : name(n) { 
   debug("Module \"" + n + "\" just created"); 
 };
@@ -47,4 +49,6 @@ ModInterface * ModInterface::load_module(string modname) {
   } else {
     throw ModuleLoadException(string(Glib::Module::get_last_error()));
   }
+};
+
 };

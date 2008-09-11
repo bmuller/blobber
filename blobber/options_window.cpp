@@ -18,6 +18,7 @@
 
 #include "blobber.h"
 
+namespace blobber {
 using namespace std;
 
 OptionsWindow::OptionsWindow(string device) : exitButton("Exit"), area(device), table(2, 15) { 
@@ -33,4 +34,4 @@ OptionsWindow::OptionsWindow(string device) : exitButton("Exit"), area(device), 
 void OptionsWindow::exit() {
   hide();
 };
-
+};

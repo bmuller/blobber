@@ -1,3 +1,5 @@
+
+namespace blobber {
 using namespace std;
 
 struct buffer {
@@ -120,4 +122,5 @@ struct PIXEL {
     color.copy(_color);
     coord.copy(_coord);
   };
+};
 };

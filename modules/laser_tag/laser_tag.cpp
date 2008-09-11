@@ -19,6 +19,7 @@
 #include "laser_tag.h"
 
 using namespace std;
+using namespace blobber;
 
 LaserTag::LaserTag() : ModInterface("LaserTag"), missing_counter(0) { 
   lastpoint.x = 0; 
