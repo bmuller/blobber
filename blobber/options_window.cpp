@@ -19,19 +19,20 @@
 #include "blobber.h"
 
 namespace blobber {
-using namespace std;
+  using namespace std;
 
-OptionsWindow::OptionsWindow(string device) : exitButton("Exit"), area(device), table(2, 15) { 
-  resize(area.width, area.height+50);   
-  exitButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::exit) );
+  OptionsWindow::OptionsWindow() : exitButton("Exit"), table(2, 15) { 
+    resize(100, 100);
+    exitButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::exit) );
+    
+    add(table);
+    Gtk::CheckButton cb("Enable", true);
+    table.attach(cb, 0, 1, 0, 1);
+    table.attach(exitButton, 0, 1, 14, 15, Gtk::EXPAND, Gtk::EXPAND); 
+    show_all_children();
+  };
 
-  add(table);
-  table.attach(area, 0, 2, 0, 14);
-  table.attach(exitButton, 0, 1, 14, 15, Gtk::EXPAND, Gtk::EXPAND); 
-  show_all_children();
-};
-
-void OptionsWindow::exit() {
-  hide();
-};
+  void OptionsWindow::exit() {
+    hide();
+  };
 };

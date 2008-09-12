@@ -39,4 +39,8 @@ namespace blobber {
     ConfigurationException(std::string s) : BlobberException(s) {};
   };
 
+  class GUIException : public BlobberException {
+  public:
+    GUIException(std::string s) : BlobberException(s) {};
+  };
 };

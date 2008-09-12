@@ -20,47 +20,29 @@
 
 namespace blobber {
 
-FrameGrabber * FrameGrabberFactory::create(string dev) {
-  // eventually, this line will go away, following would be used
-  //return new FrameGrabberOne(dev);
-  FrameGrabber * fg = (FrameGrabber *) NULL;
-  
+  FrameGrabber * FrameGrabberFactory::create(string dev) {
 #ifdef HAVE_V4L1
-  // test v1, return if works
-  debug("trying V4L1");
-  try {
-    fg = new FrameGrabberOne(dev);
-  }
-  catch ( BlobberException ex ) {
-    delete fg;
-    fg = (FrameGrabber *) NULL;
-    debug(ex._w);
-  }
-  if ( fg != (FrameGrabber *) NULL ) {
-    return fg;
-  }
-  debug("no V4L1 support");
+    // test v1, return if works
+    debug("trying V4L1");
+    try {
+      return new FrameGrabberOne(dev);
+    } catch ( BlobberException ex ) {
+      debug("No V4L1 support:" + string(ex.what()));
+    }
 #endif
 
 #ifdef HAVE_V4L2
-  // test v2, return if works
-  debug("trying V4L2");
-  try {
-    fg = new FrameGrabberTwo(dev);
-  }
-  catch ( BlobberException ex ) {
-    delete fg;
-    fg = (FrameGrabber *) NULL;
-    debug(ex._w);
-  } 
-  if (fg != (FrameGrabber *) NULL ) {
-    return fg;
-  } 
-  debug("no V4L2 support");
+    // test v2, return if works
+    debug("trying V4L2");
+    try {
+      return new FrameGrabberTwo(dev);
+    } catch ( BlobberException ex ) {
+      debug("No V4L2 support:" + string(ex.what()));
+    } 
 #endif
-  // and if we're and neither worked, die loudly
-  throw BlobberException("No V4L support found");
-  return fg;
-};
+    // and if we're and neither worked, die loudly
+    throw BlobberException("No V4L support found");
+    return (FrameGrabber *) NULL;
+  };
 
 };
