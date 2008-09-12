@@ -18,7 +18,8 @@ namespace blobber {
     try {
       Glib::Dir::Dir dirio(directory);
     } catch(Glib::FileError fe) {
-      mkdir(directory.c_str(), S_IRWXU);
+      if(mkdir(directory.c_str(), S_IRWXU) != 0)
+	throw ConfigurationException("Could not make configuration directory " + directory);
     };
     ofstream fio(Glib::build_filename(directory, filename).c_str(), fstream::out | fstream::trunc);
     string data = config.to_data();
@@ -31,15 +32,21 @@ namespace blobber {
   };
 
   void Configuration::set(string key, vector<string> values, string groupname) {
-
+    config.set_string_list(groupname, key, values);
   };
 
-  void Configuration::get(string key, string &value, string groupname) {
-    value = config.get_string(groupname, key);
+  void Configuration::get(string key, string &value, string vdefault, string groupname) {
+    if(config.has_group(groupname) && config.has_key(groupname, key))
+      value = config.get_string(groupname, key);
+    else
+      value = vdefault;
   };
 
   void Configuration::get(string key, vector<string> &values, string groupname) {
-
+    if(config.has_group(groupname) && config.has_key(groupname, key))
+      values = config.get_string_list(groupname, key);
+    else
+      values.clear();      
   };
 
   void Configuration::module_set(string key, string value, string modname) {
@@ -50,8 +57,8 @@ namespace blobber {
     set(key, values, "mod_" + modname);
   };
 
-  void Configuration::module_get(string key, string &value, string modname) {
-    get(key, value, "mod_" + modname);
+  void Configuration::module_get(string key, string &value, string vdefault, string modname) {
+    get(key, value, vdefault, "mod_" + modname);
   };
 
   void Configuration::module_get(string key, vector<string> &values, string modname) {
