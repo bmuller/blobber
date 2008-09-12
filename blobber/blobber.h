@@ -6,6 +6,7 @@
 #include <errno.h>
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -32,10 +33,12 @@
 
 #include <sys/mman.h>
 #include <sys/ioctl.h>
+#include <sys/dir.h>
 
 #include "pixconverter.h" 
 #include "exception.h"
 #include "utils.h"
+#include "configuration.h"
 #include "types.h"
 #include "frame.h"
 #include "framegrabber.h"

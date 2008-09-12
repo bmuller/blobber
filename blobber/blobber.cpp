@@ -27,6 +27,7 @@ namespace blobber {
     BOUNDS visible_bounds;
     vector<ModInterface*> mods;
     bool aligned;
+    Configuration config;
   public:
     Blopper(string device) : win(device), proj(win.area.width, win.area.height), aligned(false) {
       if(win.area.hascam) {
@@ -40,6 +41,8 @@ namespace blobber {
       BOUNDS b(0, win.area.height, 0, win.area.width);
       win.area.set_bounds(b);
       proj.set_bounds(b);
+
+      config.set("test", "blah");
     };
     
     ~Blopper() {
@@ -93,6 +96,8 @@ namespace blobber {
     };
 
     void run() {
+      Glib::set_prgname("blobber");
+      Glib::set_application_name("blobber");
       Gtk::Main::run(win);
       debug("finished running");
     };

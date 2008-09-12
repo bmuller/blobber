@@ -5,7 +5,8 @@ AM_CPPFLAGS = -DLIBDIR='"$(libdir)/blobber"' -DDATAROOTDIR='"$(datarootdir)/blob
 
 lib_LTLIBRARIES = libblobber.la
 libblobber_la_SOURCES = camarea.cpp frame.cpp options_window.cpp framegrabber_factory.cpp \
-	mod_interface.cpp projection_window.cpp utils.cpp camera_window.cpp pixconverter.cpp
+	mod_interface.cpp projection_window.cpp utils.cpp camera_window.cpp pixconverter.cpp \
+	configuration.cpp
 
 if HAVE_V4L1
 libblobber_la_SOURCES += framegrabberone.cpp
