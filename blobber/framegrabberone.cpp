@@ -24,16 +24,19 @@ using namespace std;
 
 FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
   fd = open(dev.c_str(), O_RDONLY);
-  if (fd == -1 ) 
-    throw NoSuchVideoDeviceException("open video device \"" + dev + "\" failed");
+  if (fd == -1 ) {
+    throw NoSuchVideoDeviceException("V4L1: open video device \"" + dev + "\" failed");
+  }
   
   // For n-ary buffering
   cur_frame = -1;
 
   // Get the device capabilities
-  if( ioctl(fd, VIDIOCGCAP, &caps) < 0 ) 
-    throw CameraReadException("query capabilities failed");
-  debug("Found camera: " + string(caps.name));
+  if( ioctl(fd, VIDIOCGCAP, &caps) < 0 ) {
+    close(fd);
+    throw CameraReadException("V4L1: query capabilities failed");
+  }
+  debug("V4L1: Found camera: " + string(caps.name));
 
   // Read info for all input sources
   source = 0;
@@ -41,18 +44,20 @@ FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
     video_channel vc;
     ioctl(fd, VIDIOCGCHAN, &vc );
     sources.push_back(vc);
-    debug("Found video source: " + string(vc.name));
+    debug("V4L1: Found video source: " + string(vc.name));
   }
 
   // Don't really care about tuning capabilities
-  if(VID_TYPE_TUNER) debug("Your video device can be tuned");
+  if(VID_TYPE_TUNER) debug("V4L1: Your video device can be tuned");
   // Read info about tuner
   tuner.tuner = 0;
   if ((caps.type & VID_TYPE_TUNER ) && ioctl(fd, VIDIOCGTUNER, &tuner) < 0 )
-    debug("cannot get tuner info (not present?)");
+    debug("V4L1: cannot get tuner info (not present?)");
 
-  if(ioctl(fd, VIDIOCGWIN, &window) < 0) 
-    throw NoSuchVideoDeviceException("set default window attrs failed");
+  if(ioctl(fd, VIDIOCGWIN, &window) < 0) {
+    close(fd);
+    throw NoSuchVideoDeviceException("V4L1: set default window attrs failed");
+  }
 
   // Set default window to max size
   window.x = 0;
@@ -64,8 +69,10 @@ FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
   window.clips = NULL;
   window.clipcount = 0;
 
-  if(ioctl(fd, VIDIOCSWIN, &window) < 0) 
-    throw CameraReadException("set default window attrs failed");
+  if(ioctl(fd, VIDIOCSWIN, &window) < 0) {
+    close(fd);
+    throw CameraReadException("V4L1: set default window attrs failed");
+  }
 
   picture.brightness = 16384;
   picture.hue        = 0;
@@ -77,22 +84,30 @@ FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
   //picture.depth      = 24;
   //picture.palette    = VIDEO_PALETTE_RGB24;
 
-  if (ioctl(fd, VIDIOCSPICT, &picture) < 0 ) 
-    throw CameraReadException("set picture attributes failed");
+  if (ioctl(fd, VIDIOCSPICT, &picture) < 0 ) {
+    close(fd);
+    throw CameraReadException("V4L1: set picture attributes failed");
+  }
 
   // Get frame buffer info
-  if ( ioctl(fd, VIDIOCGFBUF, &fbuffer) < 0 ) 
-    throw CameraReadException("get framebuffer failed");
+  if ( ioctl(fd, VIDIOCGFBUF, &fbuffer) < 0 ) {
+    close(fd);
+    throw CameraReadException("V4L1: get framebuffer failed");
+  }
 
   // Get the memory buffer info
-  if ( ioctl(fd, VIDIOCGMBUF, &mbuf) < 0 ) 
-    throw CameraReadException("get memory buffer failed");
+  if ( ioctl(fd, VIDIOCGMBUF, &mbuf) < 0 ) {
+    close(fd);
+    throw CameraReadException("V4L1: get memory buffer failed");
+  }
 
   // Memory map the video buffer
   mb_map = mmap(0, mbuf.size, PROT_READ, MAP_SHARED, fd, 0);
 
-  if (mb_map == MAP_FAILED)
-    throw CameraReadException("mmap buffer not mmapped");
+  if (mb_map == MAP_FAILED) {
+    close(fd);
+    throw CameraReadException("V4L1: mmap buffer not mmapped");
+  }
 };
 
 FrameGrabberOne::~FrameGrabberOne() {
@@ -124,7 +139,7 @@ Frame * FrameGrabberOne::makeFrame() {
     break;
   default:
     // Unsupported!                                                                                                 
-    throw UnsupportedFrameFormatException("Unsupported frame type.");
+    throw UnsupportedFrameFormatException("V4L1: Unsupported frame type.");
     bpp = 1;
   }
 
@@ -151,8 +166,10 @@ void FrameGrabberOne::grabFrame(Frame *frame) {
     vmmap.height = window.height;
 
     // Start capture
-    if (ioctl(fd, VIDIOCMCAPTURE, &vmmap) < 0 ) 
-      throw CameraReadException("failed to capture frame");
+    if (ioctl(fd, VIDIOCMCAPTURE, &vmmap) < 0 ) {
+      close(fd);
+      throw CameraReadException("V4L1: failed to capture frame");
+    }
   }
 
   // Start capturing next frame
@@ -167,12 +184,16 @@ void FrameGrabberOne::grabFrame(Frame *frame) {
   vmmap.height = window.height;
 
   // Start capture
-  if (ioctl(fd, VIDIOCMCAPTURE, &vmmap) < 0)
-    throw CameraReadException("failed to capture frame");
+  if (ioctl(fd, VIDIOCMCAPTURE, &vmmap) < 0) {
+    close(fd);
+    throw CameraReadException("V4L1: failed to capture frame");
+  }
 
   // Wait for end of frame
-  if (ioctl(fd, VIDIOCSYNC, &cur_frame) < 0 ) 
-    throw CameraReadException("failed to sync frame");
+  if (ioctl(fd, VIDIOCSYNC, &cur_frame) < 0 ) {
+    close(fd);
+    throw CameraReadException("V4L1: failed to sync frame");
+  }
 
   // Save video buffer into our own memory
   memcpy(frame->data, ((unsigned char *) mb_map + mbuf.offsets[cur_frame]), frame->sizeimage);
