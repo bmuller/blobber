@@ -7,7 +7,7 @@ namespace blobber {
     ModInterface(string n);
     virtual void update(Camarea &area, ProjectionWindow &pw) = 0;
     virtual void clear() {};
-    virtual void init(Camarea &area, ProjectionWindow &pw, Configuration *config) {};
+    virtual void init(Camarea &area, ProjectionWindow &pw) {};
     virtual void projection_window_exposed(ProjectionWindow &pw) {};
     static ModInterface * load_module(string modname);
     static void get_available_modules(vector<string> &mods);

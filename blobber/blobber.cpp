@@ -57,7 +57,7 @@ namespace blobber {
     void add_mod(ModInterface * mi) {
       debug("Module " + mi->name + " loaded...");
       mi->set_config(config);
-      mi->init(win.area, proj, config);
+      mi->init(win.area, proj);
       mods.push_back(mi);
     };
     
