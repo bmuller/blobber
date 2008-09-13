@@ -26,7 +26,7 @@ namespace blobber {
     debug("trying V4L1");
     try {
       return new FrameGrabberOne(dev);
-    } catch ( BlobberException ex ) {
+    } catch ( CameraReadException ex ) {
       debug("No V4L1 support:" + string(ex.what()));
     }
 #endif
@@ -36,7 +36,7 @@ namespace blobber {
     debug("trying V4L2");
     try {
       return new FrameGrabberTwo(dev);
-    } catch ( BlobberException ex ) {
+    } catch ( CameraReadException ex ) {
       debug("No V4L2 support:" + string(ex.what()));
     } 
 #endif

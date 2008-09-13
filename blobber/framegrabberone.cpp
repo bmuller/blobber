@@ -56,7 +56,7 @@ FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
 
   if(ioctl(fd, VIDIOCGWIN, &window) < 0) {
     close(fd);
-    throw NoSuchVideoDeviceException("V4L1: set default window attrs failed");
+    throw CameraReadException("V4L1: set default window attrs failed");
   }
 
   // Set default window to max size
