@@ -37,7 +37,7 @@ bool ProjectionWindow::on_key_press_event(GdkEventKey* eventData) {
 #ifdef DEBUG
   string ks;
   num_to_string((int) eventData->keyval, ks);
-  debug("key pressed on projection window: "+ks);
+  debug("Key pressed on projection window: "+ks);
 #endif
   switch(eventData->keyval) {
   case 32: // spacebar
@@ -91,7 +91,7 @@ bool ProjectionWindow::get_context(Cairo::RefPtr<Cairo::Context> &cr) {
     cr = window->create_cairo_context();
     return true;
   }
-  debug("no cairo context yet");
+  debug("No cairo context yet");
   return false;
 };
 
@@ -100,7 +100,7 @@ void ProjectionWindow::set_bounds(BOUNDS &b) {
 };
 
 bool ProjectionWindow::on_expose_event(GdkEventExpose* event) {
-  debug("projection window expose event");
+  debug("Projection window expose event");
   i_exposed_myself = true;
   Cairo::RefPtr<Cairo::Context> cr;
   if(!get_context(cr))

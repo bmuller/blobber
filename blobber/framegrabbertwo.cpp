@@ -40,20 +40,20 @@ namespace blobber {
     fd = open(dev.c_str(), O_RDWR, 0); //removed  | O_NONBLOCK to prevent EBUSY's
     if (fd == -1 ) {
       close(fd);
-      throw NoSuchVideoDeviceException("V4L2: open video device \"" + dev + "\" failed");
+      throw NoSuchVideoDeviceException(" open video device \"" + dev + "\" failed");
     }
 
     // Get the device capabilities
     if(xioctl(fd, VIDIOC_QUERYCAP, &caps) < 0 ) {
       cout << errno << endl;
       close(fd);
-      throw CameraReadException("V4L2: query capabilities failed");
+      throw CameraReadException(" query capabilities failed");
     }
     debug("V4L2: Found camera");
     
     if(!(caps.capabilities & V4L2_CAP_VIDEO_CAPTURE)) {
       close(fd);
-      throw CameraReadException("V4L2: " + dev + " is not a video capture device");
+      throw CameraReadException(" " + dev + " is not a video capture device");
     }
 
     // Get the pixelformat supported by the device
@@ -64,7 +64,7 @@ namespace blobber {
     if( xioctl(fd, VIDIOC_ENUM_FMT, &fmtd) < 0 ) { 
       cout << errno << endl;
       close(fd);
-      throw CameraReadException("V4L2: query pixelformat failed");
+      throw CameraReadException(" query pixelformat failed");
     }
 
     CLEAR(fmt);
@@ -76,13 +76,13 @@ namespace blobber {
     
     if (ioctl(fd, VIDIOC_S_FMT, &fmt) < 0) {
       close(fd);
-      throw CameraReadException("V4L2: error setting format");
+      throw CameraReadException(" error setting format");
     }
     
     switch ( fmt.fmt.pix.pixelformat ) {
     case V4L2_PIX_FMT_RGB32 : break;
     case V4L2_PIX_FMT_YUYV  : conv = new YUYVtoRGB32(fmt.fmt.pix.height, fmt.fmt.pix.width); break;
-    default                 : throw CameraReadException("V4L2: pixel format not supported");
+    default                 : throw CameraReadException(" pixel format not supported");
     }
 
 
@@ -93,12 +93,12 @@ namespace blobber {
     req.memory              = V4L2_MEMORY_MMAP;
     if (ioctl(fd, VIDIOC_REQBUFS, &req) < 0) {
       close(fd);
-      throw CameraReadException("V4L2: Device does not support memory mapping");
+      throw CameraReadException(" device does not support memory mapping");
     }
 
     if (req.count < 2) {
       close(fd);
-      throw CameraReadException("V4L2: Insufficient memory");
+      throw CameraReadException(" insufficient memory");
     }
 
     // Map the userspace buffers
@@ -113,14 +113,14 @@ namespace blobber {
       
       if (ioctl(fd, VIDIOC_QUERYBUF, &buf) < 0) {
 	close(fd);
-	throw CameraReadException("V4L2: Error reading video buffer");
+	throw CameraReadException(" error reading video buffer");
       }
       
       buffers[n_buffers].length = buf.length;
       buffers[n_buffers].start = mmap (NULL, buf.length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
       if (MAP_FAILED == buffers[n_buffers].start) {
 	close(fd);
-	throw CameraReadException("V4L2: mmap buffer not mmapped");
+	throw CameraReadException(" mmap buffer not mmapped");
       }
     }
     
@@ -133,7 +133,7 @@ namespace blobber {
       buf.index       = i;
       if (ioctl(fd, VIDIOC_QBUF, &buf) < 0) {
 	close(fd);
-	throw CameraReadException("V4L2: Error reading video buffer");
+	throw CameraReadException(" error reading video buffer");
       }
     }
     
@@ -141,7 +141,7 @@ namespace blobber {
     enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     if (ioctl(fd, VIDIOC_STREAMON, &type) < 0) {
       close(fd);
-      throw CameraReadException("V4L2: Error starting video stream");
+      throw CameraReadException(" error starting video stream");
     }
   };
   
@@ -165,7 +165,7 @@ namespace blobber {
     //if (res < 0) 
     if(tioctl(fd, VIDIOC_DQBUF, &buf) < 0) {
       close(fd);
-      throw CameraReadException("V4L2: Error dequeuing buffer");
+      throw CameraReadException(" error dequeuing buffer");
     }
   
     // If YUYV, do conversion
@@ -180,7 +180,7 @@ namespace blobber {
 
     if (ioctl(fd, VIDIOC_QBUF, &buf) < 0) {
       close(fd);
-      throw CameraReadException("V4L2: Error queuing buffer");
+      throw CameraReadException(" error queuing buffer");
     }
   };
 

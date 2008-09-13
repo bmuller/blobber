@@ -63,7 +63,7 @@ namespace blobber {
       win.area.update_frame();
 
       if(win.area.hascam && win.area.manual_align) {
-	debug("manually setting camera's bounds");
+	debug("Manually setting camera's bounds");
 	aligned = true;
 	proj.set_bounds(win.area.bounds);
 	visible_bounds.copy(win.area.bounds);
@@ -99,7 +99,7 @@ namespace blobber {
       Glib::set_prgname("blobber");
       Glib::set_application_name("blobber");
       Gtk::Main::run(win);
-      debug("finished running");
+      debug("Finished running");
     };
 
     void align() {

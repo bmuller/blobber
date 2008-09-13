@@ -23,7 +23,7 @@ namespace blobber {
   FrameGrabber * FrameGrabberFactory::create(string dev) {
 #ifdef HAVE_V4L1
     // test v1, return if works
-    debug("trying V4L1");
+    debug("Trying V4L1");
     try {
       return new FrameGrabberOne(dev);
     } catch ( CameraReadException ex ) {
@@ -33,7 +33,7 @@ namespace blobber {
 
 #ifdef HAVE_V4L2
     // test v2, return if works
-    debug("trying V4L2");
+    debug("Trying V4L2");
     try {
       return new FrameGrabberTwo(dev);
     } catch ( CameraReadException ex ) {
@@ -41,7 +41,7 @@ namespace blobber {
     } 
 #endif
     // and if we're and neither worked, die loudly
-    throw BlobberException("No V4L support found");
+    throw BlobberException(" no V4L support found");
     return (FrameGrabber *) NULL;
   };
 

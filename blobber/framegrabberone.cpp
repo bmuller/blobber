@@ -25,7 +25,7 @@ using namespace std;
 FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
   fd = open(dev.c_str(), O_RDONLY);
   if (fd == -1 ) {
-    throw NoSuchVideoDeviceException("V4L1: open video device \"" + dev + "\" failed");
+    throw NoSuchVideoDeviceException(" open video device \"" + dev + "\" failed");
   }
   
   // For n-ary buffering
@@ -34,7 +34,7 @@ FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
   // Get the device capabilities
   if( ioctl(fd, VIDIOCGCAP, &caps) < 0 ) {
     close(fd);
-    throw CameraReadException("V4L1: query capabilities failed");
+    throw CameraReadException(" query capabilities failed");
   }
   debug("V4L1: Found camera: " + string(caps.name));
 
@@ -56,7 +56,7 @@ FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
 
   if(ioctl(fd, VIDIOCGWIN, &window) < 0) {
     close(fd);
-    throw CameraReadException("V4L1: set default window attrs failed");
+    throw CameraReadException(" set default window attrs failed");
   }
 
   // Set default window to max size
@@ -71,7 +71,7 @@ FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
 
   if(ioctl(fd, VIDIOCSWIN, &window) < 0) {
     close(fd);
-    throw CameraReadException("V4L1: set default window attrs failed");
+    throw CameraReadException(" set default window attrs failed");
   }
 
   picture.brightness = 16384;
@@ -86,19 +86,19 @@ FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
 
   if (ioctl(fd, VIDIOCSPICT, &picture) < 0 ) {
     close(fd);
-    throw CameraReadException("V4L1: set picture attributes failed");
+    throw CameraReadException(" set picture attributes failed");
   }
 
   // Get frame buffer info
   if ( ioctl(fd, VIDIOCGFBUF, &fbuffer) < 0 ) {
     close(fd);
-    throw CameraReadException("V4L1: get framebuffer failed");
+    throw CameraReadException(" get framebuffer failed");
   }
 
   // Get the memory buffer info
   if ( ioctl(fd, VIDIOCGMBUF, &mbuf) < 0 ) {
     close(fd);
-    throw CameraReadException("V4L1: get memory buffer failed");
+    throw CameraReadException(" get memory buffer failed");
   }
 
   // Memory map the video buffer
@@ -106,7 +106,7 @@ FrameGrabberOne::FrameGrabberOne(string dev) : cur_frame(-1) {
 
   if (mb_map == MAP_FAILED) {
     close(fd);
-    throw CameraReadException("V4L1: mmap buffer not mmapped");
+    throw CameraReadException(" mmap buffer not mmapped");
   }
 };
 
@@ -139,7 +139,7 @@ Frame * FrameGrabberOne::makeFrame() {
     break;
   default:
     // Unsupported!                                                                                                 
-    throw UnsupportedFrameFormatException("V4L1: Unsupported frame type.");
+    throw UnsupportedFrameFormatException(" unsupported frame type");
     bpp = 1;
   }
 
@@ -168,7 +168,7 @@ void FrameGrabberOne::grabFrame(Frame *frame) {
     // Start capture
     if (ioctl(fd, VIDIOCMCAPTURE, &vmmap) < 0 ) {
       close(fd);
-      throw CameraReadException("V4L1: failed to capture frame");
+      throw CameraReadException(" failed to capture frame");
     }
   }
 
@@ -186,13 +186,13 @@ void FrameGrabberOne::grabFrame(Frame *frame) {
   // Start capture
   if (ioctl(fd, VIDIOCMCAPTURE, &vmmap) < 0) {
     close(fd);
-    throw CameraReadException("V4L1: failed to capture frame");
+    throw CameraReadException(" failed to capture frame");
   }
 
   // Wait for end of frame
   if (ioctl(fd, VIDIOCSYNC, &cur_frame) < 0 ) {
     close(fd);
-    throw CameraReadException("V4L1: failed to sync frame");
+    throw CameraReadException(" failed to sync frame");
   }
 
   // Save video buffer into our own memory
