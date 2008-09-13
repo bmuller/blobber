@@ -6,7 +6,9 @@ namespace blobber {
     directory =  Glib::build_filename(Glib::get_user_config_dir(), "blobber");
     filename = "conf.ini";
     try {
-      config.load_from_file(Glib::build_filename(directory, filename));
+      string conflocation = Glib::build_filename(directory, filename);
+      config.load_from_file(conflocation);
+      debug("Successfully loaded config file " + conflocation);
     } catch(Glib::Error e) {};
   };
 
@@ -21,7 +23,9 @@ namespace blobber {
       if(mkdir(directory.c_str(), S_IRWXU) != 0)
 	throw ConfigurationException("Could not make configuration directory " + directory);
     };
-    ofstream fio(Glib::build_filename(directory, filename).c_str(), fstream::out | fstream::trunc);
+    string conflocation = Glib::build_filename(directory, filename);
+    debug("Writing configuration file " + conflocation);
+    ofstream fio(conflocation.c_str(), fstream::out | fstream::trunc);
     string data = config.to_data();
     fio.write(data.c_str(), data.size());
     fio.close();

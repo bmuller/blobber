@@ -82,7 +82,12 @@ namespace blobber {
   };
 
   void CameraWindow::about() {
-    cout << "weeeeeeee\n";
+    Glib::ustring strVersion = "Blobber version " + string(VERSION);
+    Gtk::MessageDialog cmdAbout(*this, strVersion);
+    cmdAbout.set_secondary_text("Blobber tracks lights/colors with an attached webcam and "
+				"then projects their \"reactions\" using an attached projector.\n\n"
+				"Blobber is open source software brougt to you by csclug.org.");
+    cmdAbout.run();
   };
 
   void CameraWindow::options() {

@@ -191,7 +191,7 @@ void Camarea::register_poi_criteria(string modname, CRANGE range) {
 };
 
 void Camarea::get_poi(string modname, vector<PIXEL> &modpoi) {
-  modpoi = poi[modname];
+  modpoi.assign(poi[modname].begin(), poi[modname].end());
 };
 
 };

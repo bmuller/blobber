@@ -56,8 +56,25 @@ namespace blobber {
       Glib::Dir dir(LIBDIR);
       mods.assign(dir.begin(), dir.end());
     } catch(Glib::FileError fe) {
-      throw ModuleListException(" program was compiled with " + string(LIBDIR) + " as library directory - but not readable.");
+      throw ModuleListException(" program was compiled with " + string(LIBDIR) + " as library "
+				"directory - but not readable.");
     }
+  };
+
+  void ModInterface::config_set(string key, string value) {
+    config->module_set(key, value, name);
+  };
+
+  void ModInterface::config_set(string key, vector<string> values) {
+    config->module_set(key, values, name);
+  };
+
+  void ModInterface::config_get(string key, string &value, string vdefault) {
+    config->module_get(key, value, vdefault, name);
+  };
+
+  void ModInterface::config_get(string key, vector<string> &values) {
+    config->module_get(key, values, name);
   };
 
 };

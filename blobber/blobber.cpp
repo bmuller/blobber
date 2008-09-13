@@ -27,7 +27,7 @@ namespace blobber {
     BOUNDS visible_bounds;
     vector<ModInterface*> mods;
     bool aligned;
-    Configuration config;
+    Configuration *config;
   public:
     Blopper(string device) : win(device), proj(win.area.width, win.area.height), aligned(false) {
       if(win.area.hascam) {
@@ -42,7 +42,7 @@ namespace blobber {
       win.area.set_bounds(b);
       proj.set_bounds(b);
 
-      config.set("test", "blah");
+      config = new Configuration();
     };
     
     ~Blopper() {
@@ -51,11 +51,13 @@ namespace blobber {
 	debug("Freeing " + mods[i]->name + "...");
 	delete mods[i];
       }
+      delete config;
     };
 
     void add_mod(ModInterface * mi) {
       debug("Module " + mi->name + " loaded...");
-      mi->init(win.area, proj);
+      mi->set_config(config);
+      mi->init(win.area, proj, config);
       mods.push_back(mi);
     };
     
@@ -140,26 +142,9 @@ namespace blobber {
 int main(int argc, char** argv) {
   Gtk::Main kit(argc, argv);
   blobber::Blopper b("/dev/video0");
-    
-  //MultiColoredTag *mct = new MultiColoredTag();
-  //b.add_mod(mct);
-    
-  //MultiLaserTag *mlt = new MultiLaserTag();
-  //b.add_mod(mlt);
 
-  //LaserTag *lt = new LaserTag();
-  //b.add_mod(lt);
-  //ProjectionOptions *po = new ProjectionOptions();
-  //b.add_mod(po);
-
-  //GreenScreen *gs = new GreenScreen("mods/stone-640x480.jpg");
-  //b.add_mod(gs);
-
-  blobber::ModInterface *lasertag = blobber::ModInterface::load_module("lasertag");
-  b.add_mod(lasertag);
-
-  blobber::ModInterface *options = blobber::ModInterface::load_module("projectionoptions");
-  b.add_mod(options);
+  b.add_mod(blobber::ModInterface::load_module("lasertag"));
+  b.add_mod(blobber::ModInterface::load_module("projectionoptions"));
 
   b.run();
   return 0;

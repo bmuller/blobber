@@ -29,6 +29,14 @@ LaserTag::LaserTag() : ModInterface("LaserTag"), missing_counter(0) {
 void LaserTag::init(Camarea &area, ProjectionWindow &pw) {
   // adjust these as necessary for different light/laser sources.  Any pixel
   // with the threshold you set will be considered in the input.
+  string red, green, blue;
+  config_get("red", red, "60");
+  config_get("blue", blue, "0");
+  config_get("green", green, "0");
+
+  config_set("red", red);
+  config_set("blue", blue);
+  config_set("green", green);
   register_poi_criteria(area, CRANGE(COLOR(60, 0, 0)));
 };
 
