@@ -13,6 +13,7 @@ namespace blobber {
     // get/set values for main program
     void set(string key, string value, string groupname="blobber");
     void set(string key, vector<string> values, string groupname="blobber");   
+    bool is_set(string key, string groupname="blobber");
     void get(string key, string &value, string vdefault, string groupname="blobber");
     void get(string key, vector<string> &values, string groupname="blobber");
 

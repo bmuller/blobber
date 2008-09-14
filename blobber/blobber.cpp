@@ -28,6 +28,20 @@ namespace blobber {
     vector<ModInterface*> mods;
     bool aligned;
     Configuration *config;
+
+    void load_modules() {
+      if(!config->is_set("mods_enabled")) {
+	vector<string> mods;
+	mods.push_back("lasertag");
+	mods.push_back("projectionoptions");
+	config->set("mods_enabled", mods);
+      }
+      vector<string> mods_enabled;
+      config->get("mods_enabled", mods_enabled);
+      for(unsigned int i=0; i<mods_enabled.size(); i++)
+	add_mod(blobber::ModInterface::load_module(mods_enabled[i]));
+    };
+
   public:
     Blopper(string device) : win(device), proj(win.area.width, win.area.height), aligned(false) {
       if(win.area.hascam) {
@@ -43,6 +57,7 @@ namespace blobber {
       proj.set_bounds(b);
 
       config = new Configuration();
+      load_modules();
     };
     
     ~Blopper() {
@@ -142,10 +157,6 @@ namespace blobber {
 int main(int argc, char** argv) {
   Gtk::Main kit(argc, argv);
   blobber::Blopper b("/dev/video0");
-
-  b.add_mod(blobber::ModInterface::load_module("lasertag"));
-  b.add_mod(blobber::ModInterface::load_module("projectionoptions"));
-
   b.run();
   return 0;
 }

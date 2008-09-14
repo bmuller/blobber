@@ -53,6 +53,10 @@ namespace blobber {
       values.clear();      
   };
 
+  bool Configuration::is_set(string key, string groupname) {
+    return (config.has_group(groupname) && config.has_key(groupname, key));
+  };
+
   void Configuration::module_set(string key, string value, string modname) {
     set(key, value, "mod_" + modname);
   };
