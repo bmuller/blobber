@@ -53,4 +53,9 @@ namespace blobber {
     return i;
   };
 
+  template <class T> void random_choice(vector<T> things, T &pick) {
+    Glib::Rand rand;
+    pick = things[rand.get_int_range(0, things.size())];
+  };
+
 };
