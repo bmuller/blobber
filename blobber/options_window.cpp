@@ -21,18 +21,22 @@
 namespace blobber {
   using namespace std;
 
-  OptionsWindow::OptionsWindow() : exitButton("Exit"), table(2, 15) { 
+  OptionsWindow::OptionsWindow() : okButton("OK"), lblCamDevice("Camera devices: ") { 
     resize(100, 100);
-    exitButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::exit) );
+    okButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::ok));
     
-    add(table);
-    Gtk::CheckButton cb("Enable", true);
-    table.attach(cb, 0, 1, 0, 1);
-    table.attach(exitButton, 0, 1, 14, 15, Gtk::EXPAND, Gtk::EXPAND); 
+    add(mainBox);
+    mainBox.add(camDevice);
+    camDevice.add(lblCamDevice);
+    cboCamDevice.append_text("one");
+    cboCamDevice.append_text("two");
+    cboCamDevice.append_text("three");
+    camDevice.add(cboCamDevice);
+  //  mainBox.add(modules);
     show_all_children();
   };
 
-  void OptionsWindow::exit() {
+  void OptionsWindow::ok() {
     hide();
   };
 };
