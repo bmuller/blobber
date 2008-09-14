@@ -23,19 +23,30 @@ using namespace blobber;
 using namespace std;
 
 GreenScreen::GreenScreen() : ModInterface("GreenScreen") {
-  string filename = string(DATAROOTDIR) + "/green_screen/stone-640x480.jpg";
-  try { image = Gdk::Pixbuf::create_from_file(filename); }
+}
+
+void GreenScreen::init(Camarea &area, ProjectionWindow &pw) {
+  config_get_set("image_file", filename, string(DATAROOTDIR) + "/green_screen/stone-640x480.jpg");
+  Glib::RefPtr<Gdk::Pixbuf> temp_buf;
+  try { temp_buf = Gdk::Pixbuf::create_from_file(filename); }
   catch(Glib::FileError err) { 
     cout << filename << " File not found!" << endl; 
     exit(1);
   }  
-}
+  image = temp_buf->scale_simple(area.frame->width, area.frame->height, Gdk::INTERP_BILINEAR);
+  string grd, gbd;
+  config_get_set("green_red_diff", grd, "30");
+  config_get_set("green_blue_diff", gbd, "20");
+  green_red_diff = (unsigned char) atoi(grd.c_str());
+  green_blue_diff = (unsigned char) atoi(gbd.c_str());
+  //config_set("green_red_diff", grd);
+  //config_set("green_blue_diff", gbd);
+  //config_set("image_file", filename);
+}  
 
 GreenScreen::~GreenScreen() {}
 
 void GreenScreen::update(Camarea &area, ProjectionWindow &pw) {
-  green_red_diff = 35; 
-  green_blue_diff = 25; 
   unsigned char * data;
   Glib::RefPtr<Gdk::Pixbuf> buf = image;
   guint8 * image_data = buf->get_pixels();
