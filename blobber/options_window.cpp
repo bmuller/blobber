@@ -28,9 +28,17 @@ namespace blobber {
     add(mainBox);
     mainBox.add(camDevice);
     camDevice.add(lblCamDevice);
-    cboCamDevice.append_text("one");
-    cboCamDevice.append_text("two");
-    cboCamDevice.append_text("three");
+    string devDir = "/dev";
+    Glib::Dir listDev(devDir);
+    string isVideo;
+    isVideo = listDev.read_name();
+    do
+    {
+      if(isVideo.substr(0,5).compare("video") == 0)
+        cboCamDevice.append_text(devDir + "/" + isVideo);
+      isVideo = listDev.read_name();
+    } while(isVideo.compare("") != 0);
+
     camDevice.add(cboCamDevice);
   //  mainBox.add(modules);
     show_all_children();
