@@ -24,6 +24,11 @@ namespace blobber {
     CameraReadException(std::string s) : BlobberException(s) {};
   };  
 
+  class ModuleFileException : public BlobberException {
+  public:
+    ModuleFileException(std::string s) : BlobberException(s) {};
+  };
+
   class ModuleLoadException : public BlobberException {
   public:
     ModuleLoadException(std::string s) : BlobberException(s) {};

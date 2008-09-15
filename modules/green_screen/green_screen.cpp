@@ -30,18 +30,14 @@ void GreenScreen::init(Camarea &area, ProjectionWindow &pw) {
   Glib::RefPtr<Gdk::Pixbuf> temp_buf;
   try { temp_buf = Gdk::Pixbuf::create_from_file(filename); }
   catch(Glib::FileError err) { 
-    cout << filename << " File not found!" << endl; 
-    exit(1);
+    throw ModuleFileException(" file " + filename + "  not found!");
   }  
   image = temp_buf->scale_simple(area.frame->width, area.frame->height, Gdk::INTERP_BILINEAR);
   string grd, gbd;
   config_get_set("green_red_diff", grd, "30");
   config_get_set("green_blue_diff", gbd, "20");
-  green_red_diff = (unsigned char) atoi(grd.c_str());
-  green_blue_diff = (unsigned char) atoi(gbd.c_str());
-  //config_set("green_red_diff", grd);
-  //config_set("green_blue_diff", gbd);
-  //config_set("image_file", filename);
+  green_red_diff = (unsigned char) string_to_int(grd);
+  green_blue_diff = (unsigned char) string_to_int(gbd);
 }  
 
 GreenScreen::~GreenScreen() {}
