@@ -1,13 +1,17 @@
 First, you'll need to install gtkmm and make sure v4l support is compiled in your kernel.
 
+Before compiling in ubuntu:
+
+sudo apt-get install sudo apt-get install libgtkmm-2.4-dev autoconf automake libtool
+
 To run:
 
 svn co https://svn.butterfat.net/public/blobber/trunk blobber
 cd blobber
 sh autogen.sh --enable-debug
 make
-cd src
-./blobber
+sudo make install
+blobber
 
 ******************************************************************************
 TODO:
@@ -18,6 +22,10 @@ TODO:
 ******************************************************************************
 Works with:
 ID 046d:0870 Logitech, Inc. QuickCam Express
+
+Tested with (appears to work, but only minimal testing):
+ID 046d:08da Logitech, Inc. QuickCam Messanger
+
 ******************************************************************************
 frame size: 
 frame wxh: 352 288
