@@ -28,16 +28,14 @@ namespace blobber {
     add(mainBox);
     mainBox.add(camDevice);
     camDevice.add(lblCamDevice);
-    string devDir = "/dev";
+
+    string devDir = "/dev"; 
     Glib::Dir listDev(devDir);
-    string isVideo;
-    isVideo = listDev.read_name();
-    do
-    {
-      if(isVideo.substr(0,5).compare("video") == 0)
-        cboCamDevice.append_text(devDir + "/" + isVideo);
-      isVideo = listDev.read_name();
-    } while(isVideo.compare("") != 0);
+    vector<string> files(listDev.begin(), listDev.end());
+    for(unsigned int i=0; i<files.size(); i++) {
+      if(files[i].substr(0,5).compare("video") == 0)
+        cboCamDevice.append_text(Glib::build_filename(devDir, files[i]));
+    }
 
     camDevice.add(cboCamDevice);
   //  mainBox.add(modules);
