@@ -19,207 +19,244 @@
 #include "blobber.h"
 
 namespace blobber {
-using namespace std;
+  using namespace std;
 
-ProjectionWindow::ProjectionWindow(int cw, int ch) : is_fullscreen(false), cam_width(cw), cam_height(ch), need_alignment(false) {
-  resize(cam_width, cam_height);
-  colors.push_back(BLUE);
-  colors.push_back(RED);
-  colors.push_back(GREEN);
-  colors.push_back(WHITE);
-  colors.push_back(LIGHT_BLUE);
-  colors.push_back(BROWN);
-  preferred_color = 4;
-  i_exposed_myself = false;
-};
-
-bool ProjectionWindow::on_key_press_event(GdkEventKey* eventData) {
-#ifdef DEBUG
-  string ks;
-  num_to_string((int) eventData->keyval, ks);
-  debug("Key pressed on projection window: "+ks);
-#endif
-  switch(eventData->keyval) {
-  case 32: // spacebar
-    clear();
-    break;
-  case 102: // f
-    if(is_fullscreen)
-      unfullscreen();
-    else
-      fullscreen();
-    is_fullscreen = !is_fullscreen;
-    break;
-  case 65307: // ESC
-    unfullscreen();
-    is_fullscreen = false;
-    break;
-  case 97:
-    need_alignment = true;
-    break;
-  case 99:
-    preferred_color = (preferred_color + 1) % colors.size();
-    show_message("Color changed", colors[preferred_color]);
-    break;
+  ProjectionWindow::ProjectionWindow(int cw, int ch) : is_fullscreen(false), cam_width(cw), cam_height(ch), need_alignment(false) {
+    resize(cam_width, cam_height);
+    i_exposed_myself = false;
   };
-};
 
-void ProjectionWindow::set_color(Cairo::RefPtr<Cairo::Context> cr, COLOR c) {
-  cr->set_source_rgb(c.cairo_red(), c.cairo_green(), c.cairo_blue());
-  current_color.copy(c);
-};
+  void ProjectionWindow::init(Configuration *c) {
+    config = c;
+    string groupname = "default_colors";
+    string key, value;
+    vector<string> colornames;
+    c->get_keys(colornames, groupname);
 
-void ProjectionWindow::show_message(string msg, COLOR c) {
-  Cairo::RefPtr<Cairo::Context> cr;
-  if(!get_context(cr))
-    return;
+    // set default colors if non existant
+    if(colornames.size() == 0) {
+      vector<COLOR> default_colors;
+      default_colors.push_back(BLUE);
+      default_colors.push_back(RED);
+      default_colors.push_back(GREEN);
+      default_colors.push_back(WHITE);
+      default_colors.push_back(LIGHT_BLUE);
+      default_colors.push_back(BROWN);
+      for(int i=0; i<default_colors.size(); i++) {
+	num_to_string(i, key);
+	default_colors[i].to_string(value);
+	config->set("color_"+key, value, groupname);
+      }
+    }
 
-  COLOR old_color(current_color);
-  cr->move_to(10, 10);
-  set_color(cr, c);
-  cr->show_text(msg);
-  set_color(cr, old_color);
-};
+    // load colors in config
+    for(unsigned int i=0; i<colornames.size(); i++) {
+      COLOR color;
+      config->get(colornames[i], value, groupname);
+      color.from_string(value);
+      colors.push_back(color);
+    }
+    config->get("preferred_color", value, "4"); 
+    preferred_color = string_to_int(value);
+  };
 
-bool ProjectionWindow::get_context(Cairo::RefPtr<Cairo::Context> &cr) {
-  Glib::RefPtr<Gdk::Window> window = get_window();
-  if(window) {
-    Gtk::Allocation allocation = get_allocation();
-    width = allocation.get_width();
-    height = allocation.get_height();
+  void ProjectionWindow::finish() {
+    string key, value;
+    string groupname = "default_colors";
+    for(int i=0; i<colors.size(); i++) {
+      num_to_string(i, key);
+      colors[i].to_string(value);
+      config->set("color_"+key, value, groupname);
+    }
+    num_to_string(preferred_color, value);
+    config->set("preferred_color", value);
+  };
+  
+  bool ProjectionWindow::on_key_press_event(GdkEventKey* eventData) {
+#ifdef DEBUG
+    string ks;
+    num_to_string((int) eventData->keyval, ks);
+    debug("Key pressed on projection window: "+ks);
+#endif
+    switch(eventData->keyval) {
+    case 32: // spacebar
+      clear();
+      break;
+    case 102: // f
+      if(is_fullscreen)
+	unfullscreen();
+      else
+	fullscreen();
+      is_fullscreen = !is_fullscreen;
+      break;
+    case 65307: // ESC
+      unfullscreen();
+      is_fullscreen = false;
+      break;
+    case 97:
+      need_alignment = true;
+      break;
+    case 99:
+      preferred_color = (preferred_color + 1) % colors.size();
+      show_message("Color changed", colors[preferred_color]);
+      break;
+    };
+  };
 
-    cr = window->create_cairo_context();
+  void ProjectionWindow::set_color(Cairo::RefPtr<Cairo::Context> cr, COLOR c) {
+    cr->set_source_rgb(c.cairo_red(), c.cairo_green(), c.cairo_blue());
+    current_color.copy(c);
+  };
+
+  void ProjectionWindow::show_message(string msg, COLOR c) {
+    Cairo::RefPtr<Cairo::Context> cr;
+    if(!get_context(cr))
+      return;
+
+    COLOR old_color(current_color);
+    cr->move_to(10, 10);
+    set_color(cr, c);
+    cr->show_text(msg);
+    set_color(cr, old_color);
+  };
+  
+  bool ProjectionWindow::get_context(Cairo::RefPtr<Cairo::Context> &cr) {
+    Glib::RefPtr<Gdk::Window> window = get_window();
+    if(window) {
+      Gtk::Allocation allocation = get_allocation();
+      width = allocation.get_width();
+      height = allocation.get_height();
+      
+      cr = window->create_cairo_context();
+      return true;
+    }
+    return false;
+  };
+
+  void ProjectionWindow::set_bounds(BOUNDS &b) {
+    vprojbounds.copy(b);
+  };
+
+  bool ProjectionWindow::on_expose_event(GdkEventExpose* event) {
+    debug("Projection window expose event");
+    i_exposed_myself = true;
+    Cairo::RefPtr<Cairo::Context> cr;
+    if(!get_context(cr))
+      return true;
+    
+    set_background(BLACK);
+    
+    if(need_alignment)
+      draw_alignment_graphics();
     return true;
-  }
-  debug("No cairo context yet");
-  return false;
-};
+  };
 
-void ProjectionWindow::set_bounds(BOUNDS &b) {
-  vprojbounds.copy(b);
-};
+  void ProjectionWindow::set_background(COLOR c) {
+    Cairo::RefPtr<Cairo::Context> cr;
+    if(!get_context(cr))
+      return;
+    set_color(cr, c);
+    cr->paint();
+  };
 
-bool ProjectionWindow::on_expose_event(GdkEventExpose* event) {
-  debug("Projection window expose event");
-  i_exposed_myself = true;
-  Cairo::RefPtr<Cairo::Context> cr;
-  if(!get_context(cr))
-    return true;
+  void ProjectionWindow::draw_line(COORD source, COORD sink, COLOR c, double line_width) {
+    COORD projcoords_source, projcoords_sink;
+    translate_coordinates(COORD(source.x, source.y), projcoords_source);
+    translate_coordinates(COORD(sink.x, sink.y), projcoords_sink);
+    
+    Cairo::RefPtr<Cairo::Context> cr;
+    if(!get_context(cr))
+      return;
+    
+    cr->set_line_width(line_width);
+    set_color(cr, c);
+    cr->move_to(projcoords_source.x, projcoords_source.y);
+    cr->line_to(projcoords_sink.x, projcoords_sink.y);
+    cr->stroke();
+  };
 
-  set_background(BLACK);
 
-  if(need_alignment)
+  void ProjectionWindow::draw_curve(vector<COORD> points, COLOR c, double line_width) {
+    Cairo::RefPtr<Cairo::Context> cr;
+    if(!get_context(cr) || points.size()!=4)
+      return;
+    
+    cr->set_line_width(line_width);
+    set_color(cr, c);
+    
+    COORD convcoord;
+    translate_coordinates(points[0], convcoord);
+    cr->move_to(convcoord.x, convcoord.y);
+    
+    COORD first, second, third;
+    translate_coordinates(points[1], first);
+    translate_coordinates(points[2], second);
+    translate_coordinates(points[3], third);
+    cr->curve_to(first.x, first.y, second.x, second.y, third.x, third.y);
+    cr->stroke();
+  };
+  
+  void ProjectionWindow::draw_point(COORD cords, COLOR c) {
+    Cairo::RefPtr<Cairo::Context> cr;
+    if(!get_context(cr))
+      return;
+    
+    COORD translated;
+    translate_coordinates(COORD(cords.x, cords.y), translated);
+    set_color(cr, c);
+    cr->move_to(translated.x, translated.y);
+    cr->line_to(translated.x+1, translated.y);
+    cr->stroke();
+  };
+
+  void ProjectionWindow::draw_alignment_graphics() {
+    set_background(BLUE);
+  };
+
+  void ProjectionWindow::show_alignment_graphics() {
+    need_alignment = true;
     draw_alignment_graphics();
-  return true;
-};
+  };
 
-void ProjectionWindow::set_background(COLOR c) {
-  Cairo::RefPtr<Cairo::Context> cr;
-  if(!get_context(cr))
-    return;
-  set_color(cr, c);
-  cr->paint();
-};
+  void ProjectionWindow::hide_alignment_graphics() {
+    need_alignment = false;
+    set_background(BLACK);
+  };
 
-void ProjectionWindow::draw_line(COORD source, COORD sink, COLOR c, double line_width) {
-  COORD projcoords_source, projcoords_sink;
-  translate_coordinates(COORD(source.x, source.y), projcoords_source);
-  translate_coordinates(COORD(sink.x, sink.y), projcoords_sink);
-  
-  Cairo::RefPtr<Cairo::Context> cr;
-  if(!get_context(cr))
-    return;
-
-  cr->set_line_width(line_width);
-  set_color(cr, c);
-  cr->move_to(projcoords_source.x, projcoords_source.y);
-  cr->line_to(projcoords_sink.x, projcoords_sink.y);
-  cr->stroke();
-};
-
-
-void ProjectionWindow::draw_curve(vector<COORD> points, COLOR c, double line_width) {
-  Cairo::RefPtr<Cairo::Context> cr;
-  if(!get_context(cr) || points.size()!=4)
-    return;
-
-  cr->set_line_width(line_width);
-  set_color(cr, c);
-
-  COORD convcoord;
-  translate_coordinates(points[0], convcoord);
-  cr->move_to(convcoord.x, convcoord.y);
-  
-  COORD first, second, third;
-  translate_coordinates(points[1], first);
-  translate_coordinates(points[2], second);
-  translate_coordinates(points[3], third);
-  cr->curve_to(first.x, first.y, second.x, second.y, third.x, third.y);
-  cr->stroke();
-};
-
-
-void ProjectionWindow::draw_point(COORD cords, COLOR c) {
-  Cairo::RefPtr<Cairo::Context> cr;
-  if(!get_context(cr))
-    return;
-
-  COORD translated;
-  translate_coordinates(COORD(cords.x, cords.y), translated);
-  set_color(cr, c);
-  cr->move_to(translated.x, translated.y);
-  cr->line_to(translated.x+1, translated.y);
-  cr->stroke();
-};
-
-void ProjectionWindow::draw_alignment_graphics() {
-  set_background(BLUE);
-};
-
-void ProjectionWindow::show_alignment_graphics() {
-  need_alignment = true;
-  draw_alignment_graphics();
-};
-
-void ProjectionWindow::hide_alignment_graphics() {
-  need_alignment = false;
-  set_background(BLACK);
-};
-
-void ProjectionWindow::draw_circle(COORD coords, int radius, COLOR c) {
-  Cairo::RefPtr<Cairo::Context> cr;
-  if(!get_context(cr))
-    return;
-
-  cr->save();
-  cr->arc(coords.x, coords.y, radius, 0.0, 2.0 * M_PI); // full circle
-  set_color(cr, c);
-  cr->fill_preserve();
-  cr->restore();
-  cr->stroke();
-};
-
-void ProjectionWindow::draw_box(COORD coord, int width, int height, COLOR c, bool fill) {
-  Cairo::RefPtr<Cairo::Context> cr;
-  if(!get_context(cr))
-    return;
-
-  set_color(cr, c);
-  cr->set_line_width(1.0);
-  cr->rectangle(coord.x, coord.y, width, height);
-  if(fill)
+  void ProjectionWindow::draw_circle(COORD coords, int radius, COLOR c) {
+    Cairo::RefPtr<Cairo::Context> cr;
+    if(!get_context(cr))
+      return;
+    
+    cr->save();
+    cr->arc(coords.x, coords.y, radius, 0.0, 2.0 * M_PI); // full circle
+    set_color(cr, c);
     cr->fill_preserve();
-  cr->stroke();
-};
+    cr->restore();
+    cr->stroke();
+  };
 
-// see http://trac.butterfat.net/public/blobber/wiki/DevDocs
-void ProjectionWindow::translate_coordinates(COORD camcords, COORD &projcoords) { 
-  projcoords.x = (int) ((float(camcords.x - vprojbounds.left) / float(vprojbounds.width())) * width);
-  projcoords.y = (int) ((float(camcords.y - vprojbounds.top) / float(vprojbounds.height())) * height);
-};
+  void ProjectionWindow::draw_box(COORD coord, int width, int height, COLOR c, bool fill) {
+    Cairo::RefPtr<Cairo::Context> cr;
+    if(!get_context(cr))
+      return;
+    
+    set_color(cr, c);
+    cr->set_line_width(1.0);
+    cr->rectangle(coord.x, coord.y, width, height);
+    if(fill)
+      cr->fill_preserve();
+    cr->stroke();
+  };
 
-void ProjectionWindow::clear(COLOR c) {
-  set_background(c);
-};
+  // see http://trac.butterfat.net/public/blobber/wiki/DevDocs
+  void ProjectionWindow::translate_coordinates(COORD camcords, COORD &projcoords) { 
+    projcoords.x = (int) ((float(camcords.x - vprojbounds.left) / float(vprojbounds.width())) * width);
+    projcoords.y = (int) ((float(camcords.y - vprojbounds.top) / float(vprojbounds.height())) * height);
+  };
+
+  void ProjectionWindow::clear(COLOR c) {
+    set_background(c);
+  };
 
 };

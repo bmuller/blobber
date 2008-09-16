@@ -24,6 +24,21 @@ struct COLOR {
   double cairo_red() { return float(red) / 255.0; };
   double cairo_green() { return float(green) / 255.0; };
   double cairo_blue() { return float(blue) / 255.0; };
+  void to_string(string &s) {
+    string sred, sgreen, sblue;
+    num_to_string(red, sred);
+    num_to_string(blue, sblue);
+    num_to_string(green, sgreen);
+    s = sred + "," + sblue + "," + sgreen;
+  };
+  void from_string(string s) {
+    vector<string> parts = explode(s, ",");
+    if(parts.size() != 3)
+      return;
+    red = string_to_int(parts[0]);
+    blue = string_to_int(parts[1]);
+    green = string_to_int(parts[2]);
+  };
 };
 
 #define RED COLOR(255,0,0)

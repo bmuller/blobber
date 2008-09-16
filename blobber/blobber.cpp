@@ -44,6 +44,10 @@ namespace blobber {
 
   public:
     Blopper(string device) : win(device), proj(win.area.width, win.area.height), aligned(false) {
+      config = new Configuration();
+      // give proj the configuration
+      proj.init(config);
+
       if(win.area.hascam) {
 	proj.set_transient_for(win);
 	proj.show();
@@ -56,7 +60,6 @@ namespace blobber {
       win.area.set_bounds(b);
       proj.set_bounds(b);
 
-      config = new Configuration();
       load_modules();
     };
     
@@ -66,7 +69,9 @@ namespace blobber {
 	debug("Freeing " + mods[i]->name + "...");
 	delete mods[i];
       }
-      delete config;
+      proj.finish();
+      // config should be last thing deleted
+      delete config;  
     };
 
     void add_mod(ModInterface * mi) {

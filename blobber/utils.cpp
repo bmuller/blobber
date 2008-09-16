@@ -58,4 +58,27 @@ namespace blobber {
     pick = things[rand.get_int_range(0, things.size())];
   };
 
+  /** convert integer to string */
+  void int_to_string(int i, std::string& s) {
+    char c_int[100];
+    sprintf(c_int, "%ld", i);
+    s = std::string(c_int);
+  };
+
+  /** Split a string s into parts by value e */
+  vector<string> explode(string s, string e) {
+    vector<string> ret;
+    int iPos = s.find(e, 0);
+    int iPit = e.length();
+    while(iPos>-1) {
+      if(iPos!=0)
+	ret.push_back(s.substr(0,iPos));
+      s.erase(0,iPos+iPit);
+      iPos = s.find(e, 0);
+    }
+    if(s!="")
+      ret.push_back(s);
+    return ret;
+  };
+
 };

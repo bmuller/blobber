@@ -17,6 +17,8 @@ namespace blobber {
     void get(string key, string &value, string vdefault, string groupname="blobber");
     void get(string key, vector<string> &values, string groupname="blobber");
 
+    void get_keys(vector<string> &keys, string groupname);
+
     // get/set values for modules
     void module_set(string key, string value, string modname);
     void module_set(string key, vector<string> values, string modname);   

@@ -73,4 +73,11 @@ namespace blobber {
     get(key, values, "mod_" + modname);    
   };
 
+  void Configuration::get_keys(vector<string> &values, string groupname) {
+    if(!config.has_group(groupname)) {
+      values.clear();
+      return;
+    }  
+    values = config.get_keys(groupname);
+  };
 };
