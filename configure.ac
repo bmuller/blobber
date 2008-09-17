@@ -20,6 +20,25 @@ AC_ARG_ENABLE(debug, AC_HELP_STRING([[--enable-debug]], [enable debugging output
 fi]
 )
 
+# provide flag --enable-doxygen
+HAVE_DOXYGEN="no"
+AC_ARG_ENABLE(doxygen, AC_HELP_STRING([[--enable-doxygen]], [enable doxygen api docs output]),
+[if test "$enableval" = "yes"; then
+  AC_PATH_PROG([DOXYGEN],[doxygen],[false])
+  if test "${DOXYGEN}" != "false" ; then
+    HAVE_DOXYGEN="yes"
+    AC_SUBST([DOXYGEN])
+    HAVE_DOT="no"
+    AC_PATH_PROG([DOT],[dot],[false])
+    if test "${DOT}" != "false" ; then
+      HAVE_DOT="YES"
+      AC_SUBST([DOT])
+    fi
+    AC_SUBST([HAVE_DOT])
+  fi
+fi])
+AM_CONDITIONAL([HAVE_DOXYGEN],[test "${HAVE_DOXYGEN}" = "yes"])
+
 # option for compiler to be nitpicky about code
 nitpick=false
 AC_ARG_ENABLE([nitpicking],
@@ -63,6 +82,7 @@ AC_CONFIG_FILES([
  blobber/Makefile
  modules/Makefile
  libblobber.pc
+ Doxyfile
 ])
 AC_OUTPUT
 

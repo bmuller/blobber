@@ -14,3 +14,13 @@ dist_pkgdata_DATA = blobber/nocam.png
 
 install-exec-hook:
 	ldconfig
+
+if HAVE_DOXYGEN
+dox: Doxyfile
+	${DOXYGEN} && echo && echo "You can now view your documentation by browsing to the apidocs/html directory and viewing index.html in a browser."
+clean-local:
+	rm -rf apidocs
+else
+dox:
+	echo "You need to configure with --enable-doxygen if you want to get the docs too."
+endif
