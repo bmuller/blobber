@@ -228,11 +228,9 @@ namespace blobber {
     if(!get_context(cr))
       return;
     
-    cr->save();
     cr->arc(coords.x, coords.y, radius, 0.0, 2.0 * M_PI); // full circle
     set_color(cr, c);
     cr->fill_preserve();
-    cr->restore();
     cr->stroke();
   };
 

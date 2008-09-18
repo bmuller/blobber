@@ -1,9 +1,18 @@
 #include "config.h"
 
-#include <gtkmm.h>
-#include <cairomm/cairomm.h>
-#include <glib.h>
-#include <errno.h>
+#include <glibmm/keyfile.h>
+
+#include <gtkmm/window.h>
+#include <gtkmm/label.h>
+#include <gtkmm/box.h>
+#include <gtkmm/combobox.h>
+#include <gtkmm/comboboxentrytext.h>
+#include <gtkmm/drawingarea.h>
+#include <gtkmm/table.h>
+#include <gtkmm/uimanager.h>
+#include <gtkmm/stock.h>
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/main.h>
 
 #include <iostream>
 #include <fstream>
@@ -18,6 +27,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <math.h>
+#include <errno.h>
 
 #include <linux/fs.h>
 #include <linux/kernel.h>
