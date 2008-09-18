@@ -25,7 +25,9 @@ HAVE_DOXYGEN="no"
 AC_ARG_ENABLE(doxygen, AC_HELP_STRING([[--enable-doxygen]], [enable doxygen api docs output]),
 [if test "$enableval" = "yes"; then
   AC_PATH_PROG([DOXYGEN],[doxygen],[false])
-  if test "${DOXYGEN}" != "false" ; then
+  if test "${DOXYGEN}" = "false" ; then
+    AC_MSG_ERROR([You chose the --enable-doxygen option but you don't seem to have doxygen installed.])
+  else
     HAVE_DOXYGEN="yes"
     AC_SUBST([DOXYGEN])
     HAVE_DOT="no"
