@@ -40,7 +40,7 @@ void Pong::init(Camarea &area, ProjectionWindow &pw) {
   config_get_set("green", green, "0");
 
   CRANGE range(COLOR(string_to_int(red), string_to_int(blue), string_to_int(green)));
-  register_poi_criteria(area, range);
+  register_poi_criteria(area, range, 100); // 100 is max number of poi returned
 
 
   Glib::Rand rand;

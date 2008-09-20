@@ -29,32 +29,32 @@ MultiLaserTag::MultiLaserTag() : ModInterface("MultiLaserTag") {
 void MultiLaserTag::init(Camarea &area, ProjectionWindow &pw) {
   // adjust these as necessary for different light/laser sources.  Any pixel
   // with the threshold you set will be considered in the input.
-  register_poi_criteria(area, CRANGE(COLOR(60, 0, 0)));
+  register_poi_criteria(area, CRANGE(COLOR(60, 0, 0)), 100); // 100 is max number of poi returned
 };
 
 
 void MultiLaserTag::update(Camarea &area, ProjectionWindow &pw) {
-  vector<PIXEL> poi;
-  get_poi(area, poi);
+  PIXEL * poi;
+  int poi_n;
+  get_poi(area, poi, poi_n);
+  vector<PIXEL>::iterator beg = lastpoints.begin();
+  vector<PIXEL>::iterator end = lastpoints.end();
 
   for(unsigned int i=0; i<lastpoints.size(); i++) {
-
-    vector<PIXEL>::iterator iter = poi.begin();
-    while(iter != poi.end()) {
+    PIXEL * iter;  
+    while(iter - poi < poi_n) {
       if((*iter).coord.distance_from(lastpoints[i].coord) < 15.0) {
 	pw.draw_line(lastpoints[i].coord, (*iter).coord, pw.colors[pw.preferred_color], 1.0);
-	poi.erase(iter);
-	// break from loop
-	iter = poi.end();
+	break;
       } else {
-	iter++;
+	lastpoints.push_back(*(iter++));
       }
     }
 
   }
 
 
-  lastpoints = poi; 
+  lastpoints.erase(beg, end); 
 };
 
 extern "C" {

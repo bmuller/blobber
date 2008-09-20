@@ -36,7 +36,7 @@ void ProjectionOptions::init(Camarea &area, ProjectionWindow &pw) {
   config_get_set("green", green, "0");
 
   CRANGE range(COLOR(string_to_int(red), string_to_int(blue), string_to_int(green)));
-  register_poi_criteria(area, range);
+  register_poi_criteria(area, range, 10000);  // 100 is max number of poi returned
 
   // draw clear screen box
   projection_window_exposed(pw);
@@ -60,10 +60,10 @@ void ProjectionOptions::projection_window_exposed(ProjectionWindow &pw) {
 
 
 void ProjectionOptions::update(Camarea &area, ProjectionWindow &pw) {
-  vector<PIXEL> poi;
-  get_poi(area, poi);
-
-  for(unsigned int i=0; i<poi.size(); i++) {
+  PIXEL * poi;
+  int poi_n;
+  get_poi(area, poi, poi_n);
+  for(unsigned int i=0; i<poi_n; i++) {
     COORD c;
     pw.translate_coordinates(poi[i].coord, c);
 

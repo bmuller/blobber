@@ -36,15 +36,16 @@ void LaserTag::init(Camarea &area, ProjectionWindow &pw) {
   config_get_set("green", green, "0");
 
   CRANGE range(COLOR(string_to_int(red), string_to_int(blue), string_to_int(green)));
-  register_poi_criteria(area, range);
+  register_poi_criteria(area, range, 50); // 50 is max number of poi returned
 };
 
 
 void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
-  vector<PIXEL> poi;
-  get_poi(area, poi);
+  PIXEL * poi;
+  int poi_n;
+  get_poi(area, poi, poi_n);
   
-  if(poi.size() == 0)
+  if(poi_n == 0)
     missing_counter++;
   else {
     //points.push_back(poi[0]);
@@ -62,7 +63,7 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
     points.push_back(last);
   };
   */
-  if(poi.size() != 0)
+  if(poi_n != 0)
     missing_counter = 0;
 };
 

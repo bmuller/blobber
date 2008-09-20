@@ -12,7 +12,11 @@ class Camarea : public Gtk::DrawingArea {
   COORD mouse_click;
   bool mouse_clicked;
   // points of interest for the modules
-  std::map<string, vector<PIXEL> > poi;
+  std::map<string, PIXEL* > poi;
+  // size of PIXEL* for the modules
+  std::map<string, int > poi_max;
+  // current number of poi for the modules
+  std::map<string, int > poi_n;
   // modules register criteria for defining a poi
   std::map<string, vector<CRANGE> > poi_criteria;
   void update_poi(COLOR &color, COORD coord);
@@ -33,8 +37,8 @@ class Camarea : public Gtk::DrawingArea {
   void set_device(string _device);
   void set_bounds(BOUNDS &b);
   void draw_bounds(BOUNDS &b);
-  void register_poi_criteria(string modname, CRANGE range);
-  void get_poi(string modname, vector<PIXEL> &poi);
+  void register_poi_criteria(string modname, CRANGE range, int max);
+  void get_poi(string modname, PIXEL* poi, int& n);
 };
 
 };

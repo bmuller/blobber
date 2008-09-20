@@ -23,8 +23,8 @@ namespace blobber {
     void config_get_set(string key, string &value, string vdefault);
   protected:
     Configuration *config;
-    void register_poi_criteria(Camarea &area, CRANGE crange);
-    void get_poi(Camarea &area, vector<PIXEL> &modpoi);
+    void register_poi_criteria(Camarea &area, CRANGE crange, int max);
+    void get_poi(Camarea &area, PIXEL* modpoi, int& n);
   };
 
 };

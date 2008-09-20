@@ -42,6 +42,9 @@ namespace blobber {
     if(hascam) {
       delete fg;
       delete frame; 
+      for (std::map<string, PIXEL*>::iterator it = poi.begin(); it != poi.end(); it++) {
+        delete (*it).second;
+      }
     }
   };
 
@@ -109,7 +112,6 @@ void Camarea::update_frame() {
   fg->grabFrame(frame);
   unsigned char * data = (unsigned char *) frame->data; 
 
-  poi.clear();
   // set points of interests for modules
   for(int x=bounds.left; x<bounds.right; x++) {
     for(int y=bounds.top; y<bounds.bottom; y++) {
@@ -128,12 +130,14 @@ void Camarea::update_poi(COLOR &color, COORD coord) {
   for(iter = poi_criteria.begin(); iter != poi_criteria.end(); iter++ ) {
     string modname = iter->first;
     vector<CRANGE> criteria = iter->second;
+    poi_n[modname] = 0;
 	
     // for each criteria each module has set
     for(unsigned int i=0; i<criteria.size(); i++) {
       if(criteria[i].contains(color)) {
+        if( poi_n[modname] == poi_max[modname] ) { break; }
 	PIXEL p(color, coord);
-	poi[modname].push_back(p);
+	poi[modname][ poi_n[modname]++ ] = p;
       }
     }
   }
@@ -186,12 +190,15 @@ void Camarea::draw_bounds(BOUNDS &b) {
   }
 };
 
-void Camarea::register_poi_criteria(string modname, CRANGE range) {
+void Camarea::register_poi_criteria(string modname, CRANGE range, int max) {
   poi_criteria[modname].push_back(range);
+  poi_max[modname] = max;
+  poi[modname] = (PIXEL *) malloc(max*sizeof(PIXEL));
 };
 
-void Camarea::get_poi(string modname, vector<PIXEL> &modpoi) {
-  modpoi.assign(poi[modname].begin(), poi[modname].end());
+void Camarea::get_poi(string modname, PIXEL* modpoi, int& n) {
+  modpoi = poi[modname];
+  n = poi_n[modname];
 };
 
 };

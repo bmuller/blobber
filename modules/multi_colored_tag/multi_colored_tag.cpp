@@ -30,15 +30,16 @@ MultiColoredTag::MultiColoredTag() : ModInterface("MultiColoredTag"), missing_co
 void MultiColoredTag::init(Camarea &area, ProjectionWindow &pw) {
   // adjust these as necessary for different light/laser sources.  Any pixel
   // with the threshold you set will be considered in the input.
-  register_poi_criteria(area, CRANGE(COLOR(60, 0, 0)));
+  register_poi_criteria(area, CRANGE(COLOR(60, 0, 0)), 100); // 100 is max number of poi returned
 };
 
 
 void MultiColoredTag::update(Camarea &area, ProjectionWindow &pw) {
-  vector<PIXEL> poi;
-  get_poi(area, poi);
+  PIXEL * poi;
+  int poi_n;
+  get_poi(area, poi, poi_n);
   
-  if(poi.size() == 0)
+  if(poi_n == 0)
     missing_counter++;
   else {
     if(lastpoint.x!=0 && lastpoint.y!=0 && missing_counter < 2) {
@@ -50,7 +51,7 @@ void MultiColoredTag::update(Camarea &area, ProjectionWindow &pw) {
     lastpoint.copy(poi[0].coord);
   }
 
-  if(poi.size() != 0)
+  if(poi_n != 0)
     missing_counter = 0;
 };
 
