@@ -22,20 +22,9 @@ namespace blobber {
 
   using namespace std;
 
-  Camarea::Camarea(string _device) : device(_device), hascam(true), mouse_clicked(false), manual_align(false) {
+  Camarea::Camarea(string _device) : device(_device), hascam(true), mouse_clicked(false), manual_align(false), fg(NULL), frame(NULL) {
     add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
-    try {
-      fg = FrameGrabberFactory::create(device);
-      frame = fg->makeFrame();
-      width = frame->width;
-      height = frame->height;
-    } catch(NoSuchVideoDeviceException &e) {
-      debug("No video device found");
-      noCam = Cairo::ImageSurface::create_from_png(string(DATAROOTDIR) + string("/nocam.png"));
-      hascam = false;
-      width = 352;
-      height = 288;    
-    }
+    set_device(device);
   };
 
   Camarea::~Camarea() {
@@ -46,13 +35,31 @@ namespace blobber {
   };
 
   void Camarea::set_device(string _device) { 
+    hascam = false;
     device = _device;
-    delete fg;
-    delete frame;
-    fg = FrameGrabberFactory::create(device);
-    frame = fg->makeFrame();
-    width = frame->width;
-    height = frame->height;
+    if(fg)
+    {
+      delete fg;
+      fg = NULL;
+    };
+    if(frame)
+    {
+      delete frame;
+      frame = NULL;
+    };
+    try {
+      fg = FrameGrabberFactory::create(device);
+      frame = fg->makeFrame();
+      width = frame->width;
+      height = frame->height;
+      hascam = true;
+    } catch(NoSuchVideoDeviceException &e) {
+      debug("No video device found");
+      noCam = Cairo::ImageSurface::create_from_png(string(DATAROOTDIR) + string("/nocam.png"));
+      hascam = false;
+      width = 352;
+      height = 288;
+    }
   };
   
   void Camarea::set_bounds(BOUNDS &b) {
