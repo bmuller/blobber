@@ -53,8 +53,8 @@
 #include "frame.h"
 #include "framegrabber.h"
 #include "projection_window.h"
-#include "options_window.h"
 #include "camarea.h"
+#include "options_window.h"
 #include "camera_window.h"
 #include "mod_interface.h"
 

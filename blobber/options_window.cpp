@@ -21,12 +21,13 @@
 namespace blobber {
   using namespace std;
 
-  OptionsWindow::OptionsWindow() : okButton("OK"), lblCamDevice("Camera devices: ") { 
+  OptionsWindow::OptionsWindow(Camarea *cam) : area(cam), okButton("OK"), lblCamDevice("Camera devices: ") { 
     resize(100, 100);
     okButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::ok));
     
     add(mainBox);
     mainBox.add(camDevice);
+    mainBox.add(okButton);
     camDevice.add(lblCamDevice);
 
     string devDir = "/dev"; 
@@ -43,6 +44,7 @@ namespace blobber {
   };
 
   void OptionsWindow::ok() {
+    area->set_device(cboCamDevice.get_entry()->get_text().raw());
     hide();
   };
 };

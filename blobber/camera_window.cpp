@@ -21,7 +21,7 @@
 namespace blobber {
   using namespace std;
 
-  CameraWindow::CameraWindow(string device) : exitButton("Exit"), area(device), table(2, 15) { 
+  CameraWindow::CameraWindow(string device) : exitButton("Exit"), area(device), table(2, 15), options_window(&area) { 
     set_default_size(area.width, area.height+50);
     add(m_Box);
     exitButton.signal_clicked().connect(sigc::mem_fun(*this, &CameraWindow::exit) );

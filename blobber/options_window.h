@@ -4,14 +4,14 @@ namespace blobber {
 
   class OptionsWindow : public Gtk::Window {
   public:
-    OptionsWindow();
+    OptionsWindow(Camarea *cam);
     void ok();
   protected:
     Gtk::Label lblCamDevice;
     Gtk::VBox mainBox;
     Gtk::HBox camDevice;
     Gtk::ComboBoxEntryText cboCamDevice;
-//    Gtk::ButtonBox modules;
     Gtk::Button okButton;
+    Camarea *area;
   };
 };
