@@ -9,6 +9,10 @@ class GreenScreen : public ModInterface {
   void init(Camarea &area, ProjectionWindow &pw);
   void update(Camarea &area, ProjectionWindow &pw);
  protected:
+  ////////////////////////////////
+  unsigned char * frameRef;
+  int waitCycle;
+  ////////////////////////////////
   Glib::RefPtr<Gdk::Pixbuf> image;
   string filename;
   unsigned char green_red_diff;
