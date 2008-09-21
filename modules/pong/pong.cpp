@@ -44,7 +44,7 @@ void Pong::init(Camarea &area, ProjectionWindow &pw) {
 
 
   Glib::Rand rand;
-  ball_direction = rand.get_int_range(0, 180);
+  ball_direction = 45; //rand.get_int_range(0, 180);
   moving_right = true;
   ball.x = area.width / 2;
   ball.y = area.height / 2;
@@ -52,35 +52,33 @@ void Pong::init(Camarea &area, ProjectionWindow &pw) {
 
 
 void Pong::update(Camarea &area, ProjectionWindow &pw) {
-  cout << ball.x << " " << ball.y << endl;
   pw.draw_circle(ball, 6, BLACK);
   int movement = 10;
   if(ball.x <= 0) {
     moving_right = true;
     ball.x += movement;
-    if(fabs(ball_direction - 270) <= 5)
-      ball_direction += 10;
+    ball_direction = (ball_direction < 270) ? (360 - ball_direction) : (ball_direction - 270);
   } else if(ball.x >= area.width) {
     moving_right = false;
     ball.x -= movement;
-    if(fabs(ball_direction - 90) <= 5)
-      ball_direction += 10;
+    ball_direction = (ball_direction < 90) ? (ball_direction+90) : (180 - ball_direction);
   } else if(moving_right) {
     ball.x += movement;
   } else {
     ball.x -= movement;
   }
 
+  // bounce off top or bottom
   if(ball.y <= 0 || ball.y >= area.height) {
-    ball_direction = 360 - ball_direction;
+    if(moving_right) {
+      ball_direction = (ball_direction > 90) ? (ball_direction-90) : (90 - ball_direction);
+    } else {
+      ball_direction = (ball_direction > 270) ? (ball_direction - 270) : (270 - ball_direction);
+    }
   }
 
-  if(moving_right) {
-    ball_direction = (ball_direction > 90) ? (ball_direction-90) : (90 - ball_direction);
-  } else {
-    ball_direction = (ball_direction > 270) ? (ball_direction - 270) : (270 - ball_direction);
-  }
-  ball.y = atan(ball_direction) * (180/M_PI);
+  ball.y = atan(ball_direction) * ball.x;
+  cout << ball_direction << " " << ball.x << " " << ball.y << endl;
 
   pw.draw_circle(ball, 5, BLUE);  
 };

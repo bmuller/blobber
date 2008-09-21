@@ -77,153 +77,119 @@ namespace blobber {
     */
   };
 
-bool Camarea::on_button_press_event(GdkEventButton* event) { 
+  bool Camarea::on_button_press_event(GdkEventButton* event) { 
 #ifdef DEBUG
-  cout << "camarea mouse press (" << event->x << ", " << event->y << ")";
-  if(hascam) {
-    unsigned char * data = (unsigned char *) frame->data;
-    int index = (width * (int) event->y) + (int) event->x;
-    cout << " R:" << (int) data[index*4+2] << " G:" << (int) data[index*4+1] << " B:" << (int) data[index*4] << endl;
-  } else {
-    cout << endl;
-  }
-  cout.flush();
-#endif
-  if(hascam) {
-    mouse_clicked = true;
-    mouse_click.x = (int) event->x;
-    mouse_click.y = (int) event->y;
-  }
-};
-
-bool Camarea::on_button_release_event(GdkEventButton* event) { 
-#ifdef DEBUG
-  cout << "camarea mouse release (" << event->x << ", " << event->y << ")" << endl; 
-  cout.flush();
-#endif
-  COORD c((int) event->x, (int) event->y);
-  if(hascam && c.distance_from(mouse_click) > 2) {
-    bounds.from_coords(c, mouse_click);
-    manual_align = true;
-  }
-  mouse_clicked = false;
-};
-
-void Camarea::update_frame() {
-  if(!hascam)	
-    return;
-
-  fg->grabFrame(frame);
-  unsigned char * data = (unsigned char *) frame->data; 
-
-  poi.clear();
-
-  std::map<string, vector<CRANGE> >::iterator iter;
-
-  // for each module
-  for(iter = poi_criteria.begin(); iter != poi_criteria.end(); iter++ ) {
-    string modname = iter->first;
-    vector<CRANGE> criteria = iter->second;
-	
-    // for each criteria each module has set
-    for(unsigned int i=0; i<criteria.size(); i++) {
-
-
-      // set points of interests for modules
-      for(int x=bounds.left; x<bounds.right; x++) {
-        for(int y=bounds.top; y<bounds.bottom; y++) {
-          int index = x+(y*width);
-          COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
-//REMOVE      update_poi(pixelcolor, COORD(x, y));
-          if(criteria[i].contains(pixelcolor)) {
-            PIXEL p(pixelcolor, COORD(x, y));
-	    poi[modname].push_back(p);
-          }
-          if ((maxPoints[modname] > 0 && poi[modname].size() == maxPoints[modname]) || maxPoints[modname] == 0)
-	  {
-	    x = bounds.right;
-	    y = bounds.bottom;
-	  }
-        }
-      }
-    }
-  }
-
-};
-
-/*void Camarea::update_poi(COLOR &color, COORD coord) {
-  std::map<string, vector<CRANGE> >::iterator iter;
-
-  // for each module
-  for(iter = poi_criteria.begin(); iter != poi_criteria.end(); iter++ ) {
-    string modname = iter->first;
-    vector<CRANGE> criteria = iter->second;
-	
-    // for each criteria each module has set
-    for(unsigned int i=0; i<criteria.size(); i++) {
-      if(criteria[i].contains(color)) {
-	PIXEL p(color, coord);
-	poi[modname].push_back(p);
-	cout<<"hit"<<endl;
-      }
-    }
-  }
-
-};*/
-
-void Camarea::update_screen() {
-  Glib::RefPtr<Gdk::Window> window = get_window();
-  if(window) {
-    Cairo::RefPtr<Cairo::Context> context = get_window()->create_cairo_context();
     if(hascam) {
-      surface = Cairo::ImageSurface::create((unsigned char *) frame->data, Cairo::FORMAT_RGB24, frame->width, frame->height, frame->bytesperline); 
+      unsigned char * data = (unsigned char *) frame->data;
+      int index = (width * (int) event->y) + (int) event->x;
+      cout << " R:" << (int) data[index*4+2] << " G:" << (int) data[index*4+1] << " B:" << (int) data[index*4] << endl;
     } else {
-      surface = noCam;
+      cout << endl;
     }
-    context->set_source(surface, 0.0, 0.0);
-    context->rectangle (0.0, 0.0, width, height);
-    context->clip();
-    context->paint(); 
-  }
-};
+    cout.flush();
+#endif
+    if(hascam) {
+      mouse_clicked = true;
+      mouse_click.x = (int) event->x;
+      mouse_click.y = (int) event->y;
+    }
+  };
 
+  bool Camarea::on_button_release_event(GdkEventButton* event) { 
+    COORD c((int) event->x, (int) event->y);
+    if(hascam && c.distance_from(mouse_click) > 2) {
+      bounds.from_coords(c, mouse_click);
+      manual_align = true;
+    }
+    mouse_clicked = false;
+  };
 
-void Camarea::draw_bounds(BOUNDS &b) {
-  unsigned char * data = (unsigned char *) frame->data;
+  void Camarea::update_frame() {
+    if(!hascam)	
+      return;
 
-  // These will place a border on the camera window to show what it "sees"                                                                                          
-  for(int index=(b.top*width+b.left); index<(b.top*width+b.right); index++) {
-    data[index*4] = 0;
-    data[index*4+1] = 0;
-    data[index*4+2] = 210;
-  }
+    fg->grabFrame(frame);
+    unsigned char * data = (unsigned char *) frame->data; 
 
-  for(int index=(b.bottom*width+b.left); index<(b.bottom*width+b.right); index++) {
-    data[index*4] = 0;
-    data[index*4+1] = 0;
-    data[index*4+2] = 210;
-  }
+    poi.clear();
 
-  for(int index=(b.top*width+b.left); index<(b.bottom*width+b.left); index+=width) {
-    data[index*4] = 0;
-    data[index*4+1] = 0;
-    data[index*4+2] = 210;
-  }
+    // for each module and criteria update the poi
+    std::map<string, vector<CRANGE> >::iterator iter;
+    for(iter = poi_criteria.begin(); iter != poi_criteria.end(); iter++)  
+      for(unsigned int i=0; i<iter->second.size(); i++)
+	update_poi(data, iter->first, iter->second[i]);
+  };
 
-  for(int index=(b.top*width+b.right); index<(b.bottom*width+b.right); index+=width) {
-    data[index*4] = 0;
-    data[index*4+1] = 0;
-    data[index*4+2] = 210;
-  }
-};
+  void Camarea::update_poi(unsigned char *data, string modname, CRANGE &criteria) {
+    // iterate through the pixel data for the given criteria
+    for(int x=bounds.left; x<bounds.right; x++) {
+      for(int y=bounds.top; y<bounds.bottom; y++) {
+	int index = x+(y*width);
+	COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
+	if(criteria.contains(pixelcolor)) {
+	  PIXEL p(pixelcolor, COORD(x, y));
+	  poi[modname].push_back(p);
+	}
+	// following will never be true if -1 passed in as maxpoints for this criteria
+	if(poi[modname].size() == maxPoints[modname])
+	  break;
+      }
+    }    
+  };
 
-void Camarea::register_poi_criteria(string modname, CRANGE range, int maxPoi) {
-  poi_criteria[modname].push_back(range);
-  maxPoints[modname] = maxPoi;
-};
+  void Camarea::update_screen() {
+    Glib::RefPtr<Gdk::Window> window = get_window();
+    if(window) {
+      Cairo::RefPtr<Cairo::Context> context = get_window()->create_cairo_context();
+      if(hascam) {
+	surface = Cairo::ImageSurface::create((unsigned char *) frame->data, Cairo::FORMAT_RGB24, frame->width, frame->height, frame->bytesperline); 
+      } else {
+	surface = noCam;
+      }
+      context->set_source(surface, 0.0, 0.0);
+      context->rectangle (0.0, 0.0, width, height);
+      context->clip();
+      context->paint(); 
+    }
+  };
 
-void Camarea::get_poi(string modname, vector<PIXEL> &modpoi) {
-  modpoi.assign(poi[modname].begin(), poi[modname].end());
-};
+  
+  void Camarea::draw_bounds(BOUNDS &b) {
+    unsigned char * data = (unsigned char *) frame->data;
+
+    // These will place a border on the camera window to show what it "sees"                                                                                          
+    for(int index=(b.top*width+b.left); index<(b.top*width+b.right); index++) {
+      data[index*4] = 0;
+      data[index*4+1] = 0;
+      data[index*4+2] = 210;
+    }
+
+    for(int index=(b.bottom*width+b.left); index<(b.bottom*width+b.right); index++) {
+      data[index*4] = 0;
+      data[index*4+1] = 0;
+      data[index*4+2] = 210;
+    }
+    
+    for(int index=(b.top*width+b.left); index<(b.bottom*width+b.left); index+=width) {
+      data[index*4] = 0;
+      data[index*4+1] = 0;
+      data[index*4+2] = 210;
+    }
+    
+    for(int index=(b.top*width+b.right); index<(b.bottom*width+b.right); index+=width) {
+      data[index*4] = 0;
+      data[index*4+1] = 0;
+      data[index*4+2] = 210;
+    }
+  };
+
+  void Camarea::register_poi_criteria(string modname, CRANGE range, int maxPoi) {
+    poi_criteria[modname].push_back(range);
+    maxPoints[modname] = maxPoi;
+  };
+
+  void Camarea::get_poi(string modname, vector<PIXEL> &modpoi) {
+    modpoi.assign(poi[modname].begin(), poi[modname].end());
+  };
 
 };

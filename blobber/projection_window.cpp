@@ -50,9 +50,12 @@ namespace blobber {
     }
 
     // load colors in config
+    string sblack;
+    BLACK.to_string(sblack);
     for(unsigned int i=0; i<colornames.size(); i++) {
       COLOR color;
-      config->get(colornames[i], value, groupname);
+      // default is black
+      config->get(colornames[i], value, sblack, groupname);
       color.from_string(value);
       colors.push_back(color);
     }
