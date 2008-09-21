@@ -24,8 +24,8 @@ namespace blobber {
     debug("Module \"" + n + "\" just created"); 
   };
 
-  void ModInterface::register_poi_criteria(Camarea &area, CRANGE crange) {
-    area.register_poi_criteria(name, crange);
+  void ModInterface::register_poi_criteria(Camarea &area, CRANGE crange, int maxPoi) {
+    area.register_poi_criteria(name, crange, maxPoi);
   };
 
   void ModInterface::get_poi(Camarea &area, vector<PIXEL> &modpoi) {

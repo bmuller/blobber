@@ -110,25 +110,48 @@ bool Camarea::on_button_release_event(GdkEventButton* event) {
 };
 
 void Camarea::update_frame() {
-  if(!hascam)
+  if(!hascam)	
     return;
 
   fg->grabFrame(frame);
   unsigned char * data = (unsigned char *) frame->data; 
 
   poi.clear();
-  // set points of interests for modules
-  for(int x=bounds.left; x<bounds.right; x++) {
-    for(int y=bounds.top; y<bounds.bottom; y++) {
-      int index = x+(y*width);
-      COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
-      update_poi(pixelcolor, COORD(x, y));
+
+  std::map<string, vector<CRANGE> >::iterator iter;
+
+  // for each module
+  for(iter = poi_criteria.begin(); iter != poi_criteria.end(); iter++ ) {
+    string modname = iter->first;
+    vector<CRANGE> criteria = iter->second;
+	
+    // for each criteria each module has set
+    for(unsigned int i=0; i<criteria.size(); i++) {
+
+
+      // set points of interests for modules
+      for(int x=bounds.left; x<bounds.right; x++) {
+        for(int y=bounds.top; y<bounds.bottom; y++) {
+          int index = x+(y*width);
+          COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
+//REMOVE      update_poi(pixelcolor, COORD(x, y));
+          if(criteria[i].contains(pixelcolor)) {
+            PIXEL p(pixelcolor, COORD(x, y));
+	    poi[modname].push_back(p);
+          }
+          if ((maxPoints[modname] > 0 && poi[modname].size() == maxPoints[modname]) || maxPoints[modname] == 0)
+	  {
+	    x = bounds.right;
+	    y = bounds.bottom;
+	  }
+        }
+      }
     }
   }
 
 };
 
-void Camarea::update_poi(COLOR &color, COORD coord) {
+/*void Camarea::update_poi(COLOR &color, COORD coord) {
   std::map<string, vector<CRANGE> >::iterator iter;
 
   // for each module
@@ -141,11 +164,12 @@ void Camarea::update_poi(COLOR &color, COORD coord) {
       if(criteria[i].contains(color)) {
 	PIXEL p(color, coord);
 	poi[modname].push_back(p);
+	cout<<"hit"<<endl;
       }
     }
   }
 
-};
+};*/
 
 void Camarea::update_screen() {
   Glib::RefPtr<Gdk::Window> window = get_window();
@@ -193,8 +217,9 @@ void Camarea::draw_bounds(BOUNDS &b) {
   }
 };
 
-void Camarea::register_poi_criteria(string modname, CRANGE range) {
+void Camarea::register_poi_criteria(string modname, CRANGE range, int maxPoi) {
   poi_criteria[modname].push_back(range);
+  maxPoints[modname] = maxPoi;
 };
 
 void Camarea::get_poi(string modname, vector<PIXEL> &modpoi) {

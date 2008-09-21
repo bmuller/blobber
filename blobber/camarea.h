@@ -15,7 +15,9 @@ class Camarea : public Gtk::DrawingArea {
   std::map<string, vector<PIXEL> > poi;
   // modules register criteria for defining a poi
   std::map<string, vector<CRANGE> > poi_criteria;
-  void update_poi(COLOR &color, COORD coord);
+  // modules register maximum number of poi
+  std::map<string, int > maxPoints;
+//  void update_poi(COLOR &color, COORD coord);
 
  public:
   bool hascam, manual_align;
@@ -33,7 +35,7 @@ class Camarea : public Gtk::DrawingArea {
   void set_device(string _device);
   void set_bounds(BOUNDS &b);
   void draw_bounds(BOUNDS &b);
-  void register_poi_criteria(string modname, CRANGE range);
+  void register_poi_criteria(string modname, CRANGE range, int maxPoints = -1);
   void get_poi(string modname, vector<PIXEL> &poi);
 };
 
