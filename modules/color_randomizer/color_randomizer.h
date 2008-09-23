@@ -10,7 +10,6 @@ using namespace blobber;
 class ColorRandomizer : public ModInterface {
  public:
   ColorRandomizer();
-  ~ColorRandomizer();
   void init(Camarea &area, ProjectionWindow &pw);
   void update(Camarea &area, ProjectionWindow &pw);
  protected:

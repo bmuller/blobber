@@ -30,13 +30,13 @@ void ColorRandomizer::init(Camarea &area, ProjectionWindow &pw) {
 	waitTime = string_to_int(wait);
 
 	pw.colors.push_back(color);
+	//Initially set color to random color
+	//User can change at will
 	pw.preferred_color = (pw.colors.size() - 1);
 
 	time(&last);
 
 }
-
-ColorRandomizer::~ColorRandomizer() {}
 
 void ColorRandomizer::update(Camarea &area, ProjectionWindow &pw) {
 
@@ -51,8 +51,7 @@ void ColorRandomizer::update(Camarea &area, ProjectionWindow &pw) {
 		color.blue = static_cast<int>(rand.get_int_range(70, 250));
 		//set pw color
 		pw.colors.pop_back();
-		pw.colors.push_back(color);		
-		pw.preferred_color = (pw.colors.size() - 1);
+		pw.colors.push_back(color);
 
 		//reset last
 		time(&last);
