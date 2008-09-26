@@ -1,4 +1,4 @@
-#include "pong.h"
+#include "pongmod.h"
 #include <cstdlib>
 
 using namespace blobber;

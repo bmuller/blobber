@@ -1,5 +1,8 @@
-//e#include "blobber.h"
-#include "ball.h"
+//#include "pongmod.h"
+//#include "blobber.h"
+//#include "ball.h"
+
+
 
 using namespace blobber;
 
@@ -11,12 +14,6 @@ class Pong : public ModInterface {
 
  private:
   Ball ball;
-  unsigned short int x_pos;
-  unsigned short int y_pos;
-  short int x_dir;
-  short int y_dir;
-  short int speed;
-  COORD pos;
 
 };
 

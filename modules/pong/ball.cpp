@@ -1,4 +1,4 @@
-#include "ball.h"
+#include "pongmod.h"
 #include <iostream>
 
 using namespace std;
