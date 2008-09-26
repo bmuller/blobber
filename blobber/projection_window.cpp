@@ -81,6 +81,13 @@ namespace blobber {
     num_to_string((int) eventData->keyval, ks);
     debug("Key pressed on projection window: "+ks);
 #endif
+#ifdef CAIRO_HAS_PNG_FUNCTIONS
+	Cairo::RefPtr<Cairo::Context> cr;
+	Cairo::RefPtr<Cairo::Surface> sr;
+	string filepath;
+	time_t rawTime;
+	char *nameTime;
+#endif
     switch(eventData->keyval) {
     case 32: // spacebar
       clear();
@@ -92,6 +99,21 @@ namespace blobber {
 	fullscreen();
       is_fullscreen = !is_fullscreen;
       break;
+    case 115: // s
+#ifdef CAIRO_HAS_PNG_FUNCTIONS
+      if(!get_context(cr))
+        break;
+	sr = cr->get_target();
+	filepath =  Glib::build_filename(Glib::get_user_config_dir(), "blobber");
+	rawTime = time(NULL);
+	nameTime = ctime(&rawTime);
+	filepath = Glib::build_filename(filepath,string(nameTime).substr(0,strlen(nameTime)-1)+ ".png");
+	debug(filepath);
+	sr->write_to_png(filepath);
+#else
+	debug("No screen captures for you! Compile Cairo-Png support!");
+#endif	
+	break;
     case 65307: // ESC
       unfullscreen();
       is_fullscreen = false;
