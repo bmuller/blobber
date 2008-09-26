@@ -1,0 +1,5 @@
+#! /bin/bash
+
+export MODDIR=`pkg-config libblobber --variable=moduledir`
+sudo cp libpong.so.0.0.0 $MODDIR
+sudo ln -s $MODDIR/libpong.so.0.0.0 $MODDIR/libpong.so
