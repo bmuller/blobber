@@ -1,9 +1,0 @@
-PONG MODULE
-
-to compile:
-
-make
-
-to "install"
-
-./inst
