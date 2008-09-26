@@ -74,6 +74,28 @@ namespace blobber {
     num_to_string(preferred_color, value);
     config->set("preferred_color", value);
   };
+
+  void ProjectionWindow::save_to_file() {
+#ifdef CAIRO_HAS_PNG_FUNCTIONS
+    Cairo::RefPtr<Cairo::Context> cr;
+    Cairo::RefPtr<Cairo::Surface> sr;
+    string filepath;
+    time_t rawTime;
+    char *nameTime;
+
+    if(!get_context(cr))
+      return;
+    sr = cr->get_target();
+    filepath =  Glib::build_filename(Glib::get_user_config_dir(), "blobber");
+    rawTime = time(NULL);
+    nameTime = ctime(&rawTime);
+    filepath = Glib::build_filename(filepath,string(nameTime).substr(0,strlen(nameTime)-1)+ ".png");
+    debug("Saving screen capture to " + filepath);
+    sr->write_to_png(filepath);
+#else
+    throw NoSuchFeatureException("Cairo must be compiled with PNG support to save screen captures")
+#endif	
+  };
   
   bool ProjectionWindow::on_key_press_event(GdkEventKey* eventData) {
 #ifdef DEBUG
@@ -81,13 +103,7 @@ namespace blobber {
     num_to_string((int) eventData->keyval, ks);
     debug("Key pressed on projection window: "+ks);
 #endif
-#ifdef CAIRO_HAS_PNG_FUNCTIONS
-	Cairo::RefPtr<Cairo::Context> cr;
-	Cairo::RefPtr<Cairo::Surface> sr;
-	string filepath;
-	time_t rawTime;
-	char *nameTime;
-#endif
+
     switch(eventData->keyval) {
     case 32: // spacebar
       clear();
@@ -99,21 +115,9 @@ namespace blobber {
 	fullscreen();
       is_fullscreen = !is_fullscreen;
       break;
-    case 115: // s
-#ifdef CAIRO_HAS_PNG_FUNCTIONS
-      if(!get_context(cr))
-        break;
-	sr = cr->get_target();
-	filepath =  Glib::build_filename(Glib::get_user_config_dir(), "blobber");
-	rawTime = time(NULL);
-	nameTime = ctime(&rawTime);
-	filepath = Glib::build_filename(filepath,string(nameTime).substr(0,strlen(nameTime)-1)+ ".png");
-	debug(filepath);
-	sr->write_to_png(filepath);
-#else
-	debug("No screen captures for you! Compile Cairo-Png support!");
-#endif	
-	break;
+    case 115: // s for save to file
+      save_to_file();
+      break;
     case 65307: // ESC
       unfullscreen();
       is_fullscreen = false;
@@ -252,8 +256,10 @@ namespace blobber {
     Cairo::RefPtr<Cairo::Context> cr;
     if(!get_context(cr))
       return;
-    
-    cr->arc(coords.x, coords.y, radius, 0.0, 2.0 * M_PI); // full circle
+
+    COORD translated;
+    translate_coordinates(coords, translated);
+    cr->arc(translated.x, translated.y, radius, 0.0, 2.0 * M_PI); // full circle
     set_color(cr, c);
     cr->fill_preserve();
     cr->stroke();

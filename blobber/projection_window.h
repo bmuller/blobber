@@ -39,5 +39,7 @@ namespace blobber {
     bool on_expose_event(GdkEventExpose* event);
     bool get_context(Cairo::RefPtr<Cairo::Context> &cr);
     void draw_alignment_graphics();
+  private:
+    void save_to_file();
   };
 };

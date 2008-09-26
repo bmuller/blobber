@@ -48,4 +48,9 @@ namespace blobber {
   public:
     GUIException(std::string s) : BlobberException(s) {};
   };
+
+  class NoSuchFeatureException : public BlobberException {
+  public:
+    NoSuchFeatureException(std::string s) : BlobberException(s) {};
+  };
 };
