@@ -1,88 +1,48 @@
-/*
-    Blobber is webcam based blob tracking software
-    Copyright (C) 2008 Charleston, SC Linux Users Group
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #include "pong.h"
-#include "math.h"
+#include <cstdlib>
 
-using namespace std;
 using namespace blobber;
+using namespace std;
 
-Pong::Pong() : ModInterface("Pong") { 
-
-};
-
-void Pong::projection_window_exposed(ProjectionWindow &pw) {
-
-};
+Pong::Pong() : ModInterface("Pong") { }
 
 void Pong::init(Camarea &area, ProjectionWindow &pw) {
-  // adjust these as necessary for different light/laser sources.  Any pixel
-  // with the threshold you set will be considered in the input.
-  string red, green, blue;
-  // get config values - and set them to defaults if they are not set already
-  config_get_set("red", red, "60");
-  config_get_set("blue", blue, "0");
-  config_get_set("green", green, "0");
 
-  CRANGE range(COLOR(string_to_int(red), string_to_int(blue), string_to_int(green)));
-  register_poi_criteria(area, range);
-
-
-  Glib::Rand rand;
-  ball_direction = 45; //rand.get_int_range(0, 180);
-  moving_right = true;
-  ball.x = area.width / 2;
-  ball.y = area.height / 2;
-};
-
+}
 
 void Pong::update(Camarea &area, ProjectionWindow &pw) {
-  pw.draw_circle(ball, 6, BLACK);
-  int movement = 10;
-  if(ball.x <= 0) {
-    moving_right = true;
-    ball.x += movement;
-    ball_direction = (ball_direction < 270) ? (360 - ball_direction) : (ball_direction - 270);
-  } else if(ball.x >= area.width) {
-    moving_right = false;
-    ball.x -= movement;
-    ball_direction = (ball_direction < 90) ? (ball_direction+90) : (180 - ball_direction);
-  } else if(moving_right) {
-    ball.x += movement;
-  } else {
-    ball.x -= movement;
+  pw.draw_circle(ball.pos, ball.diameter+2, BLACK);  
+  ball.move();
+  pw.draw_circle(ball.pos, ball.diameter, BLUE);
+  ball.printInfo();
+
+
+  /**  pw.draw_circle(pos, BALL_DIAMETER+2, BLACK);
+  pos.x += x_dir*speed;
+  pos.y += y_dir*speed;
+  pw.draw_circle(pos, BALL_DIAMETER, BLUE);
+
+  if(pos.x + BALL_DIAMETER > WIDTH)  {
+    pos.x = WIDTH;
+    x_dir = -1;
+  }  
+  else if(pos.x < 0)  {
+    pos.x = 0;
+    x_dir = 1;
+  }
+  
+  if(pos.y + BALL_DIAMETER > HEIGHT)  {
+    pos.y = HEIGHT;
+    y_dir = -1;
+  }
+  else if(pos.y < 0)  {
+    pos.y = 0;
+    y_dir = 1;
   }
 
-  // bounce off top or bottom
-  if(ball.y <= 0 || ball.y >= area.height) {
-    if(moving_right) {
-      ball_direction = (ball_direction > 90) ? (ball_direction-90) : (90 - ball_direction);
-    } else {
-      ball_direction = (ball_direction > 270) ? (ball_direction - 270) : (270 - ball_direction);
-    }
-  }
+  cout << pos.x << "," << pos.y << endl;**/
 
-  ball.y = atan(ball_direction) * ball.x;
-  cout << ball_direction << " " << ball.x << " " << ball.y << endl;
-
-  pw.draw_circle(ball, 5, BLUE);  
-};
-
+}
 
 extern "C" {
   ModInterface *get_module() { return new Pong(); };
