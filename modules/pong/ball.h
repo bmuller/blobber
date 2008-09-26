@@ -1,5 +1,3 @@
-//#include "pongmod.h"
-
 using namespace blobber;
 
 class Ball  {

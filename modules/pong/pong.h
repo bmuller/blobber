@@ -1,9 +1,3 @@
-//#include "pongmod.h"
-//#include "blobber.h"
-//#include "ball.h"
-
-
-
 using namespace blobber;
 
 class Pong : public ModInterface {
