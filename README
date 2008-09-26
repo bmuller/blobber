@@ -8,9 +8,11 @@ To run:
 
 svn co https://svn.butterfat.net/public/blobber/trunk blobber
 cd blobber
-sh autogen.sh --enable-debug
+sh autogen.sh --enable-debug --enable-doxygen
+make dox
 make
 sudo make install
+sudo ldconfig
 blobber
 
 ******************************************************************************
