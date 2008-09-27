@@ -17,7 +17,7 @@ libmultilasertag_la_SOURCES = multi_laser_tag/multi_laser_tag.cpp
 
 libmulticoloredtag_la_SOURCES = multi_colored_tag/multi_colored_tag.cpp
 
-libpong_la_SOURCES = pong/pong.cpp pong/ball.cpp
+libpong_la_SOURCES = pong/pong.cpp pong/ball.cpp pong/paddle.cpp
 
 libcolorrandomizer_la_SOURCES = color_randomizer/color_randomizer.cpp
 
