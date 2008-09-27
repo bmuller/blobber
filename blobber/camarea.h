@@ -37,6 +37,7 @@ using namespace std;
    void draw_bounds(BOUNDS &b);
    void register_poi_criteria(string modname, CRANGE range, int maxPoints);
    void get_poi(string modname, vector<PIXEL> &poi);
+   Cairo::RefPtr< Cairo::ImageSurface > getSurface();
  };
 
 };

@@ -89,7 +89,7 @@ namespace blobber {
     filepath =  Glib::build_filename(Glib::get_user_config_dir(), "blobber");
     rawTime = time(NULL);
     nameTime = ctime(&rawTime);
-    filepath = Glib::build_filename(filepath,string(nameTime).substr(0,strlen(nameTime)-1)+ ".png");
+    filepath = Glib::build_filename(filepath,string(nameTime).substr(0,strlen(nameTime)-1)+ "proj.png");
     debug("Saving screen capture to " + filepath);
     sr->write_to_png(filepath);
 #else

@@ -192,4 +192,8 @@ namespace blobber {
     modpoi.assign(poi[modname].begin(), poi[modname].end());
   };
 
+  Cairo::RefPtr< Cairo::ImageSurface > Camarea::getSurface()
+  {
+  return surface;
+  };
 };

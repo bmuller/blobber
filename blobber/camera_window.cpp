@@ -95,4 +95,35 @@ namespace blobber {
     options_window.show();
   };
 
+  bool CameraWindow::on_key_press_event(GdkEventKey* eventData)
+  {
+#ifdef DEBUG
+    string ks;
+    num_to_string((int) eventData->keyval, ks);
+    debug("Key pressed on camera window: "+ks);
+#endif
+    switch(eventData->keyval) 
+    {
+    case 115: // s
+	save_to_file();
+	break;
+    };
+  };
+  void CameraWindow::save_to_file() 
+  {
+#ifdef CAIRO_HAS_PNG_FUNCTIONS
+    string filepath;
+    time_t rawTime;
+    char *nameTime;
+
+    filepath =  Glib::build_filename(Glib::get_user_config_dir(), "blobber");
+    rawTime = time(NULL);
+    nameTime = ctime(&rawTime);
+    filepath = Glib::build_filename(filepath,string(nameTime).substr(0,strlen(nameTime)-1)+ "proj.png");
+    debug("Saving screen capture to " + filepath);
+    area.getSurface()->write_to_png(filepath);
+#else
+    throw NoSuchFeatureException("Cairo must be compiled with PNG support to save screen captures")
+#endif	
+  };
 };
