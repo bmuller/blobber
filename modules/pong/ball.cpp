@@ -4,28 +4,48 @@
 using namespace std;
 
 Ball::Ball()  {
-  pos.x = 0;
-  pos.y = 0;
+  pos.x = 6;
+  pos.y = 6;
   x_dir = 1;
   y_dir = 1;
   speed = 5;
-  diameter = 5;
-  court_height = 250;
-  court_width = 150;
+  radius = 5;
+  court_height = 150;
+  court_width = 250;
 }
 
 void Ball::move()  {
   pos.x += x_dir*speed;
-  if(pos.x >= court_width || pos.x <= 0)
+  if(getRight() >= court_width || getLeft() <= 0)  {
     x_dir = -x_dir;
+    pos.x = (getLeft() <= 0)?0+(radius+1):court_width-(radius+1);
+  }
 
   pos.y += y_dir*speed;
-  if(pos.y >= court_height || pos.y <= 0)
+  if(getBottom() >= court_height || getTop() <= 0)  {
     y_dir = -y_dir;
+    pos.y = (getTop() <= 0)?0+(radius+1):court_height-(radius+1);
+  }
 }
 
 void Ball::printInfo()  {
-  cout << pos.x << " " << pos.y  <<endl;
+  cout << "x:" << pos.x << ", Left:" << getLeft() << ", y:" << pos.y  << endl;
+}
+
+int Ball::getLeft()  {
+  return pos.x - (radius+1);
+}
+
+int Ball::getRight()  {
+  return pos.x + (radius+1);
+}
+
+int Ball::getTop()  {
+  return pos.y - (radius+1);
+}
+
+int Ball::getBottom()  {
+  return pos.y + (radius+1);
 }
 
 void Ball::setCourtHeight(int h)  {
@@ -34,4 +54,12 @@ void Ball::setCourtHeight(int h)  {
 
 void Ball::setCourtWidth(int w)  {
   court_width = w;
+}
+
+int Ball::getCourtHeight()  {
+  return court_height;
+}
+
+int Ball::getCourtWidth()  {
+  return court_width;
 }

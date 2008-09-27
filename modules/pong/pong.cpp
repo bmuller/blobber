@@ -7,41 +7,38 @@ using namespace std;
 Pong::Pong() : ModInterface("Pong") { }
 
 void Pong::init(Camarea &area, ProjectionWindow &pw) {
+  origin.x = 1;
+  origin.y = 1;
+
+  //the ball is currently specifying the court, but we'll fix that soon
+  left_paddle.setCourtHeight(ball.getCourtHeight());
+  left_paddle.setCourtWidth(ball.getCourtWidth());
+
+  paddle_moving_up = 1;
 
 }
 
 void Pong::update(Camarea &area, ProjectionWindow &pw) {
-  pw.draw_circle(ball.pos, ball.diameter+2, BLACK);  
+  if(rand()%40 == 5)
+    paddle_moving_up = -paddle_moving_up;
+
+  pw.draw_box(origin ,ball.getCourtWidth(),ball.getCourtHeight(), BLUE);
+  pw.draw_circle(ball.pos, ball.radius+2, BLACK);  //clear the circle
   ball.move();
-  pw.draw_circle(ball.pos, ball.diameter, BLUE);
-  ball.printInfo();
+  pw.draw_circle(ball.pos, ball.radius, WHITE);  //draw the new circle
 
+  /** This is hacked together -- don't know a better way to do it off the top of my head **/
+  COORD temp;
+  temp.x = left_paddle.pos.x-1;
+  temp.y = left_paddle.pos.y-1;
+  pw.draw_box(temp, left_paddle.width+2, left_paddle.height+2, BLACK, true);
+  if(paddle_moving_up == 1)
+    left_paddle.moveUp();
+  else
+    left_paddle.moveDown();
+  pw.draw_box(left_paddle.pos, left_paddle.width, left_paddle.height, WHITE, true);
 
-  /**  pw.draw_circle(pos, BALL_DIAMETER+2, BLACK);
-  pos.x += x_dir*speed;
-  pos.y += y_dir*speed;
-  pw.draw_circle(pos, BALL_DIAMETER, BLUE);
-
-  if(pos.x + BALL_DIAMETER > WIDTH)  {
-    pos.x = WIDTH;
-    x_dir = -1;
-  }  
-  else if(pos.x < 0)  {
-    pos.x = 0;
-    x_dir = 1;
-  }
-  
-  if(pos.y + BALL_DIAMETER > HEIGHT)  {
-    pos.y = HEIGHT;
-    y_dir = -1;
-  }
-  else if(pos.y < 0)  {
-    pos.y = 0;
-    y_dir = 1;
-  }
-
-  cout << pos.x << "," << pos.y << endl;**/
-
+  //ball.printInfo();
 }
 
 extern "C" {

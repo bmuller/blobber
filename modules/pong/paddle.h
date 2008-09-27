@@ -1,10 +1,11 @@
 using namespace blobber;
 
-class Ball  {
+class Paddle  {
  public:
-  Ball();
+  Paddle();
 
-  void move();
+  void moveUp();
+  void moveDown();
   void setCourtHeight(int h);
   void setCourtWidth(int w);
   void printInfo();
@@ -17,12 +18,10 @@ class Ball  {
 
   /**I probably should make these private eventually**/
   COORD pos;
-  short int x_dir;
-  short int y_dir;
   short int speed;
-  short int radius;
+  short int width;
+  short int height;
   int court_height;
   int court_width;
 
 };
-
