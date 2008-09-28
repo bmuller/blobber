@@ -10,6 +10,7 @@ class Pong : public ModInterface {
  private:
   Ball ball;
   Paddle left_paddle;
+  Paddle right_paddle;
 
   //temp variables to be removed later
   short int paddle_moving_up;

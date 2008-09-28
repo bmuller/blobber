@@ -14,6 +14,8 @@ Ball::Ball()  {
   court_width = 250;
 }
 
+
+
 void Ball::move()  {
   pos.x += x_dir*speed;
   if(getRight() >= court_width || getLeft() <= 0)  {
@@ -62,4 +64,13 @@ int Ball::getCourtHeight()  {
 
 int Ball::getCourtWidth()  {
   return court_width;
+}
+
+
+void Ball::processCollision(Paddle* p) {
+  //do they have any overlap in the y direction?
+  if(getBottom() >= p->getTop() && getTop() <= p->getBottom()) {
+    if(getLeft() <= p->getRight() && getRight() >= p->getLeft())
+      x_dir = -x_dir;
+  }
 }

@@ -1,5 +1,13 @@
 #include "pongmod.h"
 
+Paddle::Paddle(int posx, int posy, int w, int h, int s) {
+  pos.x = posx;
+  pos.y = posy;
+  width = w;
+  height = h;
+  speed = s;
+}
+
 Paddle::Paddle()  {
   pos.x = 20;
   pos.y = 100;
@@ -23,20 +31,20 @@ void Paddle::printInfo()  {
 }
 
 int Paddle::getLeft()  {
-  return 0;
+  return pos.x;
 }
 
 int Paddle::getRight()  {
-  return 0;
+  return pos.x+width;
 }
 
 
 int Paddle::getTop()  {
-  return 0;
+  return pos.y;
 }
 
 int Paddle::getBottom()  {
-  return 0;
+  return pos.y+height;
 }
 
 void Paddle::setCourtHeight(int h)  {

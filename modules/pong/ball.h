@@ -14,6 +14,7 @@ class Ball  {
   int getBottom();
   int getCourtHeight();
   int getCourtWidth();
+  void processCollision(Paddle* p);
 
   /**I probably should make these private eventually**/
   COORD pos;
