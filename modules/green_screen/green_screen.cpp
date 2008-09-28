@@ -26,12 +26,18 @@ GreenScreen::GreenScreen() : ModInterface("GreenScreen") {
 }
 
 void GreenScreen::init(Camarea &area, ProjectionWindow &pw) {
-  ///////////////////
   waitCycle = 0;
   frameRef = (unsigned char *)(malloc(area.frame->sizeimage));
-  ///////////////////
+  string stivity;
 
   config_get_set("image_file", filename, string(DATAROOTDIR) + "/green_screen/stone-640x480.jpg");
+  config_get_set("Sensitivity", stivity, "30");
+  sensitivity = string_to_int(stivity);
+  
+  // Error check sensitivity
+  if (sensitivity < 0) sensitivity *= -1;
+  if (sensitivity > 100) sensitivity = 100;
+
   Glib::RefPtr<Gdk::Pixbuf> temp_buf;
   try { temp_buf = Gdk::Pixbuf::create_from_file(filename); }
   catch(Glib::FileError err) { 
@@ -45,17 +51,16 @@ void GreenScreen::init(Camarea &area, ProjectionWindow &pw) {
   green_blue_diff = (unsigned char) string_to_int(gbd);*/
 }  
 
-GreenScreen::~GreenScreen() {}
-
 void GreenScreen::update(Camarea &area, ProjectionWindow &pw) {
 
   unsigned char * data;
+  int frameRefDelta = 0;
 
   //gotta have this to let the camera come online before the baseline image is captured
   //a hot key would be beneficial here...
   if (waitCycle < 50) waitCycle++;
   //after wait, get the frame data and put it in memory
-  if (waitCycle == 50){
+  else if (waitCycle == 50){
     int ctr = 0;
     for( data = (unsigned char *) area.frame->data; 
          data - (unsigned char *) area.frame->data < ( area.frame->sizeimage ); 
@@ -66,19 +71,19 @@ void GreenScreen::update(Camarea &area, ProjectionWindow &pw) {
       } 
       waitCycle++; // stop checking
   }
-
-  int frameRefDelta = (unsigned char *)area.frame->data - frameRef;
-
+  
+  else {
+  frameRefDelta = (unsigned char *)area.frame->data - frameRef;
   Glib::RefPtr<Gdk::Pixbuf> buf = image;
   guint8 * image_data = buf->get_pixels();
 
   for( data = (unsigned char *) area.frame->data; 
        data - (unsigned char *) area.frame->data < ( area.frame->sizeimage ); 
        data+=4 ) {
+
       //if( *(data+1) - *data > green_red_diff && *(data+1) - *(data+2) > green_blue_diff ) {
-      //This line uses a sensitivity of 30 hard coded
-      //We could set an optinon here that can be tweaked real-time
-      if( (*(data) - *(data - frameRefDelta)) < 30 && (*(data) - *(data - frameRefDelta)) > -30){
+  
+      if( (*(data) - *(data - frameRefDelta)) < sensitivity && (*(data) - *(data - frameRefDelta)) > -1 * sensitivity){
       *data = *(image_data+2); 
       *(data+1) = *(image_data+1); 
       *(data+2) = *(image_data); 
@@ -86,8 +91,9 @@ void GreenScreen::update(Camarea &area, ProjectionWindow &pw) {
     }
     image_data+=3;
   }
-};
+  }
+}
 
 extern "C" { 
   ModInterface *get_module() { return new GreenScreen(); }; 
-}; 
+}
