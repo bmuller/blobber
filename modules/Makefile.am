@@ -4,7 +4,7 @@ AM_CPPFLAGS = -DLIBDIR='"$(libdir)/blobber"' -DDATAROOTDIR='"$(datarootdir)/blob
 
 pkglib_LTLIBRARIES = libgreenscreen.la liblasertag.la libprojectionoptions.la \
 		     libmultilasertag.la libmulticoloredtag.la libpong.la \
-		     libcolorrandomizer.la libinvaders.la libframerate.la
+		     libcolorrandomizer.la libinvaders.la librefreshrate.la
 
 libgreenscreen_la_SOURCES = green_screen/green_screen.cpp
 nobase_dist_pkgdata_DATA = green_screen/stone-640x480.jpg
@@ -23,4 +23,4 @@ libcolorrandomizer_la_SOURCES = color_randomizer/color_randomizer.cpp
 
 libinvaders_la_SOURCES = invaders/invaders.cpp
 
-libframerate_la_SOURCES = frame_rate/frame_rate.cpp
+librefreshrate_la_SOURCES = refresh_rate/refresh_rate.cpp
