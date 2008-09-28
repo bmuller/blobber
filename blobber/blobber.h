@@ -58,5 +58,9 @@
 #include "camera_window.h"
 #include "mod_interface.h"
 
+#include "mod_utils/movable_object.h"
+#include "mod_utils/movable_circle.h"
+#include "mod_utils/movable_square.h"
+
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
 

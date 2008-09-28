@@ -45,7 +45,6 @@ namespace blobber {
 
     // Get the device capabilities
     if(xioctl(fd, VIDIOC_QUERYCAP, &caps) < 0 ) {
-      cout << errno << endl;
       close(fd);
       throw CameraReadException(" query capabilities failed");
     }
@@ -62,7 +61,6 @@ namespace blobber {
     fmtd.index              = 0;
     fmtd.type               = V4L2_BUF_TYPE_VIDEO_CAPTURE; 
     if( xioctl(fd, VIDIOC_ENUM_FMT, &fmtd) < 0 ) { 
-      cout << errno << endl;
       close(fd);
       throw CameraReadException(" query pixelformat failed");
     }

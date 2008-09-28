@@ -252,7 +252,7 @@ namespace blobber {
     set_background(BLACK);
   };
 
-  void ProjectionWindow::draw_circle(COORD coords, int radius, COLOR c) {
+  void ProjectionWindow::draw_circle(COORD coords, int radius, COLOR c, bool fill) {
     Cairo::RefPtr<Cairo::Context> cr;
     if(!get_context(cr))
       return;
@@ -261,7 +261,8 @@ namespace blobber {
     translate_coordinates(coords, translated);
     cr->arc(translated.x, translated.y, radius, 0.0, 2.0 * M_PI); // full circle
     set_color(cr, c);
-    cr->fill_preserve();
+    if(fill)
+      cr->fill_preserve();
     cr->stroke();
   };
 
