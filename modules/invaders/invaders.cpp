@@ -1,12 +1,11 @@
 #include "invaders.h"
 
-
 Invaders::Invaders() : ModInterface("Invaders") { }
 
 void Invaders::init(Camarea &area, ProjectionWindow &pw) {
-  timer = clock();
-  string alien_number, alien_rows, red, green, blue;
-  int int_alien_number, int_alien_rows;
+  alien_timer = clock();
+  update_timer = alien_timer;
+  string red, green, blue;
 
   config_get_set("red", red, "60");
   config_get_set("blue", blue, "0");
@@ -14,50 +13,58 @@ void Invaders::init(Camarea &area, ProjectionWindow &pw) {
   CRANGE range(COLOR(string_to_int(red), string_to_int(blue), string_to_int(green)));
   register_poi_criteria(area, range, 1);
 
-  // initialize aliens, laser
-  config_get_set("alien_number", alien_number, "30");
-  config_get_set("alien_rows", alien_rows, "4");
-  int_alien_number = string_to_int(alien_number);
-  int_alien_rows = string_to_int(alien_rows);
-  if(int_alien_number % int_alien_rows != 0) { int_alien_rows++; }
-  for(int i= int_alien_number; i > 0; i--) {
-    //aliens.push_back(COORD(1,1));
-  }
-  laser = COORD(area.width / 2, area.bounds.bottom);
- 
+  aliens = (Alien *) malloc(10 * sizeof(Alien));
+  for (Alien * it = aliens; it - aliens < 10; it++) { init_alien(it, area); }
+}
+
+Invaders::~Invaders() {
+  delete [] aliens;
 }
 
 void Invaders::update(Camarea &area, ProjectionWindow &pw) {
-  
+  //clock_t split_timer = clock();
+  //float alien_time = ( (float) split_timer - alien_timer ) / CLOCKS_PER_SEC;
+  //float update_time = ( (float) split_timer - update_timer) / CLOCKS_PER_SEC;
+  //update_timer = split_timer;
+
   vector<PIXEL> poi;
   get_poi(area, poi);
 
-  // clear the ProjectionWindow
-  pw.clear();
-
-  // redraw the commander
-  if(poi.size() != 0) { laser.copy(poi[0].coord); }
-  draw_laser(area, pw, laser);
-
-  /* -compute new locations of beams, aliens
-     -determine if 
-      1) commander missile has hit an alien
-      2) alien missile has hit commander
-      3) aliens have reached commander base
-    -draw new locations of commander, beams, and aliens
-    -there are points of interest
-    -go ahead and iterate through them and play
-  */
+  // clear the pw
+  Cairo::RefPtr<Cairo::Context> cr;
+  Glib::RefPtr<Gdk::Window> window = pw.get_window();
+  if(!window) { return; }
+  cr = window->create_cairo_context();
+  
+  for ( Alien * it = aliens; it - aliens < 10; it++) {
+    draw_alien(pw, cr, it, true);
+    if ( poi.size() != 0 && in_bounds(it, poi[0].coord) ) { 
+      explosions.push_back( poi[0].coord );
+      init_alien(it, area);
+      //score++;
+    }
+    else if ( it->center.y > area.bounds.bottom ) {init_alien(it, area); }
+    else { it->center.y += 0.05 * it->speed;}
+    draw_alien(pw, cr, it);
+  }
 }
 
-void Invaders::draw_laser(Camarea &area, ProjectionWindow &pw,  COORD location) {
-  pw.draw_circle(COORD(location.x, area.height), 5, BLUE);
-}
-
-void Invaders::draw_aliens(ProjectionWindow &pw, vector<COORD> &locations) {}
-void Invaders::draw_beams(ProjectionWindow &pw, vector<COORD> &locations) {}
-void Invaders::draw_explosions(ProjectionWindow &pw, vector<COORD> &locations) {}
-
+void Invaders::draw_alien(ProjectionWindow &pw, Cairo::RefPtr<Cairo::Context> cr, Alien * a, bool erase) {
+  COORD translated;
+  pw.translate_coordinates(a->center, translated);
+  cr->arc(translated.x, translated.y, 5, 0.0, 2.0 * M_PI);
+  cr->set_line_width(1);
+  if(erase) {
+    cr->set_line_width(3);
+    cr->set_source_rgb(0, 0, 0); 
+  }
+  else { 
+    cr->set_source_rgb(a->color.cairo_red(), a->color.cairo_green(), a->color.cairo_blue()); 
+    cr->set_line_width(1);  
+  }
+  cr->stroke();
+}   
+void Invaders::draw_explosions(ProjectionWindow &pw) {}
 
 extern "C" {
   ModInterface *get_module() { return new Invaders(); };

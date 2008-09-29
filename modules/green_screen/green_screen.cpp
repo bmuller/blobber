@@ -26,15 +26,21 @@ GreenScreen::GreenScreen() : ModInterface("GreenScreen") {
 }
 
 void GreenScreen::init(Camarea &area, ProjectionWindow &pw) {
-  waitCycle = 0;
-  frameRef = (unsigned char *)(malloc(area.frame->sizeimage));
-  string stivity;
-
+  wait_cycle = 0;
+  frame_ref = (unsigned char *)(malloc(area.frame->sizeimage));
+  string filename, mode, grd, gbd, stivity;
   config_get_set("image_file", filename, string(DATAROOTDIR) + "/green_screen/stone-640x480.jpg");
-  config_get_set("Sensitivity", stivity, "30");
+  config_get_set("mode", mode, "background"); 
+  config_get_set("green_red_diff", grd, "30");
+  config_get_set("green_blue_diff", gbd, "20");
+  config_get_set("sensitivity", stivity, "30");
+  if( mode.compare("background") == 0 ) { rep_mode = BACKGROUND; }
+  else if ( mode.compare("greencolor") == 0 ) { rep_mode = GREENCOLOR; }
+  green_red_diff = (unsigned char) string_to_int(grd);
+  green_blue_diff = (unsigned char) string_to_int(gbd);
   sensitivity = string_to_int(stivity);
   
-  // Error check sensitivity
+  // error check sensitivity
   if (sensitivity < 0) sensitivity *= -1;
   if (sensitivity > 100) sensitivity = 100;
 
@@ -43,55 +49,38 @@ void GreenScreen::init(Camarea &area, ProjectionWindow &pw) {
   catch(Glib::FileError err) { 
     throw ModuleFileException(" file " + filename + "  not found!");
   }  
+  
+  // scale image to camera resolution
   image = temp_buf->scale_simple(area.frame->width, area.frame->height, Gdk::INTERP_BILINEAR);
-/*  string grd, gbd;
-  config_get_set("green_red_diff", grd, "30");
-  config_get_set("green_blue_diff", gbd, "20");
-  green_red_diff = (unsigned char) string_to_int(grd);
-  green_blue_diff = (unsigned char) string_to_int(gbd);*/
 }  
 
 void GreenScreen::update(Camarea &area, ProjectionWindow &pw) {
 
   unsigned char * data;
-  int frameRefDelta = 0;
 
   //gotta have this to let the camera come online before the baseline image is captured
   //a hot key would be beneficial here...
-  if (waitCycle < 50) waitCycle++;
-  //after wait, get the frame data and put it in memory
-  else if (waitCycle == 50){
-    int ctr = 0;
-    for( data = (unsigned char *) area.frame->data; 
-         data - (unsigned char *) area.frame->data < ( area.frame->sizeimage ); 
-         data++ )
-      {
-        *(frameRef + ctr) = *data;
-        ctr ++;
-      } 
-      waitCycle++; // stop checking
+  if (wait_cycle < 50) { wait_cycle++; return; }
+  else if (wait_cycle == 50){
+    memcpy( (void *) frame_ref, area.frame->data, (size_t) area.frame->sizeimage ); 
+    wait_cycle++; // stop checking
   }
   
-  else {
-  frameRefDelta = (unsigned char *)area.frame->data - frameRef;
-  Glib::RefPtr<Gdk::Pixbuf> buf = image;
-  guint8 * image_data = buf->get_pixels();
+  int frame_ref_offset = ( (unsigned char *) area.frame->data ) - frame_ref;
+  guint8 * image_data = image->get_pixels();
 
   for( data = (unsigned char *) area.frame->data; 
        data - (unsigned char *) area.frame->data < ( area.frame->sizeimage ); 
        data+=4 ) {
-
-      //if( *(data+1) - *data > green_red_diff && *(data+1) - *(data+2) > green_blue_diff ) {
-  
-      if( (*(data) - *(data - frameRefDelta)) < sensitivity && (*(data) - *(data - frameRefDelta)) > -1 * sensitivity){
+    if( (rep_mode == GREENCOLOR && *(data+1) - *data > green_red_diff && *(data+1) - *(data+2) > green_blue_diff) || 
+        (rep_mode == BACKGROUND && labs( *(data) - *(data - frame_ref_offset)) < sensitivity )){
       *data = *(image_data+2); 
       *(data+1) = *(image_data+1); 
       *(data+2) = *(image_data); 
       *(data+3) = 0x00;
     }
     image_data+=3;
-  }
-  }
+  }  
 }
 
 extern "C" { 
