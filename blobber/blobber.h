@@ -2,6 +2,7 @@
 
 #include <glibmm/keyfile.h>
 
+#include <gtkmm/frame.h>
 #include <gtkmm/window.h>
 #include <gtkmm/label.h>
 #include <gtkmm/box.h>

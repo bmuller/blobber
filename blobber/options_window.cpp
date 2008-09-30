@@ -21,14 +21,26 @@
 namespace blobber {
   using namespace std;
 
-  OptionsWindow::OptionsWindow(Camarea *cam) : area(cam), okButton("OK"), lblCamDevice("Camera devices: ") { 
-    resize(100, 100);
+  OptionsWindow::OptionsWindow(Camarea *cam) : area(cam), okButton("OK"), lblCamDevice("Camera devices: "),
+	modsFrame("Available Modules"){ 
+    resize(300, 300);
+    set_title("Configuration");
     okButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::ok));
-    
+
+    refreshAvailableModules();
+
     add(mainBox);
+    mainBox.add(modsFrame);
     mainBox.add(camDevice);
     mainBox.add(okButton);
     camDevice.add(lblCamDevice);
+    modsFrame.add(modsBox);
+
+    for (int i = 0; i < availableModules.size(); i++)
+    {
+	    Gtk::Button* modCheck = Gtk::manage(new Gtk::CheckButton(availableModules[i]));
+	    modsBox.add(*modCheck);
+    }
 
     string devDir = "/dev"; 
     Glib::Dir listDev(devDir);
@@ -47,4 +59,41 @@ namespace blobber {
     area->set_device(cboCamDevice.get_entry()->get_text().raw());
     hide();
   };
+
+  void OptionsWindow::refreshAvailableModules()
+  {
+    ModInterface::get_available_modules(availableModules);
+
+    // remove extra characters from names
+    for (int i = 0; i < availableModules.size(); i++)
+    {
+	    availableModules[i].erase(0, 3);
+	    availableModules[i].erase(availableModules[i].find_first_of("."));
+    }
+
+    // remove duplicate listings
+    for (int i = 0; i < availableModules.size(); i++)
+	    for (int j = i + 1; j < availableModules.size(); j++)
+	    {
+		    vector<string>::iterator buffer = availableModules.begin() + j;
+		    if (availableModules[i] == availableModules[j])
+		    {
+			    availableModules.erase(buffer);
+			    j--;
+		    }
+	    }
+    
+    // alphebatize list
+    for (int i = 0; i < availableModules.size(); i++)
+	    for (int j = i + 1; j < availableModules.size(); j++)
+	    {
+		    string buffer;
+		    if (availableModules[j] < availableModules[i])
+		    {
+			    buffer = availableModules[i];
+			    availableModules[i] = availableModules[j];
+			    availableModules[j] = buffer;
+		    }
+	    }
+  }
 };
