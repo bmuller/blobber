@@ -27,7 +27,8 @@ namespace blobber {
     set_title("Configuration");
     okButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::ok));
 
-    refreshAvailableModules();
+    ModInterface::get_available_modules(availableModules);
+    sort(availableModules.begin(), availableModules.end());
 
     add(mainBox);
     mainBox.add(modsFrame);
@@ -59,41 +60,4 @@ namespace blobber {
     area->set_device(cboCamDevice.get_entry()->get_text().raw());
     hide();
   };
-
-  void OptionsWindow::refreshAvailableModules()
-  {
-    ModInterface::get_available_modules(availableModules);
-
-    // remove extra characters from names
-    for (int i = 0; i < availableModules.size(); i++)
-    {
-	    availableModules[i].erase(0, 3);
-	    availableModules[i].erase(availableModules[i].find_first_of("."));
-    }
-
-    // remove duplicate listings
-    for (int i = 0; i < availableModules.size(); i++)
-	    for (int j = i + 1; j < availableModules.size(); j++)
-	    {
-		    vector<string>::iterator buffer = availableModules.begin() + j;
-		    if (availableModules[i] == availableModules[j])
-		    {
-			    availableModules.erase(buffer);
-			    j--;
-		    }
-	    }
-    
-    // alphebatize list
-    for (int i = 0; i < availableModules.size(); i++)
-	    for (int j = i + 1; j < availableModules.size(); j++)
-	    {
-		    string buffer;
-		    if (availableModules[j] < availableModules[i])
-		    {
-			    buffer = availableModules[i];
-			    availableModules[i] = availableModules[j];
-			    availableModules[j] = buffer;
-		    }
-	    }
-  }
 };

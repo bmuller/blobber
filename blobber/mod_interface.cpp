@@ -54,7 +54,10 @@ namespace blobber {
   void ModInterface::get_available_modules(vector<string> &mods) {
     try {
       Glib::Dir dir(LIBDIR);
-      mods.assign(dir.begin(), dir.end());
+      mods.clear();
+      for (Glib::DirIterator i = dir.begin(); i != dir.end(); i++)
+	      if ((*i).find_last_of(".so") == (*i).size() - 3)
+		    mods.push_back((*i).substr(3, ((*i).size() - 6)));
     } catch(Glib::FileError fe) {
       throw ModuleListException(" program was compiled with " + string(LIBDIR) + " as library "
 				"directory - but not readable.");
