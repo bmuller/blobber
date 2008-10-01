@@ -39,8 +39,9 @@ namespace blobber {
     for(std::map<string, string>::iterator it=availableModules.begin(); it!=availableModules.end(); it++) {
       string modname = it->first;
       string description = it->second;
-      Gtk::Button* modCheck = Gtk::manage(new Gtk::CheckButton(modname + ": " + description));
-      modsBox.add(*modCheck);
+      modButtons[modname] = Gtk::manage(new Gtk::CheckButton(modname + ": " + description));
+      // need to set loaded modules checkboxes here
+      modsBox.add(*modButtons[modname]);
     }
 
     string devDir = "/dev"; 
@@ -57,7 +58,7 @@ namespace blobber {
   };
 
   void OptionsWindow::ok() {
-    area->set_device(cboCamDevice.get_entry()->get_text().raw());
+//    area->set_device(cboCamDevice.get_entry()->get_text().raw());
     hide();
   };
 

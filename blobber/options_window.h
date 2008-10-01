@@ -15,6 +15,9 @@ namespace blobber {
     Gtk::Frame modsFrame;
     Gtk::VBox modsBox;
     Camarea *area;
+    // module description by module name
     std::map<string,string> availableModules;
+    // module check button pointer by module name
+    std::map<string, Gtk::CheckButton*> modButtons;
   };
 };
