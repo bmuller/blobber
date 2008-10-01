@@ -18,7 +18,7 @@ namespace blobber {
     void draw_line(COORD source, COORD sink, COLOR c, double line_width=2.0);
     void draw_point(COORD coords, COLOR c);
     void draw_circle(COORD coords, int radius, COLOR c, bool fill=false);
-    void draw_box(COORD c, int width, int height, COLOR c, bool fill=false);
+    void draw_box(COORD coord, int width, int height, COLOR c, bool fill=false);
     void draw_curve(vector<COORD> points, COLOR c, double line_width=2.0);
     void show_alignment_graphics();
     void hide_alignment_graphics();

@@ -93,6 +93,9 @@ struct COORD {
   double distance_from(int x, int y) {
     return distance_from(COORD(x, y));
   };
+  void operator+=(COORD &c) {
+    x += c.x; y += c.y;
+  };
 };
 
 struct BOUNDS {
