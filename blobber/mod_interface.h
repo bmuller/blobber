@@ -3,14 +3,14 @@ namespace blobber {
 
   class ModInterface {
   public:
-    string name;
-    ModInterface(string n);
+    string name, description;
+    ModInterface(string n, string d="No description");
     virtual void update(Camarea &area, ProjectionWindow &pw) = 0;
     virtual void clear() {};
     virtual void init(Camarea &area, ProjectionWindow &pw) {};
     virtual void projection_window_exposed(ProjectionWindow &pw) {};
-    static ModInterface * load_module(string modname);
-    static void get_available_modules(vector<string> &mods);
+    static ModInterface * load_module(string modname, bool make_resident=true);
+    static void get_available_modules(map<string, string> &mods);
     // called right before init
     inline void set_config(Configuration *c) { config = c; };
     void config_set(string key, string value);

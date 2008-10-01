@@ -81,4 +81,12 @@ namespace blobber {
     return ret;
   };
 
+  bool ends_with(string s, string end) {
+    int ssize = s.size();
+    int esize = end.size();
+    if(esize > ssize)
+      return false;
+    return s.substr((ssize-esize), ssize) == end;
+  };
+
 };

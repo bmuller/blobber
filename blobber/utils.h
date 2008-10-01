@@ -11,5 +11,7 @@ namespace blobber {
   void join(vector<std::string> v, string joiner, string& result);
   // break up a string into parts whereever e occurs
   vector<string> explode(string s, string e);
+  // return true if s ends with end, false otherwise
+  bool ends_with(string s, string end);
 };
 

@@ -15,6 +15,6 @@ namespace blobber {
     Gtk::Frame modsFrame;
     Gtk::VBox modsBox;
     Camarea *area;
-    vector<string> availableModules;
+    std::map<string,string> availableModules;
   };
 };

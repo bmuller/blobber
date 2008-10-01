@@ -20,7 +20,7 @@
 
 namespace blobber {
 
-  ModInterface::ModInterface(string n) : name(n) { 
+  ModInterface::ModInterface(string n, string d) : name(n), description(d) { 
     debug("Module \"" + n + "\" just created"); 
   };
 
@@ -32,7 +32,7 @@ namespace blobber {
     area.get_poi(name, modpoi);
   };
 
-  ModInterface * ModInterface::load_module(string modname) {
+  ModInterface * ModInterface::load_module(string modname, bool make_resident) {
     modname = "lib" + modname;
     debug("Looking in " + string(LIBDIR) + " for module " + modname);
     Glib::Module module(string(LIBDIR) + '/' + modname);  
@@ -41,7 +41,8 @@ namespace blobber {
       ModInterface* (*get_module) () ;
       bool found = module.get_symbol("get_module", (void *&) get_module);
       if(found) {
-	module.make_resident();
+	if(make_resident)
+	  module.make_resident();
 	return get_module();  
       } else {
 	throw ModuleLoadException(" get_module function not found in module " + modname);
@@ -51,16 +52,26 @@ namespace blobber {
     }
   };
   
-  void ModInterface::get_available_modules(vector<string> &mods) {
+  // mods will be mods["modname"] = "mod description"
+  void ModInterface::get_available_modules(map<string, string> &mods) {
+    mods.clear();
+    vector<string> fnames;
     try {
       Glib::Dir dir(LIBDIR);
-      mods.clear();
-      for (Glib::DirIterator i = dir.begin(); i != dir.end(); i++)
-	      if ((*i).find_last_of(".so") == (*i).size() - 3)
-		    mods.push_back((*i).substr(3, ((*i).size() - 6)));
+      fnames.assign(dir.begin(), dir.end());
     } catch(Glib::FileError fe) {
       throw ModuleListException(" program was compiled with " + string(LIBDIR) + " as library "
 				"directory - but not readable.");
+    }
+
+    for(unsigned int i=0; i<fnames.size(); i++) {
+      if(ends_with(fnames[i], ".so")) {
+	string modname = fnames[i].substr(3, fnames[i].size() - 6);
+	// load the module and get the name and description
+	ModInterface * mod = load_module(modname, false);
+	mods[mod->name] = mod->description;
+	delete mod;
+      }
     }
   };
 

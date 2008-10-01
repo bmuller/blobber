@@ -21,7 +21,7 @@
 using namespace std;
 using namespace blobber;
 
-MovableShapes::MovableShapes() : ModInterface("MoveableShapes") { 
+MovableShapes::MovableShapes() : ModInterface("MoveableShapes", "Move shapes around"), xhairs(15,COORD(0,0),WHITE) { 
   missing_point_count = 0;
 };
 
@@ -55,6 +55,7 @@ void MovableShapes::init(Camarea &area, ProjectionWindow &pw) {
 void MovableShapes::projection_window_exposed(ProjectionWindow &pw) {
   for(unsigned int i=0; i<shapes.size(); i++) 
     shapes[i]->paint(pw);
+  xhairs.paint(pw);
 };
 
 void MovableShapes::update(Camarea &area, ProjectionWindow &pw) {
@@ -66,6 +67,8 @@ void MovableShapes::update(Camarea &area, ProjectionWindow &pw) {
     missing_point_count++;
     return;
   }
+
+  xhairs.move(poi[0].coord, pw);
 
   // clear selected attr if we've missed the laser for 3 or more iterations;
   if(missing_point_count > 3) {

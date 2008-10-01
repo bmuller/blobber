@@ -21,7 +21,7 @@
 using namespace std;
 using namespace blobber;
 
-LaserTag::LaserTag() : ModInterface("LaserTag"), missing_counter(0) { 
+LaserTag::LaserTag() : ModInterface("LaserTag", "Basic drawing module"), missing_counter(0) { 
   lastpoint.x = 0; 
   lastpoint.y = 0; 
 };

@@ -4,12 +4,14 @@ pkgconfigdir=${libdir}/pkgconfig
 pkgconfig_DATA=libblobber.pc
 
 HEADERDIR = blobber
+MODUTILSDIR = $(HEADERDIR)/mod_utils
 nobase_include_HEADERS = $(HEADERDIR)/blobber.h $(HEADERDIR)/camera_window.h $(HEADERDIR)/exception.h \
 			 $(HEADERDIR)/frame.h $(HEADERDIR)/options_window.h $(HEADERDIR)/projection_window.h \
 			 $(HEADERDIR)/utils.h $(HEADERDIR)/camarea.h $(HEADERDIR)/config.h $(HEADERDIR)/types.h \
 			 $(HEADERDIR)/framegrabber.h $(HEADERDIR)/mod_interface.h $(HEADERDIR)/pixconverter.h \
-			 $(HEADERDIR)/configuration.h $(HEADERDIR)/mod_utils/movable_object.h \
-			 $(HEADERDIR)/mod_utils/movable_circle.h $(HEADERDIR)/mod_utils/movable_square.h	
+			 $(HEADERDIR)/configuration.h $(MODUTILSDIR)/movable_object.h \
+			 $(MODUTILSDIR)/movable_circle.h $(MODUTILSDIR)/movable_square.h \
+			 $(MODUTILSDIR)/movable_crosshairs.h
 
 dist_pkgdata_DATA = blobber/nocam.png
 

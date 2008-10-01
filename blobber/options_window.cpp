@@ -28,7 +28,6 @@ namespace blobber {
     okButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::ok));
 
     ModInterface::get_available_modules(availableModules);
-    sort(availableModules.begin(), availableModules.end());
 
     add(mainBox);
     mainBox.add(modsFrame);
@@ -37,10 +36,11 @@ namespace blobber {
     camDevice.add(lblCamDevice);
     modsFrame.add(modsBox);
 
-    for (int i = 0; i < availableModules.size(); i++)
-    {
-	    Gtk::Button* modCheck = Gtk::manage(new Gtk::CheckButton(availableModules[i]));
-	    modsBox.add(*modCheck);
+    for(std::map<string, string>::iterator it=availableModules.begin(); it!=availableModules.end(); it++) {
+      string modname = it->first;
+      string description = it->second;
+      Gtk::Button* modCheck = Gtk::manage(new Gtk::CheckButton(modname + ": " + description));
+      modsBox.add(*modCheck);
     }
 
     string devDir = "/dev"; 
@@ -60,4 +60,5 @@ namespace blobber {
     area->set_device(cboCamDevice.get_entry()->get_text().raw());
     hide();
   };
+
 };
