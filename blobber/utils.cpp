@@ -89,4 +89,10 @@ namespace blobber {
     return s.substr((ssize-esize), ssize) == end;
   };
 
+  template <class T> bool in_vector(vector<T> things, T thing) {
+    for(unsigned int i=0; i<things.size(); i++)
+      if(things[i] == thing)
+	return true;
+    return false;
+  };
 };

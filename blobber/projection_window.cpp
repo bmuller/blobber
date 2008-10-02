@@ -24,14 +24,12 @@ namespace blobber {
   ProjectionWindow::ProjectionWindow(int cw, int ch) : is_fullscreen(false), cam_width(cw), cam_height(ch), need_alignment(false) {
     resize(cam_width, cam_height);
     i_exposed_myself = false;
-  };
 
-  void ProjectionWindow::init(Configuration *c) {
-    config = c;
+    config = Configuration::get_config();
     string groupname = "default_colors";
     string key, value;
     vector<string> colornames;
-    c->get_keys(colornames, groupname);
+    config->get_keys(colornames, groupname);
 
     // set default colors if non existant
     if(colornames.size() == 0) {

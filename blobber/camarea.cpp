@@ -22,9 +22,11 @@ namespace blobber {
 
   using namespace std;
 
-  Camarea::Camarea(string _device) : device(_device), hascam(true), mouse_clicked(false), manual_align(false), fg(NULL), frame(NULL) {
+  Camarea::Camarea() : device(), hascam(true), mouse_clicked(false), manual_align(false), fg(NULL), frame(NULL) {
     add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
-    set_device(device);
+    string dev;
+    Configuration::get_config()->get("device", dev, DEFAULT_DEVICE);
+    set_device(dev);
   };
 
   Camarea::~Camarea() {

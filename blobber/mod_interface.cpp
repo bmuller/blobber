@@ -32,6 +32,14 @@ namespace blobber {
     area.get_poi(name, modpoi);
   };
 
+  bool ModInterface::operator==(const ModInterface& other) {
+    return name == other.name;
+  };
+
+  bool ModInterface::operator!=(const ModInterface& other) {
+    return name != other.name;
+  };
+
   ModInterface * ModInterface::load_module(string modname, bool make_resident) {
     modname = "lib" + modname;
     debug("Looking in " + string(LIBDIR) + " for module " + modname);

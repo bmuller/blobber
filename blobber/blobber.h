@@ -1,4 +1,5 @@
 #include "config.h"
+#define DEFAULT_DEVICE "/dev/video0"
 
 #include <glibmm/keyfile.h>
 
@@ -58,6 +59,7 @@
 #include "options_window.h"
 #include "camera_window.h"
 #include "mod_interface.h"
+#include "application.h"
 
 #include "mod_utils/movable_object.h"
 #include "mod_utils/movable_circle.h"
@@ -65,4 +67,3 @@
 #include "mod_utils/movable_crosshairs.h"
 
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
-

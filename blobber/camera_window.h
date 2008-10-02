@@ -7,7 +7,7 @@ namespace blobber {
   public:
     Camarea area;
     OptionsWindow options_window;
-    CameraWindow(string device);
+    CameraWindow();
     void exit();
     void about();
     void options();

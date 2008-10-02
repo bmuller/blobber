@@ -25,7 +25,7 @@ using namespace std;
    Frame *frame;
    BOUNDS bounds;
    
-   Camarea(string _device);
+   Camarea();
    ~Camarea();
    bool on_motion_notify_event (GdkEventMotion* event);
    bool on_button_press_event(GdkEventButton* event);

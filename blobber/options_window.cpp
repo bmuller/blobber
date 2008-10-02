@@ -58,7 +58,12 @@ namespace blobber {
   };
 
   void OptionsWindow::ok() {
-//    area->set_device(cboCamDevice.get_entry()->get_text().raw());
+    // string device = cboCamDevice.get_entry()->get_text().raw());
+
+    // set config options then save config file
+
+    // reload config
+    Application::get_app()->reload_config();
     hide();
   };
 

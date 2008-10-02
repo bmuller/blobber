@@ -1,6 +1,20 @@
 #include "blobber.h"
 
 namespace blobber {
+  Configuration * Configuration::_inst = 0;
+
+  Configuration * Configuration::get_config() {
+    if(_inst == 0)
+      _inst = new Configuration();
+    return _inst;
+  };
+
+  void Configuration::delete_config() {
+    if(_inst != 0) {
+      delete _inst;
+      _inst = 0;
+    }
+  };
 
   Configuration::Configuration() : config() {
     directory =  Glib::build_filename(Glib::get_user_config_dir(), "blobber");

@@ -18,6 +18,9 @@ namespace blobber {
     void config_get(string key, string &value, string vdefault);
     void config_get(string key, vector<string> &values);
 
+    bool operator==(const ModInterface& other);
+    bool operator!=(const ModInterface& other);
+
     // this method is useful when you want to get the config value - and in the
     // case that it's not set and you get the default to set it to that value
     void config_get_set(string key, string &value, string vdefault);

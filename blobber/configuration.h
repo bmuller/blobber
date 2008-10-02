@@ -5,9 +5,12 @@ namespace blobber {
   private:
     Glib::KeyFile config;
     string filename, directory;
-  public:
     Configuration();
     ~Configuration();
+  public:
+    static Configuration * _inst;
+    static Configuration * get_config();
+    static void delete_config();
     void save();
 
     // get/set values for main program

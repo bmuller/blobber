@@ -28,7 +28,6 @@ namespace blobber {
     bool on_key_press_event(GdkEventKey* eventData);
     void show_message(string msg, COLOR c=WHITE);
     void set_color(Cairo::RefPtr<Cairo::Context> cr, COLOR c);
-    void init(Configuration *c);
     
     // translate coordinates from camera coordinates to projection window coordinates
     void translate_coordinates(COORD camcords, COORD &projcoords);
