@@ -1,4 +1,4 @@
-
+//cpp h modcpph
 namespace blobber {
   using namespace std;
 
@@ -16,8 +16,11 @@ namespace blobber {
     Gtk::VBox modsBox;
     Camarea *area;
     // module description by module name
-    std::map<string,string> availableModules;
+    std::map<string, string> availableModules;
     // module check button pointer by module name
     std::map<string, Gtk::CheckButton*> modButtons;
+    // module file name by module name;
+    std::map<string, string> modFiles;
+    Configuration *config;
   };
 };

@@ -49,10 +49,10 @@ namespace blobber {
 	add_mod(ModInterface::load_module(mods_enabled[i]));
     }
 
-    // set device in camera window
+    // set device in camera window - FIXME set_device throws an unhandled exception?
     string dev;
     Configuration::get_config()->get("device", dev, DEFAULT_DEVICE);
-    win.area.set_device(dev);
+//    win.area.set_device(dev);
   };
 
   Application::Application() : win(), proj(win.area.width, win.area.height), aligned(false) {

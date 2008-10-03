@@ -27,7 +27,11 @@ namespace blobber {
     set_title("Configuration");
     okButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::ok));
 
-    ModInterface::get_available_modules(availableModules);
+    config = Configuration::get_config();
+    vector<string> preLoadedMods;
+    config->get("mods_enabled", preLoadedMods);
+
+    ModInterface::get_available_modules(availableModules, modFiles);
 
     add(mainBox);
     mainBox.add(modsFrame);
@@ -40,7 +44,14 @@ namespace blobber {
       string modname = it->first;
       string description = it->second;
       modButtons[modname] = Gtk::manage(new Gtk::CheckButton(modname + ": " + description));
-      // need to set loaded modules checkboxes here
+      for (vector<string>::iterator itt = preLoadedMods.begin(); itt < preLoadedMods.end(); itt++)
+      {
+	      if (*itt == modFiles[modname])
+	      {
+		      modButtons[modname]->set_active();
+		      break;
+	      }
+      }
       modsBox.add(*modButtons[modname]);
     }
 
@@ -53,14 +64,22 @@ namespace blobber {
     }
 
     camDevice.add(cboCamDevice);
-  //  mainBox.add(modules);
     show_all_children();
   };
 
   void OptionsWindow::ok() {
-    // string device = cboCamDevice.get_entry()->get_text().raw());
-
+    string device = cboCamDevice.get_entry()->get_text().raw();
+    if (device == "") config->get("device", device, DEFAULT_DEVICE);
+    
+    vector<string> push;
+    push.clear();
+    for(std::map<string, Gtk::CheckButton*>::iterator it = modButtons.begin(); it != modButtons.end(); it++)
+    {
+	    if (it->second->get_active()) push.push_back(modFiles[it->first]);
+    }
     // set config options then save config file
+    config->set("mods_enabled", push);
+    config->set("device", device);
 
     // reload config
     Application::get_app()->reload_config();

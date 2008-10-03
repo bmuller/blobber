@@ -61,8 +61,9 @@ namespace blobber {
   };
   
   // mods will be mods["modname"] = "mod description"
-  void ModInterface::get_available_modules(map<string, string> &mods) {
+  void ModInterface::get_available_modules(map<string, string> &mods, map<string, string> &files) {
     mods.clear();
+    files.clear();
     vector<string> fnames;
     try {
       Glib::Dir dir(LIBDIR);
@@ -78,6 +79,7 @@ namespace blobber {
 	// load the module and get the name and description
 	ModInterface * mod = load_module(modname, false);
 	mods[mod->name] = mod->description;
+	files[mod->name] = modname;
 	delete mod;
       }
     }
