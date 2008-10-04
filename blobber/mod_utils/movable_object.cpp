@@ -33,8 +33,9 @@ namespace blobber {
     color.copy(oldcolor);
   };
 
-  void MovableObject::move(COORD newcenter, ProjectionWindow &pw) {
-    clear(pw);
+  void MovableObject::move(COORD newcenter, ProjectionWindow &pw, bool first_clear) {
+    if(first_clear)
+      clear(pw);
     center.copy(newcenter);
     paint(pw);
   };

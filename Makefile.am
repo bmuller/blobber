@@ -9,7 +9,7 @@ nobase_include_HEADERS = $(HEADERDIR)/blobber.h $(HEADERDIR)/camera_window.h $(H
 			 $(HEADERDIR)/frame.h $(HEADERDIR)/options_window.h $(HEADERDIR)/projection_window.h \
 			 $(HEADERDIR)/utils.h $(HEADERDIR)/camarea.h $(HEADERDIR)/config.h $(HEADERDIR)/types.h \
 			 $(HEADERDIR)/framegrabber.h $(HEADERDIR)/mod_interface.h $(HEADERDIR)/pixconverter.h \
-			 $(HEADERDIR)/configuration.h $(MODUTILSDIR)/movable_object.h \
+			 $(HEADERDIR)/configuration.h $(HEADERDIR)/application.h $(MODUTILSDIR)/movable_object.h \
 			 $(MODUTILSDIR)/movable_circle.h $(MODUTILSDIR)/movable_square.h \
 			 $(MODUTILSDIR)/movable_crosshairs.h
 

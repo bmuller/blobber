@@ -21,7 +21,7 @@
 using namespace std;
 using namespace blobber;
 
-MovableShapes::MovableShapes() : ModInterface("MoveableShapes", "Move shapes around"), xhairs(15,COORD(0,0),WHITE) { 
+MovableShapes::MovableShapes() : ModInterface("MoveableShapes", "Move shapes around"), xhairs(9,COORD(0,0),WHITE) { 
   missing_point_count = 0;
 };
 
@@ -64,16 +64,31 @@ void MovableShapes::update(Camarea &area, ProjectionWindow &pw) {
 
   // no points means nothing is selected, return
   if(poi.size() == 0) {
+    // if we just went blank, get rid of old crosshairs
+    // we should repaint object if it was just selected, or paint
+    // old crosshairs black if nothing was selected
+    if(missing_point_count == 0) {
+      bool found = false;
+      for(unsigned int i=0; (i<shapes.size() && !found); i++) {
+	if(shapes[i]->selected) {
+	  shapes[i]->paint(pw);
+	  found = true;
+	}
+      }
+      if(!found)
+	xhairs.clear(pw);
+    }
     missing_point_count++;
     return;
   }
-
-  xhairs.move(poi[0].coord, pw);
 
   // clear selected attr if we've missed the laser for 3 or more iterations;
   if(missing_point_count > 3) {
     for(unsigned int i=0; i<shapes.size(); i++) 
       shapes[i]->selected = false;
+    xhairs.move(poi[0].coord, pw);
+  } else {
+    xhairs.move(poi[0].coord, pw, false);
   }
 
   missing_point_count = 0;
