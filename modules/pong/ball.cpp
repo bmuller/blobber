@@ -14,8 +14,6 @@ Ball::Ball()  {
   court_width = 250;
 }
 
-
-
 void Ball::move()  {
   pos.x += x_dir*speed;
   if(getRight() >= court_width || getLeft() <= 0)  {
@@ -66,11 +64,84 @@ int Ball::getCourtWidth()  {
   return court_width;
 }
 
-
+/** I'm really sorry about this, what a freakin' mess **/
 void Ball::processCollision(Paddle* p) {
-  //do they have any overlap in the y direction?
   if(getBottom() >= p->getTop() && getTop() <= p->getBottom()) {
-    if(getLeft() <= p->getRight() && getRight() >= p->getLeft())
-      x_dir = -x_dir;
+    if(getLeft() <= p->getRight() && getRight() >= p->getLeft()) {
+
+      //overlap from the left and the top
+      if(getLeft() <= p->getLeft() && getTop() <= p->getTop()) {
+	if(getRight()-p->getLeft() <= getBottom()-p->getBottom()) {
+	  //move the ball left
+	  pos.x = p->getLeft()-(radius+1);
+	  //flip the direction
+	  x_dir = -x_dir;
+	}
+	else {
+	  //move the ball up
+	  pos.y = p->getTop()-(radius+1);
+	  //flip the direction
+	  y_dir = -y_dir;
+	}
+      }
+
+      //overlap from the left and the bottom
+      else if(getLeft() <= p->getLeft() && getBottom() >= p->getBottom()) {
+	if(getRight()-p->getLeft() <= p->getBottom()-getTop()) {
+	  //move the ball left
+	  pos.x = p->getLeft()-(radius+1);
+	  //flip the direction
+	  x_dir = -x_dir;
+	}
+	else {
+	  //move the ball down
+	  pos.y = p->getBottom()+(radius+1);
+	  //flip the direction
+	  y_dir = -y_dir;
+	}
+      }
+
+      //overlap from the right and the bottom
+      else if(getRight() >= p->getRight() && getBottom() >= p->getBottom()) {
+	if(p->getRight()-getLeft() <= p->getBottom()-getTop()) {
+	  //move the ball right
+	  pos.x = p->getRight()+(radius+1);
+	  //flip the direction
+	  x_dir = -x_dir;
+	}
+	else {
+	  //move the ball down
+	  pos.y = p->getBottom()+(radius+1);
+	  //flip the direction
+	  y_dir = -y_dir;
+	}
+      }
+
+      //overlap from the right and the top
+      else if(getRight() >= p->getRight() && getTop() <= p->getTop()) {
+	if(p->getRight()-getLeft() <= getBottom()-p->getBottom()) {
+	  //move the ball right
+	  pos.x = p->getRight()+(radius+1);
+	  //flip the direction
+	  x_dir = -x_dir;
+	}
+	else {
+	  //move the ball up
+	  pos.y = p->getTop()-(radius+1);
+	  //flip the direction
+	  y_dir = -y_dir;
+	}
+      }
+
+      //else just a direct collision in a direction
+      else if(getRight() >= p->getRight() || getLeft() <= p->getLeft()) {
+	x_dir = -x_dir;
+	pos.x = (getRight() >= p->getRight())?p->getRight()+(radius+1):p->getLeft()-(radius+1);
+      }
+      else {
+	y_dir = -y_dir;
+	pos.y = (getBottom() >= p->getBottom())?p->getBottom()+(radius+1):p->getTop()-(radius+1);
+      }
+    }
   }
 }
