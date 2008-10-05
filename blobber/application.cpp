@@ -38,8 +38,10 @@ namespace blobber {
 
   void Application::reload_config() {      
     // handle modules
-    for(unsigned int i=0; i<mods.size(); i++)
+    for(unsigned int i=0; i<mods.size(); i++) {
+      mods[i]->destroy();
       delete mods[i];
+    }
     mods.clear();
     if(config->is_set("mods_enabled")) {
       vector<string> mods_enabled;
@@ -77,6 +79,7 @@ namespace blobber {
     debug("Freeing all modules...");
     for(unsigned int i=0; i<mods.size(); i++) {
       debug("Freeing " + mods[i]->name + "...");
+      mods[i]->destroy();      
       delete mods[i];
     }
     proj.finish();
