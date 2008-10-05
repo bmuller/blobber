@@ -272,9 +272,16 @@ namespace blobber {
     COORD translated;
     translate_coordinates(coord, translated);
 
+    COORD trans_opposite;
+    COORD opposite(coord.x + width, coord.y + height);
+    translate_coordinates(opposite, trans_opposite);
+
+    int transwidth = trans_opposite.x - translated.x;
+    int transheight = trans_opposite.y - translated.y;
+
     set_color(cr, c);
     cr->set_line_width(1.0);
-    cr->rectangle(translated.x, translated.y, width, height);
+    cr->rectangle(translated.x, translated.y, transwidth, transheight);
     if(fill)
       cr->fill_preserve();
     cr->stroke();
