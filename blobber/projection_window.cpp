@@ -269,9 +269,12 @@ namespace blobber {
     if(!get_context(cr))
       return;
     
+    COORD translated;
+    translate_coordinates(coord, translated);
+
     set_color(cr, c);
     cr->set_line_width(1.0);
-    cr->rectangle(coord.x, coord.y, width, height);
+    cr->rectangle(translated.x, translated.y, width, height);
     if(fill)
       cr->fill_preserve();
     cr->stroke();
