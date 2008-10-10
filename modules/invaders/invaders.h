@@ -35,20 +35,19 @@ bool in_bounds(Alien * a, COORD c) { return(sqrt( pow( (float) (c.x - a->center.
 class Invaders : public ModInterface {
  public:
   InvadersMovableCrosshairs crosshairs;
-  Alien * aliens;
-  vector<COORD> explosions;
-  clock_t alien_timer;
-  clock_t update_timer;
+  //Alien * aliens;
+  //vector<COORD> explosions;
+  clock_t timer;
+  Glib::RefPtr<Gdk::Pixbuf> image;
+  int win_height;
+  int win_width;
+
 
   Invaders();
   ~Invaders();
 
   void init(Camarea &area, ProjectionWindow &pw);
   void update(Camarea &area, ProjectionWindow &pw);
-  volatile void volatile_update(Camarea &area, ProjectionWindow &pw);
-
-  void draw_alien(ProjectionWindow &pw, Cairo::RefPtr<Cairo::Context> cr, Alien * a, bool erase = false);
-  void draw_explosions(ProjectionWindow &pw);
 
   void test(GdkEventKey * event);
 };
