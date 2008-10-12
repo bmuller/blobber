@@ -43,12 +43,12 @@ void Invaders::init(Camarea &area, ProjectionWindow &pw) {
   // start the timer
   //timer = clock();
  
-  cross.x = area.bounds.left + 10;
-  cross.y = area.bounds.top + 10;
+  cross.x = area.bounds.left + 100;
+  cross.y = area.bounds.top + 100;
  
   // initialize aliens (ghosts?)
   aliens_size = 5;
-  aliens = (Entity *) malloc( aliens_size * sizeof(Entity));
+  aliens = (Entity *) malloc( aliens_size * sizeof(Entity) );
   for (int i = 0; i < aliens_size; i++) {
     aliens[i].loc.x = area.bounds.left + rand() % (area.width - 60);
     aliens[i].loc.y = area.bounds.top;
@@ -92,7 +92,7 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
   } 
   if(paused == RESET) { paused = NORMAL; }
 
-  // move the 'cross'hairs
+  // get the poi
   vector<PIXEL> poi;
   get_poi(area, poi);
    
@@ -104,15 +104,17 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
     cross.copy(poi[0].coord);
   }
   
-  //start with black opaque background
+  // start with black opaque background
   scr->fill(0x000000FF);  
 
+  // paint the 'cross'hairs
   dest_x = floor( scale[0]*(cross.x - 8) );
   dest_y = floor( scale[1]*(cross.y - 11) );
   dest_w = ceil(scale[0]*cro->get_width());
   dest_h = ceil(scale[1]*cro->get_height());
   cro->composite(scr, dest_x, dest_y, dest_w, dest_h, dest_x, dest_y, scale[0], scale[1], Gdk::INTERP_BILINEAR, 255);
 
+  // if cross over ghost, blow up ghost, paint ghosts.
   for ( Entity * it = aliens; it - aliens < aliens_size; it++) {  
     if ( in_bounds(it, cross ) ) { 
       it->state = 0;
@@ -135,6 +137,7 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
     gho[(++(it->state)) %= 8]->composite(scr, dest_x, dest_y, dest_w, dest_h, dest_x, dest_y, scale[0], scale[1], Gdk::INTERP_BILINEAR, 255); 
   }
 
+  // paint explosions
   for ( vector<Entity>::iterator it = bams.begin(); it < bams.end(); it++ ) { 
     dest_x = floor( scale[0]*(it->loc.x+10) );
     dest_y = floor( scale[1]*(it->loc.y+20) );
@@ -143,11 +146,16 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
     bam[it->state]->composite(scr, dest_x, dest_y, dest_w, dest_h, dest_x, dest_y, scale[0], scale[1], Gdk::INTERP_BILINEAR, 255);
     if( (it->state++) == 7 ) { it = bams.erase(it); }   
   }
-  scr->render_to_drawable_alpha(window, 0, 0, 0, 0, win_width, win_height, Gdk::PIXBUF_ALPHA_BILEVEL, 255, Gdk::RGB_DITHER_NORMAL, 0, 0);
+
+  // paint the local buffer to the pw
+  //window->draw_pixbuf(pw.get_style()->get_black_gc(), scr, 0, 0, 0, 0, win_width, win_height, Gdk::RGB_DITHER_NONE, 0, 0);
+  scr->render_to_drawable(window, pw.get_style()->get_black_gc(), 0, 0, 0, 0, win_width, win_height, Gdk::RGB_DITHER_NONE, 0, 0);
+  //scr->render_to_drawable_alpha(window, 0, 0, 0, 0, win_width, win_height, Gdk::PIXBUF_ALPHA_BILEVEL, 255, Gdk::RGB_DITHER_NONE, 0, 0);
 }
 
 
 void Invaders::resize() {
+  // resize the local buffer
   scr = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB,true,8,win_width,win_height);
   scr->fill(0x000000FF);
 }
@@ -157,10 +165,9 @@ void Invaders::key(GdkEventKey * event){
     case GDK_Pause : paused = paused^0x01; break;
     case GDK_r     : score = 0; break;
     case GDK_R     : score = 0; break;
-    default        : debug("Key Pressed");
+    default        : break;
   }
 }
-
 
 void Invaders::expose(GdkEventExpose* event) {
   win_width = event->area.width;
