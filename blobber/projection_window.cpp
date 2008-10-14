@@ -79,15 +79,15 @@ namespace blobber {
     Cairo::RefPtr<Cairo::Surface> sr;
     string filepath;
     time_t rawTime;
-    char *nameTime;
+    string nameTime;
 
     if(!get_context(cr))
       return;
     sr = cr->get_target();
     filepath =  Glib::build_filename(Glib::get_user_config_dir(), "blobber");
     rawTime = time(NULL);
-    nameTime = ctime(&rawTime);
-    filepath = Glib::build_filename(filepath,string(nameTime).substr(0,strlen(nameTime)-1)+ "proj.png");
+    nameTime = string(ctime(&rawTime));
+    filepath = Glib::build_filename(filepath, nameTime.substr(0, nameTime.length()-1)+ "proj.png");
     debug("Saving screen capture to " + filepath);
     sr->write_to_png(filepath);
 #else
