@@ -53,19 +53,27 @@ struct COLOR {
 // color range
 struct CRANGE {
   COLOR lower, upper;
-  CRANGE(COLOR l, COLOR u) {
-    lower.copy(l); 
-    upper.copy(u);
+  CRANGE() {
+    lower.copy(BLACK);
+    upper.copy(WHITE);
   };
   CRANGE(COLOR l) {
     lower.copy(l);
     upper.copy(WHITE);
   };
+  CRANGE(COLOR l, COLOR u) {
+    lower.copy(l); 
+    upper.copy(u);
+  };
   bool contains(COLOR &c) {
     return c.red >= lower.red && c.red <= upper.red && \
       c.green >= lower.green && c.green <= upper.green && \
       c.blue >= lower.blue && c.blue <= upper.blue;
-  }
+  };
+  void copy(CRANGE &c) {
+    lower.copy(c.lower);
+    upper.copy(c.upper);
+  };
 };
 
 struct COORD {

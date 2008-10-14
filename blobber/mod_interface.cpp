@@ -28,6 +28,10 @@ namespace blobber {
     area.register_poi_criteria(name, crange, maxPoi);
   };
 
+  void ModInterface::register_poi(Camarea &area, int maxPoi) {
+    area.register_poi(name, maxPoi);
+  };
+
   void ModInterface::get_poi(Camarea &area, vector<PIXEL> &modpoi) {
     area.get_poi(name, modpoi);
   };

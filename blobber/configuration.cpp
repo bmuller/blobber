@@ -60,6 +60,11 @@ namespace blobber {
       value = vdefault;
   };
 
+  void Configuration::get_set(string key, string &value, string vdefault, string groupname) {
+    get(key, value, vdefault, groupname);
+    set(key, value, groupname);
+  };
+
   void Configuration::get(string key, vector<string> &values, string groupname) {
     if(config.has_group(groupname) && config.has_key(groupname, key))
       values = config.get_string_list(groupname, key);

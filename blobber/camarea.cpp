@@ -24,9 +24,17 @@ namespace blobber {
 
   Camarea::Camarea() : device(), hascam(true), mouse_clicked(false), manual_align(false), fg(NULL), frame(NULL) {
     add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
-    string dev;
-    Configuration::get_config()->get("device", dev, DEFAULT_DEVICE);
+    string dev, red, green, blue;    
+    Configuration *config = Configuration::get_config();
+    config->get("device", dev, DEFAULT_DEVICE);
     set_device(dev);
+
+    // get default criteria values - and set them to defaults if they are not set already 
+    config->get_set("default_red", red, "60");
+    config->get_set("default_blue", blue, "0");
+    config->get_set("default_green", green, "0");
+    CRANGE range(COLOR(string_to_int(red), string_to_int(blue), string_to_int(green)));
+    default_criteria.copy(range);
   };
 
   Camarea::~Camarea() {
@@ -120,6 +128,39 @@ namespace blobber {
     for(iter = poi_criteria.begin(); iter != poi_criteria.end(); iter++)  
       for(unsigned int i=0; i<iter->second.size(); i++)
 	update_poi(data, iter->first, iter->second[i]);
+    
+    // update the modules that just went w/ the default criteria - this will be
+    // a single pass
+    update_default_poi(data);
+  };
+
+  // update the modules that just went w/ the default criteria - this will be
+  // a single pass
+  void Camarea::update_default_poi(unsigned char *data) {
+    int mods_left_to_hit_max = default_criteria_mods.size();
+
+    // iterate through the pixel data for the given criteria
+    for(int x=bounds.left; x<bounds.right; x++) {
+      for(int y=bounds.top; y<bounds.bottom; y++) {
+	int index = x+(y*width);
+	COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
+	// if pixel matches default criteria
+	if(default_criteria.contains(pixelcolor)) {
+	  PIXEL p(pixelcolor, COORD(x, y));
+	  // alert all the modules that should know
+	  for(unsigned int i=0; i<default_criteria_mods.size(); i++) {
+	    string modname = default_criteria_mods[i];
+	    if(poi[modname].size() < maxPoints[modname]) {
+	      poi[modname].push_back(p);
+	      if(poi[modname].size() == maxPoints[modname])
+		mods_left_to_hit_max--;
+	    }
+	  }
+	}
+	if(mods_left_to_hit_max == 0)
+	  break;
+      }
+    }    
   };
 
   void Camarea::update_poi(unsigned char *data, string modname, CRANGE &criteria) {
@@ -187,6 +228,11 @@ namespace blobber {
 
   void Camarea::register_poi_criteria(string modname, CRANGE range, int maxPoi) {
     poi_criteria[modname].push_back(range);
+    maxPoints[modname] = maxPoi;
+  };
+
+  void Camarea::register_poi(string modname, int maxPoi) {
+    default_criteria_mods.push_back(modname);
     maxPoints[modname] = maxPoi;
   };
 
