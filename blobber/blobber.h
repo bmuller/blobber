@@ -16,6 +16,7 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/main.h>
 
+#include <cstring>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -23,13 +24,14 @@
 #include <algorithm>
 #include <map>
 
-#include <stdio.h>
+#include <cstdio>
 #include <fcntl.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
-#include <time.h>
-#include <math.h>
-#include <errno.h>
+#include <ctime>
+#include <cmath>
+#include <cstring>
+#include <cerrno>
 
 #include <linux/fs.h>
 #include <linux/kernel.h>
