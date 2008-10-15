@@ -114,13 +114,13 @@ namespace blobber {
 #ifdef CAIRO_HAS_PNG_FUNCTIONS
     string filepath;
     time_t rawTime;
-    char *nameTime;
+    string nameTime;
 
-    filepath =  Glib::build_filename(Glib::get_user_config_dir(), "blobber");
+    filepath =  Glib::build_filename(Glib::get_user_data_dir(), "blobber");
     rawTime = time(NULL);
-    nameTime = ctime(&rawTime);
-    filepath = Glib::build_filename(filepath,string(nameTime).substr(0,strlen(nameTime)-1)+ "proj.png");
-    debug("Saving screen capture to " + filepath);
+    nameTime = string(ctime(&rawTime));
+    filepath = Glib::build_filename(filepath, nameTime.substr(0, nameTime.length()-1) + "_camera.png");
+    debug("Saving camera screen capture to " + filepath);
     area.getSurface()->write_to_png(filepath);
 #else
     throw NoSuchFeatureException("Cairo must be compiled with PNG support to save screen captures")

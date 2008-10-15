@@ -84,11 +84,11 @@ namespace blobber {
     if(!get_context(cr))
       return;
     sr = cr->get_target();
-    filepath =  Glib::build_filename(Glib::get_user_config_dir(), "blobber");
+    filepath =  Glib::build_filename(Glib::get_user_data_dir(), "blobber");
     rawTime = time(NULL);
     nameTime = string(ctime(&rawTime));
-    filepath = Glib::build_filename(filepath, nameTime.substr(0, nameTime.length()-1)+ "proj.png");
-    debug("Saving screen capture to " + filepath);
+    filepath = Glib::build_filename(filepath, nameTime.substr(0, nameTime.length()-1)+ "_proj.png");
+    debug("Saving projection screen capture to " + filepath);
     sr->write_to_png(filepath);
 #else
     throw NoSuchFeatureException("Cairo must be compiled with PNG support to save screen captures")
