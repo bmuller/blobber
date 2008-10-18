@@ -122,7 +122,7 @@ namespace blobber {
       for(int y=bounds.top; y<bounds.bottom; y++) {
 	int index = x+(y*width);
 	COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
-	if(pixelcolor.brighter_than(blobcolor))
+	if(pixelcolor.brighter_than(blob))
 	  blob.copy(pixelcolor);
       }
     }
