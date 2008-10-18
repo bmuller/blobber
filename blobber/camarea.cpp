@@ -88,6 +88,7 @@ namespace blobber {
   };
 
   bool Camarea::on_button_press_event(GdkEventButton* event) { 
+    cout << event->button << endl;
 #ifdef DEBUG
     if(hascam) {
       unsigned char * data = (unsigned char *) frame->data;

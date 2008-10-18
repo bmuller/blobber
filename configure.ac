@@ -79,6 +79,47 @@ AC_CHECK_HEADER([linux/videodev2.h], [
   AM_CONDITIONAL(HAVE_V4L2, false)
 ])
 
+
+# enable modules as necessary
+allmods=false
+AC_ARG_ENABLE(all-modules, AC_HELP_STRING([[--enable-all-modules]], [enable all modules]), [allmods=true])
+
+greenscreen=false
+AC_ARG_ENABLE(greenscreen-module, AC_HELP_STRING([[--enable-greenscreen-module]], [enable greenscreen module]), [greenscreen=true])
+AM_CONDITIONAL(GREENSCREEN, $greenscreen || $allmods)
+
+multicoloredtag=false
+AC_ARG_ENABLE(multicoloredtag-module, AC_HELP_STRING([[--enable-multicoloredtag-module]], [enable multi-color tagging module]), [multicoloredtag=true])
+AM_CONDITIONAL(MULTICOLOREDTAG, $multicoloredtag || $allmods)
+
+pong=false
+AC_ARG_ENABLE(pong-module, AC_HELP_STRING([[--enable-pong-module]], [enable pong game module]), [pong=true])
+AM_CONDITIONAL(PONG, $pong || $allmods)
+
+invaders=false
+AC_ARG_ENABLE(invaders-module, AC_HELP_STRING([[--enable-invaders-module]], [enable invaders game module]), [invaders=true])
+AM_CONDITIONAL(INVADERS, $invaders || $allmods)
+
+flower=false
+AC_ARG_ENABLE(flower-module, AC_HELP_STRING([[--enable-flower-module]], [enable flower game module]), [flower=true])
+AM_CONDITIONAL(FLOWER, $flower || $allmods)
+
+refreshrate=false
+AC_ARG_ENABLE(refreshrate-module, AC_HELP_STRING([[--enable-refreshrate-module]], [enable refresh-rate info module]), [refreshrate=true])
+AM_CONDITIONAL(REFRESHRATE, $refreshrate || $allmods)
+
+movableshapes=false
+AC_ARG_ENABLE(movableshapes-module, AC_HELP_STRING([[--enable-movableshapes-module]], [enable movableshapes game module]), [movableshapes=true])
+AM_CONDITIONAL(MOVABLESHAPES, $movableshapes || $allmods)
+
+multilasertag=false
+AC_ARG_ENABLE(multilasertag-module, AC_HELP_STRING([[--enable-multilasertag-module]], [enable multilasertag drawing module]), [multilasertag=true])
+AM_CONDITIONAL(MULTILASERTAG, $multilasertag || $allmods)
+
+colorrandomizer=false
+AC_ARG_ENABLE(colorrandomizer-module, AC_HELP_STRING([[--enable-colorrandomizer-module]], [enable colorrandomizer game module]), [colorrandomizer=true])
+AM_CONDITIONAL(COLORRANDOMIZER, $colorrandomizer || $allmods)
+
 AC_CONFIG_FILES([
  Makefile
  blobber/Makefile
