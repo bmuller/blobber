@@ -10,7 +10,6 @@ using namespace std;
    Cairo::RefPtr< Cairo::ImageSurface > surface;
    Cairo::RefPtr< Cairo::ImageSurface > noCam;
    COORD mouse_click;
-   bool mouse_clicked;
    // points of interest for the modules
    std::map<string, vector<PIXEL> > poi;
    // modules register criteria for defining a poi
@@ -23,6 +22,7 @@ using namespace std;
    CRANGE default_criteria;
    void update_poi(unsigned char *data, string modname, CRANGE &criteria);
    void update_default_poi(unsigned char *data);
+   bool find_the_blob(COLOR &blob, BOUNDS &bounds, unsigned char *data);
 
  public:
    bool hascam, manual_align;
@@ -32,7 +32,6 @@ using namespace std;
    
    Camarea();
    ~Camarea();
-   bool on_motion_notify_event (GdkEventMotion* event);
    bool on_button_press_event(GdkEventButton* event);
    bool on_button_release_event(GdkEventButton* event);
    void update_screen();

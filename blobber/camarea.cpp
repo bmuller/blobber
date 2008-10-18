@@ -22,7 +22,7 @@ namespace blobber {
 
   using namespace std;
 
-  Camarea::Camarea() : device(), hascam(true), mouse_clicked(false), manual_align(false), fg(NULL), frame(NULL) {
+  Camarea::Camarea() : device(), hascam(true), manual_align(false), fg(NULL), frame(NULL) {
     add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
     string dev, red, green, blue;    
     Configuration *config = Configuration::get_config();
@@ -30,10 +30,11 @@ namespace blobber {
     set_device(dev);
 
     // get default criteria values - and set them to defaults if they are not set already 
-    config->get_set("default_red", red, "60");
-    config->get_set("default_blue", blue, "0");
-    config->get_set("default_green", green, "0");
-    CRANGE range(COLOR(string_to_int(red), string_to_int(blue), string_to_int(green)));
+    COLOR vdefault(60, 0, 0);
+    COLOR lower;
+    config->get_set_color(lower, vdefault, "default");
+    // Our range for the default criterea will include a range +-10 from the default color
+    CRANGE range(lower, 10);
     default_criteria.copy(range);
   };
 
@@ -72,47 +73,59 @@ namespace blobber {
     }
   };
   
+
   void Camarea::set_bounds(BOUNDS &b) {
     bounds.copy(b);
   };
 
-  bool Camarea::on_motion_notify_event (GdkEventMotion* event) { 
-    /* doesn't actually work - not sure it matters
-       if(mouse_clicked && hascam) {
-       BOUNDS b;
-       COORD c((int) event->x, (int) event->y);
-       b.from_coords(c, mouse_click);
-       draw_bounds(b);
-       };
-    */
-  };
 
   bool Camarea::on_button_press_event(GdkEventButton* event) { 
-    cout << event->button << endl;
 #ifdef DEBUG
     if(hascam) {
       unsigned char * data = (unsigned char *) frame->data;
       int index = (width * (int) event->y) + (int) event->x;
       cout << " R:" << (int) data[index*4+2] << " G:" << (int) data[index*4+1] << " B:" << (int) data[index*4] << endl;
-    } else {
-      cout << endl;
     }
     cout.flush();
 #endif
     if(hascam) {
-      mouse_clicked = true;
       mouse_click.x = (int) event->x;
       mouse_click.y = (int) event->y;
     }
   };
 
   bool Camarea::on_button_release_event(GdkEventButton* event) { 
+    Configuration * config = Configuration::get_config();
     COORD c((int) event->x, (int) event->y);
-    if(hascam && c.distance_from(mouse_click) > 2) {
+    // event->button is 1 if left mouse button, 3 is right mouse button
+    if(hascam && c.distance_from(mouse_click) > 2 && event->button == 1) {
       bounds.from_coords(c, mouse_click);
       manual_align = true;
+    } else if(hascam && c.distance_from(mouse_click) > 2 && event->button == 3) {
+      BOUNDS blob_bounds;
+      blob_bounds.from_coords(c, mouse_click);
+      COLOR blob;
+      if(find_the_blob(blob, blob_bounds, (unsigned char *) frame->data)) {
+	config->set_color(blob, "default");
+        // we've identified the brightest point - now make a range that centers on that 
+	// bright point and goes above and below 10
+	CRANGE range(blob, 10);
+	default_criteria.copy(range);
+      } else debug("couldn't find a blob in the coordinates given");
     }
-    mouse_clicked = false;
+  };
+
+  // Find the brightest color in the bounds of the data
+  bool Camarea::find_the_blob(COLOR &blob, BOUNDS &bounds, unsigned char *data) {
+    blob.set(0, 0, 0);
+    for(int x=bounds.left; x<bounds.right; x++) {
+      for(int y=bounds.top; y<bounds.bottom; y++) {
+	int index = x+(y*width);
+	COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
+	if(pixelcolor.brighter_than(blobcolor))
+	  blob.copy(pixelcolor);
+      }
+    }
   };
 
   void Camarea::update_frame() {
@@ -241,8 +254,7 @@ namespace blobber {
     modpoi.assign(poi[modname].begin(), poi[modname].end());
   };
 
-  Cairo::RefPtr< Cairo::ImageSurface > Camarea::getSurface()
-  {
-  return surface;
+  Cairo::RefPtr< Cairo::ImageSurface > Camarea::getSurface() {
+    return surface;
   };
 };

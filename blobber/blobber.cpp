@@ -16,6 +16,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+\mainpage Blobber :: The Blob Tracker
+\section desc Description
+Blobber is a program that tracks points of light (lasers, LEDs) and projects reactions.
+Given a webcam, projector, and a computer, the idea is to track lights/colors with the camera and 
+then project "reactions" onto a large surface with the projector. Right now, a framework has been 
+created to allow the creation of modules to handle output "reactions" based on what the camera sees. 
+These modules accept as input the pixel data from the camera and can draw on a Cairo::Context in a 
+separate window (this method is called ~ 30 times/sec). Many modules can be loaded at once. You can 
+also easily create your own modules. 
+ 
+You can find out more at http://trac.butterfat.net/public/blobber
+\section Authors
+\li Brian Muller <bmuller@butterfat.net>
+\li Matt Shotwell <shotwelm@musc.edu>
+*/
+
 #include "blobber.h"
 
 using namespace blobber;

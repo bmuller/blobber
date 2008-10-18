@@ -29,5 +29,10 @@ namespace blobber {
     void module_set(string key, vector<string> values, string modname);   
     void module_get(string key, string &value, string vdefault, string modname);
     void module_get(string key, vector<string> &values, string modname);
+
+    // storing colors
+    void get_color(COLOR &c, COLOR &vdefault, string prefix, string groupname="blobber");
+    void get_set_color(COLOR &c, COLOR &vdefault, string prefix, string groupname="blobber");
+    void set_color(COLOR &c, string prefix, string groupname="blobber");
   };
 };

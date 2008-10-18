@@ -92,6 +92,38 @@ namespace blobber {
     get(key, values, "mod_" + modname);    
   };
 
+  void Configuration::set_color(COLOR &c, string prefix, string groupname) {
+    string red, green, blue;
+    num_to_string(c.red, red);
+    num_to_string(c.green, green);
+    num_to_string(c.blue, blue);
+
+    set(prefix + "_red", red, groupname);
+    set(prefix + "_green", green, groupname);
+    set(prefix + "_blue", blue, groupname);
+  };
+
+  void Configuration::get_color(COLOR &c, COLOR &vdefault, string prefix, string groupname) {
+    string red, green, blue;
+    string dred, dgreen, dblue;
+
+    num_to_string(vdefault.red, dred);
+    num_to_string(vdefault.green, dgreen);
+    num_to_string(vdefault.blue, dblue);
+
+    get(prefix + "_red", red, dred, groupname);
+    get(prefix + "_green", green, dgreen, groupname);
+    get(prefix + "_blue", blue, dblue, groupname);
+    
+    COLOR tmp(string_to_int(red), string_to_int(blue), string_to_int(green));
+    c.copy(tmp);
+  };
+
+  void Configuration::get_set_color(COLOR &c, COLOR &vdefault, string prefix, string groupname) {
+    get_color(c, vdefault, prefix, groupname);
+    set_color(c, prefix, groupname);
+  };
+
   void Configuration::get_keys(vector<string> &values, string groupname) {
     if(!config.has_group(groupname)) {
       values.clear();

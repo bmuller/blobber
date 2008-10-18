@@ -21,6 +21,9 @@ struct COLOR {
   void copy(const COLOR &c) {
     red=c.red; green=c.green; blue=c.blue;
   }
+  void set(int r, int g, int b) {
+    red=r; green=g; blue=b;
+  };
   double cairo_red() { return float(red) / 255.0; };
   double cairo_green() { return float(green) / 255.0; };
   double cairo_blue() { return float(blue) / 255.0; };
@@ -38,6 +41,9 @@ struct COLOR {
     red = string_to_int(parts[0]);
     blue = string_to_int(parts[1]);
     green = string_to_int(parts[2]);
+  };
+  bool brighter_than(COLOR &c) {
+    return red > c.red || green > c.green || blue > c.blue;
   };
 };
 
@@ -60,6 +66,16 @@ struct CRANGE {
   CRANGE(COLOR l) {
     lower.copy(l);
     upper.copy(WHITE);
+  };
+  /** 
+     @param center The color to center the range on
+     @param plusminus The range should be plusminus above and below the center
+  */
+  CRANGE(COLOR center, int plusminus) {
+    COLOR newlower(center.red - plusminus, center.green - plusminus, center.blue - plusminus);
+    COLOR newupper(center.red + plusminus, center.green + plusminus, center.blue + plusminus);
+    lower.copy(newlower);
+    upper.copy(newupper);
   };
   CRANGE(COLOR l, COLOR u) {
     lower.copy(l); 
