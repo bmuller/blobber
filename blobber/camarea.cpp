@@ -77,6 +77,15 @@ namespace blobber {
       width = 352;
       height = 288;
     }
+    catch(exception &e)
+    {
+      // not sure if the above catch is necessary?
+      debug(e.what());
+      noCam = Cairo::ImageSurface::create_from_png(string(DATAROOTDIR) + string("/nocam.png"));
+      hascam = false;
+      width = 352;
+      height = 288;
+    }
   };
   
 
