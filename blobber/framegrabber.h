@@ -7,6 +7,7 @@ class FrameGrabber {
  public:
   virtual Frame * makeFrame() = 0;
   virtual void grabFrame(Frame *frame) = 0;
+  virtual ~FrameGrabber(){};
 };
 
 class FrameGrabberFactory {
