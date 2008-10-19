@@ -31,13 +31,9 @@ endif
 if INVADERS
   pkglib_LTLIBRARIES += libinvaders.la 
   libinvaders_la_SOURCES = invaders/invaders.cpp
-  nobase_dist_pkgdata_DATA += invaders/ghost1.png invaders/ghost2.png invaders/ghost3.png \
-                              invaders/ghost4.png invaders/ghost5.png invaders/ghost6.png \
-                              invaders/ghost7.png invaders/ghost8.png invaders/ghost9.png \
-                              invaders/explode1.png invaders/explode2.png \
-                              invaders/explode3.png invaders/explode4.png invaders/explode5.png \
-                              invaders/explode6.png invaders/explode7.png invaders/explode8.png \
-                              invaders/pause.png invaders/cross.png
+  nobase_dist_pkgdata_DATA += invaders/invader0.png invaders/invader1.png \
+                              invaders/invaderblk0.png invaders/invaderblk1.png \
+                              invaders/pause.png invaders/kill.png invaders/killblk.png
 endif
 
 if FLOWER
@@ -45,7 +41,8 @@ if FLOWER
   libflower_la_SOURCES = flower/flower.cpp
   nobase_dist_pkgdata_DATA += flower/flower1.png flower/flower2.png flower/flower3.png \
                               flower/flower4.png flower/flower5.png flower/flower6.png \
-                              flower/flower7.png flower/flower8.png flower/flower9.png
+                              flower/flower7.png flower/flower8.png flower/flower9.png \
+                              flower/flower10.png
 endif
 
 if REFRESHRATE
