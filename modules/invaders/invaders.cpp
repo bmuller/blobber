@@ -72,9 +72,9 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
 
   if ( (score+1) % 50 == 0 ) { 
     string s;
-    level++; 
-    int_to_string(level, s);
-    pw.show_message("Level " + s);
+    //level++; 
+    //int_to_string(level, s);
+    //pw.show_message("Level " + s);
   }
 
   // if the game was just paused, draw "Pause"
@@ -104,8 +104,8 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
   
   if(poi.size() > 0) {
     cross.copy(poi[0].coord);
-    pw.translate_coordinates(cross,t);
-    window->draw_rectangle(pw.get_style()->get_white_gc(),true,t.x,t.y,5,5);
+    //pw.translate_coordinates(cross,t);
+    //window->draw_rectangle(pw.get_style()->get_white_gc(),true,t.x,t.y,5,5);
   }
   
 

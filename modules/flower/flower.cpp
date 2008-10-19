@@ -49,7 +49,7 @@ void Flower::update(Camarea &area, ProjectionWindow &pw) {
 
   // paint flowers
   for ( vector<Entity>::iterator it = flowers.begin(); it < flowers.end(); it++ ) { 
-    pw.translate_coordinates( COORD((*it).loc.x-30,(*it).loc.y-45), t);
+    pw.translate_coordinates( COORD((*it).loc.x-60,(*it).loc.y-60), t);
     window->draw_pixbuf(pw.get_style()->get_black_gc(), 
                         image[it->state], 0, 0, t.x, t.y, 
                         image[0]->get_width(), 
