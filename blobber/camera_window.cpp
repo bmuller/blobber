@@ -91,7 +91,8 @@ namespace blobber {
   };
 
   void CameraWindow::options() {
-    set_transient_for(options_window);
+    // LIES! LIES! set_transient_for() does not follow gtkmm.org docs
+    //set_transient_for(options_window);
     options_window.show();
   };
 
