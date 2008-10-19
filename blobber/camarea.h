@@ -20,6 +20,8 @@ using namespace std;
    std::vector<string> default_criteria_mods;
    // default criteria
    CRANGE default_criteria;
+   // size of the default criteria window - range is picked color += default_criteria_window
+   int default_criteria_window;
    void update_poi(unsigned char *data, string modname, CRANGE &criteria);
    void update_default_poi(unsigned char *data);
    bool find_the_blob(COLOR &blob, BOUNDS &bounds, unsigned char *data);

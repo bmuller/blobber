@@ -33,8 +33,14 @@ namespace blobber {
     COLOR vdefault(60, 0, 0);
     COLOR lower;
     config->get_set_color(lower, vdefault, "default");
-    // Our range for the default criterea will include a range +-10 from the default color
-    CRANGE range(lower, 10);
+
+    // get window size
+    string window_size;
+    config->get_set("default_criteria_window", window_size, "15");
+    default_criteria_window = string_to_int(window_size);
+
+    // Our range for the default criterea will include a range +-default_criteria_window from the default color
+    CRANGE range(lower, default_criteria_window);
     default_criteria.copy(range);
   };
 
@@ -106,10 +112,14 @@ namespace blobber {
       blob_bounds.from_coords(c, mouse_click);
       COLOR blob;
       if(find_the_blob(blob, blob_bounds, (unsigned char *) frame->data)) {
+	string colors, criteria_window;
+	blob.to_string(colors);
+	num_to_string(default_criteria_window, criteria_window);
+	debug("Setting default criteria to look for " + colors + " += " + criteria_window);
 	config->set_color(blob, "default");
         // we've identified the brightest point - now make a range that centers on that 
-	// bright point and goes above and below 10
-	CRANGE range(blob, 10);
+	// bright point and goes above and below default_criteria_window
+	CRANGE range(blob, default_criteria_window);
 	default_criteria.copy(range);
       } else debug("couldn't find a blob in the coordinates given");
     }

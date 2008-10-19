@@ -71,7 +71,7 @@ struct CRANGE {
      @param center The color to center the range on
      @param plusminus The range should be plusminus above and below the center
   */
-  CRANGE(COLOR center, int plusminus) {
+  CRANGE(COLOR &center, int plusminus) {
     COLOR newlower(center.red - plusminus, center.green - plusminus, center.blue - plusminus);
     COLOR newupper(center.red + plusminus, center.green + plusminus, center.blue + plusminus);
     lower.copy(newlower);

@@ -8,26 +8,11 @@ To run:
 
 svn co https://svn.butterfat.net/public/blobber/trunk blobber
 cd blobber
-sh autogen.sh --enable-debug --enable-doxygen
-make dox
+sh autogen.sh --enable-debug
 make
 sudo make install
-sudo ldconfig
 blobber
 
-******************************************************************************
-TODO:
-    * Camera / projection alignment. This should occur when program starts.
-    * GUI love
-    * Better interface for doing things on the projection screen.
-    * Finish V4L2 support 
-******************************************************************************
-Works with:
-ID 046d:0870 Logitech, Inc. QuickCam Express
+For a list of working cameras see: http://trac.butterfat.net/public/blobber/wiki/Cameras
 
-Tested with (appears to work, but only minimal testing):
-ID 046d:08da Logitech, Inc. QuickCam Messanger
 
-******************************************************************************
-frame size: 
-frame wxh: 352 288
