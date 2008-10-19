@@ -6,7 +6,7 @@ Alien::Alien(COORD _loc) {
 
 void Alien::reset(COORD _loc) {
   state = 0;
-  speed = 1 + rand() % 10;
+  speed = 1 + rand() % 5;
   loc.x = _loc.x;
   loc.y = _loc.y;
 }
@@ -21,7 +21,7 @@ bool Alien::in_bounds(COORD c) { return( labs(c.x - loc.x - 40) < 40 && labs(c.y
 
 Invaders::Invaders() : 
   paused(0x00), 
-  level(5), 
+  level(1), 
   score(0), 
   ModInterface("Invaders") {} 
 
@@ -50,7 +50,7 @@ void Invaders::init(Camarea &area, ProjectionWindow &pw) {
   register_poi(area, 1);
 
   // initialize aliens (5 in this case)
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 5 + level; i++) {
     aliens.push_back(Alien(COORD(area.bounds.left + rand() % area.width, area.bounds.top)));
   }
 }
@@ -69,6 +69,13 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
   // get the Gdk::Window, recompute the scale
   Glib::RefPtr<Gdk::Window> window = pw.get_window();
   if(!window) { return; }
+
+  if ( (score+1) % 50 == 0 ) { 
+    string s;
+    level++; 
+    int_to_string(level, s);
+    pw.show_message("Level " + s);
+  }
 
   // if the game was just paused, draw "Pause"
   if(paused == PAUSED) {
@@ -97,8 +104,8 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
   
   if(poi.size() > 0) {
     cross.copy(poi[0].coord);
-    //pw.translate_coordinates(cross,t);
-    //window->draw_rectangle(pw.get_style()->get_white_gc(),true,t.x,t.y,5,5);
+    pw.translate_coordinates(cross,t);
+    window->draw_rectangle(pw.get_style()->get_white_gc(),true,t.x,t.y,5,5);
   }
   
 
@@ -115,7 +122,7 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
       it->reset(COORD(area.bounds.left + rand() % (area.width-80), area.bounds.top));
       score++;
     }
-    else if ( (it->loc.y += 5 * it->speed) > area.bounds.bottom - ali[0]->get_height() ) { 
+    else if ( (it->loc.y += level * it->speed) > area.bounds.bottom - ali[0]->get_height() ) { 
       it->reset(COORD(area.bounds.left + rand() % (area.width-80), area.bounds.top));
     }
     pw.translate_coordinates(it->loc, t);
