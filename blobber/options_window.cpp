@@ -21,10 +21,15 @@
 namespace blobber {
   using namespace std;
 
-  OptionsWindow::OptionsWindow(Camarea *cam) : area(cam), okButton("OK"), lblCamDevice("Camera devices: "),
+  OptionsWindow::OptionsWindow(Camarea *cam) : 
+	area(cam), 
+	okButton(Gtk::Stock::OK),
+	lblCamDevice("Camera devices: "),
 	modsFrame("Available Modules"){ 
-    resize(300, 300);
-    set_title("Configuration");
+
+    set_title("Blobber Configuration");
+    set_resizable(false);
+
     okButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::ok));
 
     config = Configuration::get_config();
@@ -34,10 +39,10 @@ namespace blobber {
     ModInterface::get_available_modules(availableModules, modFiles);
 
     add(mainBox);
-    mainBox.add(modsFrame);
-    mainBox.add(camDevice);
-    mainBox.add(okButton);
-    camDevice.add(lblCamDevice);
+    mainBox.pack_start(modsFrame, Gtk::PACK_SHRINK);
+    camDevice.pack_end(okButton, Gtk::PACK_SHRINK);
+    mainBox.pack_end(camDevice, Gtk::PACK_SHRINK);
+    camDevice.pack_start(lblCamDevice, Gtk::PACK_SHRINK);
     modsFrame.add(modsBox);
 
     for(std::map<string, string>::iterator it=availableModules.begin(); it!=availableModules.end(); it++) {
@@ -63,7 +68,7 @@ namespace blobber {
         cboCamDevice.append_text(Glib::build_filename(devDir, files[i]));
     }
 
-    camDevice.add(cboCamDevice);
+    camDevice.pack_start(cboCamDevice, Gtk::PACK_SHRINK);
     show_all_children();
   };
 

@@ -1,4 +1,4 @@
-//cpp h modcpph
+
 namespace blobber {
   using namespace std;
 
