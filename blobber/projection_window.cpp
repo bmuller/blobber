@@ -94,6 +94,14 @@ namespace blobber {
     throw NoSuchFeatureException("Cairo must be compiled with PNG support to save screen captures")
 #endif	
   };
+
+  int get_drawing_area_height() {
+    return vprojbounds.top - vprojbounds.bottom;
+  };
+
+  int get_drawing_area_width() {
+    return vprojbounds.right - vprojbounds.left;    
+  };
   
   bool ProjectionWindow::on_key_press_event(GdkEventKey* eventData) {
 #ifdef DEBUG
@@ -282,6 +290,19 @@ namespace blobber {
     set_color(cr, c);
     cr->set_line_width(1.0);
     cr->rectangle(translated.x, translated.y, transwidth, transheight);
+    if(fill)
+      cr->fill_preserve();
+    cr->stroke();
+  };
+
+  void ProjectionWindow::draw_box_absolute(COORD coord, int width, int height, COLOR c, bool fill) {
+    Cairo::RefPtr<Cairo::Context> cr;
+    if(!get_context(cr))
+      return;
+    
+    set_color(cr, c);
+    cr->set_line_width(1.0);
+    cr->rectangle(coord.x, coord.y, width, height);
     if(fill)
       cr->fill_preserve();
     cr->stroke();
