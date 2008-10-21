@@ -13,7 +13,11 @@ namespace blobber {
     Gtk::ComboBoxEntryText cboCamDevice;
     Gtk::Button okButton;
     Gtk::Frame modsFrame;
+    Gtk::Frame brightnessFrame;
+    Gtk::Frame contrastFrame;
     Gtk::VBox modsBox;
+    Gtk::HScale brightnessScale;
+    Gtk::HScale contrastScale;
     Camarea *area;
     // module description by module name
     std::map<string, string> availableModules;

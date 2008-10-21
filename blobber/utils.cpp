@@ -95,4 +95,11 @@ namespace blobber {
 	return true;
     return false;
   };
+
+  string stringify(double x)
+  {
+    ostringstream o;
+    if (!(o << x)) return"";
+    return o.str();
+  }
 };

@@ -24,8 +24,12 @@ namespace blobber {
   OptionsWindow::OptionsWindow(Camarea *cam) : 
 	area(cam), 
 	okButton(Gtk::Stock::OK),
+	brightnessScale(1, 100, 1.0),
+	contrastScale(1, 100, 1.0),
 	lblCamDevice("Camera devices: "),
-	modsFrame("Available Modules"){ 
+	modsFrame("Available Modules"),
+	brightnessFrame("Brightness"),
+	contrastFrame("Contrast"){ 
 
     set_title("Blobber Configuration");
     set_resizable(false);
@@ -38,10 +42,21 @@ namespace blobber {
 
     ModInterface::get_available_modules(availableModules, modFiles);
 
+    // Get the brightness and contrast from the config file
+    string slidePosition;
+    config->get("brightness", slidePosition, "50");
+    brightnessScale.set_value(string_to_int(slidePosition));
+    config->get("contrast", slidePosition, "50");
+    contrastScale.set_value(string_to_int(slidePosition));
+
     add(mainBox);
     mainBox.pack_start(modsFrame, Gtk::PACK_SHRINK);
     camDevice.pack_end(okButton, Gtk::PACK_SHRINK);
     mainBox.pack_end(camDevice, Gtk::PACK_SHRINK);
+    mainBox.pack_end(brightnessFrame, Gtk::PACK_SHRINK);
+    brightnessFrame.add(brightnessScale);
+    mainBox.pack_end(contrastFrame, Gtk::PACK_SHRINK);
+    contrastFrame.add(contrastScale);
     camDevice.pack_start(lblCamDevice, Gtk::PACK_SHRINK);
     modsFrame.add(modsBox);
 
@@ -85,6 +100,8 @@ namespace blobber {
     // set config options then save config file
     config->set("mods_enabled", push);
     config->set("device", device);
+    config->set("brightness", stringify(brightnessScale.get_value()));
+    config->set("contrast", stringify(contrastScale.get_value()));
 
     // reload config
     Application::get_app()->reload_config();

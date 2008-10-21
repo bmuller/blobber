@@ -3,6 +3,7 @@
 
 #include <glibmm/keyfile.h>
 
+#include <gtkmm/scale.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/window.h>
 #include <gtkmm/label.h>
