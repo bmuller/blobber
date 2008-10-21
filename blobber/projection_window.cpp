@@ -95,11 +95,11 @@ namespace blobber {
 #endif	
   };
 
-  int get_drawing_area_height() {
+  int ProjectionWindow::get_drawing_area_height() {
     return vprojbounds.top - vprojbounds.bottom;
   };
 
-  int get_drawing_area_width() {
+  int ProjectionWindow::get_drawing_area_width() {
     return vprojbounds.right - vprojbounds.left;    
   };
   
