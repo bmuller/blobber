@@ -43,7 +43,7 @@ namespace blobber {
 
   void num_to_string(double i, std::string& s) {
     char c_int[100];
-    sprintf(c_int, "%ld", i);
+    sprintf(c_int, "%f", i);
     s = std::string(c_int);
   };
 
@@ -95,11 +95,4 @@ namespace blobber {
 	return true;
     return false;
   };
-
-  string stringify(double x)
-  {
-    ostringstream o;
-    if (!(o << x)) return"";
-    return o.str();
-  }
 };

@@ -100,8 +100,11 @@ namespace blobber {
     // set config options then save config file
     config->set("mods_enabled", push);
     config->set("device", device);
-    config->set("brightness", stringify(brightnessScale.get_value()));
-    config->set("contrast", stringify(contrastScale.get_value()));
+    string slider;
+    num_to_string(brightnessScale.get_value(), slider);
+    config->set("brightness", slider);
+    num_to_string(contrastScale.get_value(), slider);
+    config->set("contrast", slider);
 
     // reload config
     Application::get_app()->reload_config();
