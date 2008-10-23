@@ -10,6 +10,12 @@ namespace blobber {
     virtual void init(Camarea &area, ProjectionWindow &pw) {};
     virtual void destroy() {};
     virtual void projection_window_exposed(ProjectionWindow &pw) {};
+    /**
+       Get a path for the given resource file.
+       @param path A reference to the string to put the result in.
+       @param resource The resource filename.
+     */
+    void get_resource_path(string &path, string resource);
     static ModInterface * load_module(string modname, bool make_resident=true);
     static void get_available_modules(map<string, string> &mods, map<string, string> &files);
     // called right before init

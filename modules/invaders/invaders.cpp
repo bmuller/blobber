@@ -23,7 +23,7 @@ Invaders::Invaders() :
   paused(0x00), 
   level(1), 
   score(0), 
-  ModInterface("Invaders") {} 
+  ModInterface("invaders") {} 
 
 void Invaders::init(Camarea &area, ProjectionWindow &pw) {
   string s;
@@ -33,18 +33,24 @@ void Invaders::init(Camarea &area, ProjectionWindow &pw) {
   pw.signal_expose_event().connect_notify(sigc::mem_fun(*this, &Invaders::expose));
   
   // read image files 
-  pau = Gdk::Pixbuf::create_from_file(string(DATAROOTDIR) + "/invaders/pause.png");
+  string filelocation;
+  get_resource_path(filelocation, "pause.png");
+  pau = Gdk::Pixbuf::create_from_file(filelocation);
   pau_blk = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, pau->get_bits_per_sample(), pau->get_width(), pau->get_height());
   pau_blk->fill(0x000000);
   ali = new Glib::RefPtr<Gdk::Pixbuf>[2];
   ali_blk = new Glib::RefPtr<Gdk::Pixbuf>[2];
   for(int i = 0; i < 2; i++) {
     int_to_string(i, s);
-    ali[i] = Gdk::Pixbuf::create_from_file(string(DATAROOTDIR) + "/invaders/invader" + s + ".png");
-    ali_blk[i] = Gdk::Pixbuf::create_from_file(string(DATAROOTDIR) + "/invaders/invaderblk" + s + ".png");    
+    get_resource_path(filelocation, "invader" + s + ".png");
+    ali[i] = Gdk::Pixbuf::create_from_file(filelocation);
+    get_resource_path(filelocation, "invaderblk" + s + ".png");
+    ali_blk[i] = Gdk::Pixbuf::create_from_file(filelocation);    
   }
-  kill = Gdk::Pixbuf::create_from_file(string(DATAROOTDIR) + "/invaders/kill.png");
-  kill_blk = Gdk::Pixbuf::create_from_file(string(DATAROOTDIR) + "/invaders/killblk.png");
+  get_resource_path(filelocation, "kill.png");
+  kill = Gdk::Pixbuf::create_from_file(filelocation);
+  get_resource_path(filelocation, "killblk.png");
+  kill_blk = Gdk::Pixbuf::create_from_file(filelocation);
   
   // register poi
   register_poi(area, 1);

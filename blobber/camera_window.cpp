@@ -21,10 +21,9 @@
 namespace blobber {
   using namespace std;
 
-  CameraWindow::CameraWindow() : exitButton("Exit"), area(), table(2, 15), options_window(&area) { 
+  CameraWindow::CameraWindow() : area(), table(2, 15), options_window(&area), description() { 
     set_default_size(area.width, area.height+50);
     add(m_Box);
-    exitButton.signal_clicked().connect(sigc::mem_fun(*this, &CameraWindow::exit) );
 
     //Create actions for menus and toolbars:
     m_ActionGroup = Gtk::ActionGroup::create();
@@ -40,6 +39,8 @@ namespace blobber {
     m_ActionGroup->add( Gtk::Action::create("HelpMenu", "Help"));
     m_ActionGroup->add(Gtk::Action::create("HelpAbout", Gtk::Stock::ABOUT),
 		       sigc::mem_fun(*this, &CameraWindow::about));
+    m_ActionGroup->add(Gtk::Action::create("HelpContents", Gtk::Stock::HELP),
+		       sigc::mem_fun(*this, &CameraWindow::help));
 
     m_UIManager = Gtk::UIManager::create();
     m_UIManager->insert_action_group(m_ActionGroup);
@@ -54,6 +55,7 @@ namespace blobber {
       "      <menuitem action='FileQuit'/>"
       "    </menu>"
       "    <menu action='HelpMenu'>"
+      "      <menuitem action='HelpContents'/>"
       "      <menuitem action='HelpAbout'/>"
       "    </menu>"
       "  </menubar>"
@@ -73,7 +75,8 @@ namespace blobber {
     };
     m_Box.pack_start(table);
     table.attach(area, 0, 2, 0, 14);
-    table.attach(exitButton, 0, 1, 14, 15, Gtk::EXPAND, Gtk::EXPAND); 
+    description.set_label("Insert some meaningful text here.");
+    table.attach(description, 0, 1, 14, 15, Gtk::EXPAND, Gtk::EXPAND); 
     show_all_children();
   };
 
@@ -82,12 +85,19 @@ namespace blobber {
   };
 
   void CameraWindow::about() {
-    Glib::ustring strVersion = "Blobber version " + string(VERSION);
+    Glib::ustring strVersion = string(PACKAGE_STRING);
     Gtk::MessageDialog cmdAbout(*this, strVersion);
     cmdAbout.set_secondary_text("Blobber tracks lights/colors with an attached webcam and "
 				"then projects their \"reactions\" using an attached projector.\n\n"
 				"Blobber is open source software brougt to you by csclug.org.");
     cmdAbout.run();
+  };
+
+  void CameraWindow::help() {
+    Glib::ustring strVersion = string(PACKAGE_STRING) + " Help";
+    Gtk::MessageDialog cmdHelp(*this, strVersion);
+    cmdHelp.set_secondary_text("You can find help for blobber at:\n" + string(PACKAGE_URL));
+    cmdHelp.run();
   };
 
   void CameraWindow::options() {

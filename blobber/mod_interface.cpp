@@ -24,6 +24,11 @@ namespace blobber {
     debug("Module \"" + n + "\" just created"); 
   };
 
+  void ModInterface::get_resource_path(string &path, string resource) {
+    path = Glib::build_filename(string(DATAROOTDIR), name);
+    path = Glib::build_filename(path, resource);
+  };
+
   void ModInterface::register_poi_criteria(Camarea &area, CRANGE crange, int maxPoi) {
     area.register_poi_criteria(name, crange, maxPoi);
   };

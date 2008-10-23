@@ -10,10 +10,11 @@ namespace blobber {
     CameraWindow();
     void exit();
     void about();
+    void help();
     void options();
     bool on_key_press_event(GdkEventKey* eventData);
   protected:
-    Gtk::Button exitButton;
+    Gtk::Label description;
     Gtk::Table table;
     Gtk::VBox m_Box;
     Glib::RefPtr<Gtk::UIManager> m_UIManager;

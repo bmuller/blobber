@@ -65,7 +65,8 @@ namespace blobber {
       proj.show();
     }
     Glib::signal_idle().connect(sigc::mem_fun(*this, &Application::on_idle));
-      
+    //Glib::signal_timeout().connect(sigc::mem_fun(*this, &Application::on_idle), 50);      
+
     // until we do an alignment, just set the projection area and camarea bounds to be the 
     // full visible area of camera
     BOUNDS b(0, win.area.height, 0, win.area.width);
