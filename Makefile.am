@@ -11,7 +11,7 @@ nobase_include_HEADERS = $(HEADERDIR)/blobber.h $(HEADERDIR)/camera_window.h $(H
 			 $(HEADERDIR)/framegrabber.h $(HEADERDIR)/mod_interface.h $(HEADERDIR)/pixconverter.h \
 			 $(HEADERDIR)/configuration.h $(HEADERDIR)/application.h $(MODUTILSDIR)/movable_object.h \
 			 $(MODUTILSDIR)/movable_circle.h $(MODUTILSDIR)/movable_square.h \
-			 $(MODUTILSDIR)/movable_crosshairs.h
+			 $(MODUTILSDIR)/movable_crosshairs.h $(MODUTILSDIR)/sprite.h
 
 dist_pkgdata_DATA = blobber/nocam.png
 

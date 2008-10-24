@@ -24,6 +24,9 @@ struct COLOR {
   void set(int r, int g, int b) {
     red=r; green=g; blue=b;
   };
+  int to_int() {
+    return ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff);
+  };
   double cairo_red() { return float(red) / 255.0; };
   double cairo_green() { return float(green) / 255.0; };
   double cairo_blue() { return float(blue) / 255.0; };
