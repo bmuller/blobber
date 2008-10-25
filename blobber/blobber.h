@@ -1,5 +1,7 @@
 #include "config.h"
 #define DEFAULT_DEVICE "/dev/video0"
+// size of the default POI criteria window
+#define DEFAULT_CRITERIA_WINDOW_SIZE "15"
 
 #include <glibmm/keyfile.h>
 

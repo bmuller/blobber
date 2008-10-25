@@ -36,7 +36,7 @@ namespace blobber {
 
     // get window size
     string window_size;
-    config->get_set("default_criteria_window", window_size, "15");
+    config->get_set("default_criteria_window", window_size, DEFAULT_CRITERIA_WINDOW_SIZE);
     default_criteria_window = string_to_int(window_size);
 
     // Our range for the default criterea will include a range +-default_criteria_window from the default color

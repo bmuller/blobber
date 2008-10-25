@@ -22,14 +22,17 @@ namespace blobber {
   using namespace std;
 
   OptionsWindow::OptionsWindow(Camarea *cam) : 
-	area(cam), 
-	okButton(Gtk::Stock::OK),
-	brightnessScale(1, 100, 1.0),
-	contrastScale(1, 100, 1.0),
-	lblCamDevice("Camera devices: "),
-	modsFrame("Available Modules"),
-	brightnessFrame("Brightness"),
-	contrastFrame("Contrast"){ 
+    area(cam), 
+    okButton(Gtk::Stock::OK),
+    brightnessScale(1, 100, 1.0),
+    contrastScale(1, 100, 1.0),
+    poiCriteriaWindow(1, 100, 1.0),
+    lblCamDevice("Camera devices: "),
+    modsFrame("Available Modules"),
+    brightnessFrame("Brightness"),
+    contrastFrame("Contrast"),
+    poiCriteriaWindowFrame("Laser Color Window")
+  { 
 
     set_title("Blobber Configuration");
     set_resizable(false);
@@ -44,10 +47,12 @@ namespace blobber {
 
     // Get the brightness and contrast from the config file
     string slidePosition;
-    config->get("brightness", slidePosition, "50");
+    config->get_set("brightness", slidePosition, "50");
     brightnessScale.set_value(string_to_int(slidePosition));
-    config->get("contrast", slidePosition, "50");
+    config->get_set("contrast", slidePosition, "50");
     contrastScale.set_value(string_to_int(slidePosition));
+    config->get_set("default_criteria_window", slidePosition, DEFAULT_CRITERIA_WINDOW_SIZE);
+    poiCriteriaWindow.set_value(string_to_int(slidePosition));
 
     add(mainBox);
     mainBox.pack_start(modsFrame, Gtk::PACK_SHRINK);
@@ -57,6 +62,8 @@ namespace blobber {
     brightnessFrame.add(brightnessScale);
     mainBox.pack_end(contrastFrame, Gtk::PACK_SHRINK);
     contrastFrame.add(contrastScale);
+    mainBox.pack_end(poiCriteriaWindowFrame, Gtk::PACK_SHRINK);
+    poiCriteriaWindowFrame.add(poiCriteriaWindow);
     camDevice.pack_start(lblCamDevice, Gtk::PACK_SHRINK);
     modsFrame.add(modsBox);
 
@@ -105,6 +112,8 @@ namespace blobber {
     config->set("brightness", slider);
     num_to_string(contrastScale.get_value(), slider);
     config->set("contrast", slider);
+    num_to_string(poiCriteriaWindow.get_value(), slider);
+    config->set("default_criteria_window", slider);
 
     // reload config
     Application::get_app()->reload_config();

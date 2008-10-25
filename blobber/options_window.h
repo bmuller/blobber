@@ -15,9 +15,12 @@ namespace blobber {
     Gtk::Frame modsFrame;
     Gtk::Frame brightnessFrame;
     Gtk::Frame contrastFrame;
+    Gtk::Frame poiCriteriaWindowFrame;
     Gtk::VBox modsBox;
     Gtk::HScale brightnessScale;
     Gtk::HScale contrastScale;
+    // this is for the default_criteria_window config option
+    Gtk::HScale poiCriteriaWindow;
     Camarea *area;
     // module description by module name
     std::map<string, string> availableModules;
