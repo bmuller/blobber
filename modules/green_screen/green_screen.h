@@ -12,6 +12,7 @@ typedef enum {
 class GreenScreen : public ModInterface {
  public:
   GreenScreen();
+  ~GreenScreen();
   void init(Camarea &area, ProjectionWindow &pw);
   void update(Camarea &area, ProjectionWindow &pw);
  protected:

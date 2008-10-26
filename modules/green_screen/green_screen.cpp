@@ -25,6 +25,10 @@ using namespace std;
 GreenScreen::GreenScreen() : ModInterface("GreenScreen") {
 }
 
+GreenScreen::~GreenScreen() {
+  free(frame_ref);
+}
+
 void GreenScreen::init(Camarea &area, ProjectionWindow &pw) {
   wait_cycle = 0;
   frame_ref = (unsigned char *)(malloc(area.frame->sizeimage));
