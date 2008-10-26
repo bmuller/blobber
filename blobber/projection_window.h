@@ -3,7 +3,8 @@ namespace blobber {
 
   class ProjectionWindow : public Gtk::Window {
   public:
-    int height, width, preferred_color; // preferred_color is index in colors
+    DIMENSION dimensions;
+    int preferred_color; // preferred_color is index in colors
     vector<COLOR> colors;
     bool is_fullscreen;
     bool need_alignment; 
@@ -25,12 +26,16 @@ namespace blobber {
     void hide_alignment_graphics();
     void set_bounds(BOUNDS &b);
     void set_background(COLOR c);
+    void set_background_image(string filelocation);
     void clear(COLOR c=BLACK);
     bool on_key_press_event(GdkEventKey* eventData);
     void show_message(string msg, COLOR c=WHITE);
     void set_color(Cairo::RefPtr<Cairo::Context> cr, COLOR c);
     int get_drawing_area_width();
     int get_drawing_area_height();
+
+    bool in_visible_bounds(COORD &location);
+    bool in_visible_bounds(BOUNDS &bounds);
     
     // translate coordinates from camera coordinates to projection window coordinates
     void translate_coordinates(COORD camcords, COORD &projcoords);

@@ -120,6 +120,10 @@ colorrandomizer=false
 AC_ARG_ENABLE(colorrandomizer-module, AC_HELP_STRING([[--enable-colorrandomizer-module]], [enable colorrandomizer game module]), [colorrandomizer=true])
 AM_CONDITIONAL(COLORRANDOMIZER, $colorrandomizer || $allmods)
 
+duckhunt=false
+AC_ARG_ENABLE(duckhunt-module, AC_HELP_STRING([[--enable-duckhunt-module]], [enable duckhunt game module]), [duckhunt=true])
+AM_CONDITIONAL(DUCKHUNT, $duckhunt || $allmods)
+
 AC_CONFIG_FILES([
  Makefile
  blobber/Makefile

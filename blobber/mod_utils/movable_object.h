@@ -9,8 +9,8 @@ namespace blobber {
     virtual bool in_bounds(COORD c) = 0;
     virtual void paint(ProjectionWindow &pw) = 0;
     virtual void clear(ProjectionWindow &pw);
+    virtual void get_bounds(BOUNDS &bounds);
     bool selected;
-  protected:
     COORD center;
     COLOR color;
   };

@@ -7,6 +7,10 @@ class Duckhunt : public ModInterface {
   Duckhunt();
   void update(Camarea &area, ProjectionWindow &pw);
   void init(Camarea &area, ProjectionWindow &pw);
+  void projection_window_exposed(ProjectionWindow &pw);
+  void destroy();
  protected:
-  Sprite duck;
+  Sprite * duck;
+  PROPORTION duck_proportion;
+  int direction;
 };

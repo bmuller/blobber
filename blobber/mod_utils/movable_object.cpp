@@ -39,4 +39,10 @@ namespace blobber {
     center.copy(newcenter);
     paint(pw);
   };
+
+  // assume the movable object is just one pixel in size
+  void MovableObject::get_bounds(BOUNDS &bounds) {
+    BOUNDS b(center.y, center.y, center.x, center.x);
+    bounds.copy(b);
+  };
 };

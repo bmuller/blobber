@@ -6,10 +6,13 @@ namespace blobber {
     bool in_bounds(COORD c);
     void paint(ProjectionWindow &pw);
     void clear(ProjectionWindow &pw);
+    void get_bounds(BOUNDS &bounds);
+    void scale(PROPORTION p, ProjectionWindow &pw);
+    DIMENSION dimensions, half_dimensions;
   private:
     Glib::RefPtr<Gdk::Pixbuf> img;
     Glib::RefPtr<Gdk::Pixbuf> blkimg;
-    int width, height, half_width, half_height;
+    string filelocation;
   };
 
 };

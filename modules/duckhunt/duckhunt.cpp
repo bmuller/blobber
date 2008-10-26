@@ -16,51 +16,71 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "laser_tag.h"
+#include "duckhunt.h"
 
 using namespace std;
 using namespace blobber;
 
-LaserTag::LaserTag() : ModInterface("LaserTag", "Basic drawing module"), missing_counter(0) { 
-  lastpoint.x = 0; 
-  lastpoint.y = 0; 
+Duckhunt::Duckhunt() : ModInterface("duckhunt", "like the old nintendo game") { 
+
 };
 
-void LaserTag::init(Camarea &area, ProjectionWindow &pw) {
+void Duckhunt::destroy() {
+  delete duck;
+};
+
+void Duckhunt::projection_window_exposed(ProjectionWindow &pw) {
+  duck->scale(duck_proportion, pw);
+  duck->paint(pw);
+
+  string filelocation;
+  get_resource_path(filelocation, "background.png");
+  pw.set_background_image(filelocation);
+};
+
+void Duckhunt::init(Camarea &area, ProjectionWindow &pw) {
+  direction = 1;
+
+  COORD center((pw.get_drawing_area_width() / 2), (pw.get_drawing_area_height() / 2));
+
+  string filelocation;
+  get_resource_path(filelocation, "duck.png");
+  duck = new Sprite(filelocation, center, COLOR(51, 204, 255));
+  duck->paint(pw);
+
+  // get the proprtion we are to the projection window and save it
+  duck->dimensions.get_proportion(duck_proportion, pw.dimensions);
+
+  cout << duck_proportion.width_percent << " " << duck_proportion.height_percent << endl;
+
   // use default CRANGE criteria
   register_poi(area, 2);
 };
 
 
-void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
+void Duckhunt::update(Camarea &area, ProjectionWindow &pw) {
   vector<PIXEL> poi;
   get_poi(area, poi);
-  
-  if(poi.size() == 0)
-    missing_counter++;
-  else {
-    //points.push_back(poi[0]);
-    if(lastpoint.x!=0 && lastpoint.y!=0 && missing_counter < 2)
-      pw.draw_line(lastpoint, poi[0].coord, pw.colors[pw.preferred_color], 5.0);    
-    lastpoint.copy(poi[0].coord);
-  }
 
-  /* Trying to smooth line out
-  if(points.size() == 3) {
-    points.push_back(points[points.size() - 1]);
-    pw.draw_curve(points, pw.colors[pw.preferred_color]);
-    COORD last = points[points.size() - 1];
-    points.clear();
-    points.push_back(last);
-  };
-  */
-  if(poi.size() != 0)
-    missing_counter = 0;
+  BOUNDS b;
+  duck->get_bounds(b);
+  if(!pw.in_visible_bounds(b))
+    direction = -direction;
+
+  //string location;
+  //duck->center.to_s(location);
+  //cout << "location: " << location << endl;
+
+  //int x = (direction * 10) + duck->center.x;
+  //duck->move(COORD(x, duck->center.y), pw);
+
+  int y = (direction * 10) + duck->center.y;
+  duck->move(COORD(duck->center.x, y), pw);
 };
 
 
 extern "C" {
   ModInterface *get_module() { 
-    return new LaserTag(); 
+    return new Duckhunt(); 
   };
 };

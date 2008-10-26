@@ -31,6 +31,10 @@ namespace blobber {
     vector<string> colornames;
     config->get_keys(colornames, groupname);
 
+    // initialize height, width
+    dimensions.width = cam_width;
+    dimensions.height = cam_height;
+
     // set default colors if non existant
     if(colornames.size() == 0) {
       vector<COLOR> default_colors;
@@ -96,11 +100,21 @@ namespace blobber {
   };
 
   int ProjectionWindow::get_drawing_area_height() {
-    return vprojbounds.top - vprojbounds.bottom;
+    return cam_height;
   };
 
   int ProjectionWindow::get_drawing_area_width() {
-    return vprojbounds.right - vprojbounds.left;    
+    return cam_width;
+  };
+
+  bool ProjectionWindow::in_visible_bounds(COORD &location) {
+    BOUNDS b(0, cam_height, 0, cam_width);
+    return b.contains(location);
+  };
+
+  bool ProjectionWindow::in_visible_bounds(BOUNDS &bounds) { 
+    BOUNDS b(0, cam_height, 0, cam_width);
+    return b.contains(bounds);
   };
   
   bool ProjectionWindow::on_key_press_event(GdkEventKey* eventData) {
@@ -159,8 +173,8 @@ namespace blobber {
     Glib::RefPtr<Gdk::Window> window = get_window();
     if(window) {
       Gtk::Allocation allocation = get_allocation();
-      width = allocation.get_width();
-      height = allocation.get_height();
+      dimensions.width = allocation.get_width();
+      dimensions.height = allocation.get_height();
       
       cr = window->create_cairo_context();
       return true;
@@ -192,6 +206,13 @@ namespace blobber {
       return;
     set_color(cr, c);
     cr->paint();
+  };
+
+  void ProjectionWindow::set_background_image(string filelocation) {
+    Glib::RefPtr<Gdk::Pixbuf> img = Gdk::Pixbuf::create_from_file(filelocation);
+    Glib::RefPtr<Gdk::Pixbuf> scaled = img->scale_simple(dimensions.width, dimensions.height, Gdk::INTERP_HYPER);
+    get_window()->draw_pixbuf(get_style()->get_black_gc(), scaled, 0, 0, 0, 0, 
+			      dimensions.width, dimensions.height, Gdk::RGB_DITHER_NONE, 0, 0);
   };
 
   void ProjectionWindow::draw_line(COORD source, COORD sink, COLOR c, double line_width) {
@@ -310,8 +331,8 @@ namespace blobber {
 
   // see http://trac.butterfat.net/public/blobber/wiki/DevDocs
   void ProjectionWindow::translate_coordinates(COORD camcords, COORD &projcoords) { 
-    projcoords.x = (int) ((float(camcords.x - vprojbounds.left) / float(vprojbounds.width())) * width);
-    projcoords.y = (int) ((float(camcords.y - vprojbounds.top) / float(vprojbounds.height())) * height);
+    projcoords.x = (int) ((float(camcords.x - vprojbounds.left) / float(vprojbounds.width())) * dimensions.width);
+    projcoords.y = (int) ((float(camcords.y - vprojbounds.top) / float(vprojbounds.height())) * dimensions.height);
   };
 
   void ProjectionWindow::clear(COLOR c) {

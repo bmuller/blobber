@@ -64,3 +64,9 @@ if COLORRANDOMIZER
   pkglib_LTLIBRARIES += libcolorrandomizer.la
   libcolorrandomizer_la_SOURCES = color_randomizer/color_randomizer.cpp
 endif
+
+if DUCKHUNT
+  pkglib_LTLIBRARIES += libduckhunt.la
+  libduckhunt_la_SOURCES = duckhunt/duckhunt.cpp
+  nobase_dist_pkgdata_DATA += duckhunt/duck.png duckhunt/background.png
+endif
