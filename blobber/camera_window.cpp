@@ -22,7 +22,7 @@ namespace blobber {
   using namespace std;
 
   CameraWindow::CameraWindow() : area(), table(2, 15), options_window(&area), description() { 
-    set_default_size(area.width, area.height+50);
+    set_default_size(area.dimensions.width, area.dimensions.height+50);
     add(m_Box);
 
     //Create actions for menus and toolbars:

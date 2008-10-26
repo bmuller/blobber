@@ -14,7 +14,7 @@ namespace blobber {
     BOUNDS vprojbounds;
     COLOR current_color;
     
-    ProjectionWindow(int cw, int ch);
+    ProjectionWindow(DIMENSION _cam_dimensions);
     void finish();
     void draw_line(COORD source, COORD sink, COLOR c, double line_width=2.0);
     void draw_point(COORD coords, COLOR c);
@@ -31,8 +31,7 @@ namespace blobber {
     bool on_key_press_event(GdkEventKey* eventData);
     void show_message(string msg, COLOR c=WHITE);
     void set_color(Cairo::RefPtr<Cairo::Context> cr, COLOR c);
-    int get_drawing_area_width();
-    int get_drawing_area_height();
+    void get_drawing_area_dimensions(DIMENSION &d);
 
     bool in_visible_bounds(COORD &location);
     bool in_visible_bounds(BOUNDS &bounds);
@@ -40,7 +39,7 @@ namespace blobber {
     // translate coordinates from camera coordinates to projection window coordinates
     void translate_coordinates(COORD camcords, COORD &projcoords);
   protected:
-    int cam_height, cam_width;
+    DIMENSION cam_dimensions;
     Configuration *config;
     // this var tells the window to draw the align graphics (green circles) on expose
     bool on_expose_event(GdkEventExpose* event);

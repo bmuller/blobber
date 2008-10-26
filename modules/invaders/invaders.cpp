@@ -57,7 +57,7 @@ void Invaders::init(Camarea &area, ProjectionWindow &pw) {
 
   // initialize aliens (5 in this case)
   for (int i = 0; i < 5 + level; i++) {
-    aliens.push_back(Alien(COORD(area.bounds.left + rand() % area.width, area.bounds.top)));
+    aliens.push_back(Alien(COORD(area.bounds.left + rand() % area.dimensions.width, area.bounds.top)));
   }
 }
 
@@ -86,7 +86,7 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
   // if the game was just paused, draw "Pause"
   if(paused == PAUSED) {
     paused = WAIT;
-    pw.translate_coordinates( COORD( (area.width - pau->get_width() ) / 2 , (area.height - pau->get_height() ) / 2 ), t );
+    pw.translate_coordinates( COORD( (area.dimensions.width - pau->get_width() ) / 2 , (area.dimensions.height - pau->get_height() ) / 2 ), t );
     window->draw_pixbuf(pw.get_style()->get_black_gc(),
                         pau, 0, 0, t.x, t.y, 
                         pau->get_width(),
@@ -96,7 +96,7 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
   } 
   if(paused == RESET) { 
     paused = NORMAL; 
-    pw.translate_coordinates( COORD( (area.width - pau->get_width() ) / 2 , (area.height - pau->get_height() ) / 2 ), t );
+    pw.translate_coordinates( COORD( (area.dimensions.width - pau->get_width() ) / 2 , (area.dimensions.height - pau->get_height() ) / 2 ), t );
     window->draw_pixbuf(pw.get_style()->get_black_gc(), 
                         pau_blk, 0, 0, t.x, t.y, 
                         pau->get_width(), 
@@ -125,11 +125,11 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
                         Gdk::RGB_DITHER_NONE, 0, 0);
     if ( it->in_bounds( cross ) ) { 
       kills.push_back(Explosion(it->loc));
-      it->reset(COORD(area.bounds.left + rand() % (area.width-80), area.bounds.top));
+      it->reset(COORD(area.bounds.left + rand() % (area.dimensions.width-80), area.bounds.top));
       score++;
     }
     else if ( (it->loc.y += level * it->speed) > area.bounds.bottom - ali[0]->get_height() ) { 
-      it->reset(COORD(area.bounds.left + rand() % (area.width-80), area.bounds.top));
+      it->reset(COORD(area.bounds.left + rand() % (area.dimensions.width-80), area.bounds.top));
     }
     pw.translate_coordinates(it->loc, t);
     window->draw_pixbuf(pw.get_style()->get_black_gc(), 

@@ -42,7 +42,10 @@ void MovableShapes::init(Camarea &area, ProjectionWindow &pw) {
   CRANGE range(COLOR(string_to_int(red), string_to_int(blue), string_to_int(green)));
   register_poi_criteria(area, range, 1);
 
-  COORD middle(area.width/2, area.height/2);
+  DIMENSION visible_dimensions;
+  pw.get_drawing_area_dimensions(visible_dimensions);
+
+  COORD middle(visible_dimensions.width/2, visible_dimensions.height/2);
   MovableSquare *square = new MovableSquare(20, middle, BLUE);
   shapes.push_back(square);
 

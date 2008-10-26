@@ -207,6 +207,10 @@ namespace blobber {
       width = _width;
       height = _height;
     };
+    DIMENSION(const DIMENSION &d) {
+      width = d.width;
+      height = d.height;
+    };
     void copy(DIMENSION &d) {
       width = d.width;
       height = d.height;

@@ -57,7 +57,7 @@ namespace blobber {
 //    win.area.set_device(dev);
   };
 
-  Application::Application() : win(), proj(win.area.width, win.area.height), aligned(false) {
+  Application::Application() : win(), proj(win.area.dimensions), aligned(false) {
     config = Configuration::get_config();   
 
     if(win.area.hascam) {
@@ -69,7 +69,7 @@ namespace blobber {
 
     // until we do an alignment, just set the projection area and camarea bounds to be the 
     // full visible area of camera
-    BOUNDS b(0, win.area.height, 0, win.area.width);
+    BOUNDS b(0, win.area.dimensions.height, 0, win.area.dimensions.width);
     win.area.set_bounds(b);
     proj.set_bounds(b);
     
@@ -167,23 +167,23 @@ namespace blobber {
       
     BOUNDS b;
     COORD coord;
-    b.top = win.area.height;
-    b.left = win.area.width;
+    b.top = win.area.dimensions.height;
+    b.left = win.area.dimensions.width;
     b.right = b.bottom = 0;
     unsigned char * data = (unsigned char *) win.area.frame->data;
-    for(int index=0; index < (win.area.height*win.area.width); index++) {
+    for(int index=0; index < (win.area.dimensions.height*win.area.dimensions.width); index++) {
       // looking for blue
       if(data[index*4] > 205 && data[index*4+1] < 190 && data[index*4+2] < 150) {
-	coord.x = index % win.area.width;
-	coord.y = index / win.area.width;
+	coord.x = index % win.area.dimensions.width;
+	coord.y = index / win.area.dimensions.width;
 	b.update(coord);
       }
     }
     
-    if(b.right == b.bottom && b.left == win.area.width) {
+    if(b.right == b.bottom && b.left == win.area.dimensions.width) {
       b.top = b.left = 0;
-      b.bottom = win.area.height;
-      b.right = win.area.width;
+      b.bottom = win.area.dimensions.height;
+      b.right = win.area.dimensions.width;
     } else {
       aligned = true;
       win.area.set_bounds(b);

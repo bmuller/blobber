@@ -40,8 +40,10 @@ void Duckhunt::projection_window_exposed(ProjectionWindow &pw) {
 
 void Duckhunt::init(Camarea &area, ProjectionWindow &pw) {
   direction = 1;
+  DIMENSION drawing_area;
+  pw.get_drawing_area_dimensions(drawing_area);
 
-  COORD center((pw.get_drawing_area_width() / 2), (pw.get_drawing_area_height() / 2));
+  COORD center((drawing_area.width / 2), (drawing_area.height / 2));
 
   string filelocation;
   get_resource_path(filelocation, "duck.png");

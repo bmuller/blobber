@@ -28,7 +28,7 @@ using namespace std;
 
  public:
    bool hascam, manual_align;
-   int height, width;
+   DIMENSION dimensions;
    Frame *frame;
    BOUNDS bounds;
    

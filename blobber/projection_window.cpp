@@ -21,8 +21,8 @@
 namespace blobber {
   using namespace std;
 
-  ProjectionWindow::ProjectionWindow(int cw, int ch) : is_fullscreen(false), cam_width(cw), cam_height(ch), need_alignment(false) {
-    resize(cam_width, cam_height);
+  ProjectionWindow::ProjectionWindow(DIMENSION _cam_dimensions) : is_fullscreen(false), need_alignment(false), cam_dimensions(_cam_dimensions) {
+    resize(cam_dimensions.width, cam_dimensions.height);
     i_exposed_myself = false;
 
     config = Configuration::get_config();
@@ -32,8 +32,7 @@ namespace blobber {
     config->get_keys(colornames, groupname);
 
     // initialize height, width
-    dimensions.width = cam_width;
-    dimensions.height = cam_height;
+    dimensions.copy(cam_dimensions);
 
     // set default colors if non existant
     if(colornames.size() == 0) {
@@ -99,21 +98,17 @@ namespace blobber {
 #endif	
   };
 
-  int ProjectionWindow::get_drawing_area_height() {
-    return cam_height;
-  };
-
-  int ProjectionWindow::get_drawing_area_width() {
-    return cam_width;
+  void ProjectionWindow::get_drawing_area_dimensions(DIMENSION &d) {
+    d.copy(cam_dimensions);
   };
 
   bool ProjectionWindow::in_visible_bounds(COORD &location) {
-    BOUNDS b(0, cam_height, 0, cam_width);
+    BOUNDS b(0, cam_dimensions.height, 0, cam_dimensions.width);
     return b.contains(location);
   };
 
   bool ProjectionWindow::in_visible_bounds(BOUNDS &bounds) { 
-    BOUNDS b(0, cam_height, 0, cam_width);
+    BOUNDS b(0, cam_dimensions.height, 0, cam_dimensions.width);
     return b.contains(bounds);
   };
   

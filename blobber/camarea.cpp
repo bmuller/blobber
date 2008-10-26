@@ -67,15 +67,15 @@ namespace blobber {
     try {
       fg = FrameGrabberFactory::create(device);
       frame = fg->makeFrame();
-      width = frame->width;
-      height = frame->height;
+      dimensions.width = frame->width;
+      dimensions.height = frame->height;
       hascam = true;
     } catch(NoSuchVideoDeviceException &e) {
       debug("No video device found");
       noCam = Cairo::ImageSurface::create_from_png(string(DATAROOTDIR) + string("/nocam.png"));
       hascam = false;
-      width = 352;
-      height = 288;
+      dimensions.width = 352;
+      dimensions.height = 288;
     }
     catch(exception &e)
     {
@@ -83,8 +83,8 @@ namespace blobber {
       debug(e.what());
       noCam = Cairo::ImageSurface::create_from_png(string(DATAROOTDIR) + string("/nocam.png"));
       hascam = false;
-      width = 352;
-      height = 288;
+      dimensions.width = 352;
+      dimensions.height = 288;
     }
   };
   
@@ -98,7 +98,7 @@ namespace blobber {
 #ifdef DEBUG
     if(hascam) {
       unsigned char * data = (unsigned char *) frame->data;
-      int index = (width * (int) event->y) + (int) event->x;
+      int index = (dimensions.width * (int) event->y) + (int) event->x;
       cout << " R:" << (int) data[index*4+2] << " G:" << (int) data[index*4+1] << " B:" << (int) data[index*4] << endl;
     }
     cout.flush();
@@ -139,7 +139,7 @@ namespace blobber {
     blob.set(0, 0, 0);
     for(int x=bounds.left; x<bounds.right; x++) {
       for(int y=bounds.top; y<bounds.bottom; y++) {
-	int index = x+(y*width);
+	int index = x+(y*dimensions.width);
 	COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
 	if(pixelcolor.brighter_than(blob))
 	  blob.copy(pixelcolor);
@@ -175,7 +175,7 @@ namespace blobber {
     // iterate through the pixel data for the given criteria
     for(int x=bounds.left; x<bounds.right; x++) {
       for(int y=bounds.top; y<bounds.bottom; y++) {
-	int index = x+(y*width);
+	int index = x+(y*dimensions.width);
 	COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
 	// if pixel matches default criteria
 	if(default_criteria.contains(pixelcolor)) {
@@ -200,7 +200,7 @@ namespace blobber {
     // iterate through the pixel data for the given criteria
     for(int x=bounds.left; x<bounds.right; x++) {
       for(int y=bounds.top; y<bounds.bottom; y++) {
-	int index = x+(y*width);
+	int index = x+(y*dimensions.width);
 	COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
 	if(criteria.contains(pixelcolor)) {
 	  PIXEL p(pixelcolor, COORD(x, y));
@@ -223,7 +223,7 @@ namespace blobber {
 	surface = noCam;
       }
       context->set_source(surface, 0.0, 0.0);
-      context->rectangle (0.0, 0.0, width, height);
+      context->rectangle (0.0, 0.0, dimensions.width, dimensions.height);
       context->clip();
       context->paint(); 
     }
@@ -234,25 +234,25 @@ namespace blobber {
     unsigned char * data = (unsigned char *) frame->data;
 
     // These will place a border on the camera window to show what it "sees"                                                                                          
-    for(int index=(b.top*width+b.left); index<(b.top*width+b.right); index++) {
+    for(int index=(b.top*dimensions.width+b.left); index<(b.top*dimensions.width+b.right); index++) {
       data[index*4] = 0;
       data[index*4+1] = 0;
       data[index*4+2] = 210;
     }
 
-    for(int index=(b.bottom*width+b.left); index<(b.bottom*width+b.right); index++) {
+    for(int index=(b.bottom*dimensions.width+b.left); index<(b.bottom*dimensions.width+b.right); index++) {
       data[index*4] = 0;
       data[index*4+1] = 0;
       data[index*4+2] = 210;
     }
     
-    for(int index=(b.top*width+b.left); index<(b.bottom*width+b.left); index+=width) {
+    for(int index=(b.top*dimensions.width+b.left); index<(b.bottom*dimensions.width+b.left); index+=dimensions.width) {
       data[index*4] = 0;
       data[index*4+1] = 0;
       data[index*4+2] = 210;
     }
     
-    for(int index=(b.top*width+b.right); index<(b.bottom*width+b.right); index+=width) {
+    for(int index=(b.top*dimensions.width+b.right); index<(b.bottom*dimensions.width+b.right); index+=dimensions.width) {
       data[index*4] = 0;
       data[index*4+1] = 0;
       data[index*4+2] = 210;
