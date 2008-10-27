@@ -22,11 +22,12 @@ using namespace std;
 using namespace blobber;
 
 Duckhunt::Duckhunt() : ModInterface("duckhunt", "like the old nintendo game") { 
-
+  duck = NULL;
 };
 
-void Duckhunt::destroy() {
-  delete duck;
+Duckhunt::~Duckhunt() {
+  if(duck != NULL) 
+    delete duck;
 };
 
 void Duckhunt::projection_window_exposed(ProjectionWindow &pw) {

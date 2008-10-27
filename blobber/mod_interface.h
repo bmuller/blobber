@@ -5,10 +5,10 @@ namespace blobber {
   public:
     string name, description;
     ModInterface(string n, string d="No description");
+    virtual ~ModInterface() {};
     virtual void update(Camarea &area, ProjectionWindow &pw) = 0;
     virtual void clear() {};
     virtual void init(Camarea &area, ProjectionWindow &pw) {};
-    virtual void destroy() {};
     virtual void projection_window_exposed(ProjectionWindow &pw) {};
     /**
        Get a path for the given resource file.

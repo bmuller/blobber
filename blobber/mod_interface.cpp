@@ -89,7 +89,8 @@ namespace blobber {
 	ModInterface * mod = load_module(modname, false);
 	mods[mod->name] = mod->description;
 	files[mod->name] = modname;
-	delete mod;
+	// not resident, so don't need to delete
+	//delete mod;
       }
     }
   };

@@ -5,6 +5,7 @@ using namespace blobber;
 class LaserTag : public ModInterface {
  public:
   LaserTag();
+  ~LaserTag() {};
   void update(Camarea &area, ProjectionWindow &pw);
   void init(Camarea &area, ProjectionWindow &pw);
  protected:
