@@ -29,5 +29,7 @@ namespace blobber {
     // module file name by module name;
     std::map<string, string> modFiles;
     Configuration *config;
+    void brightness_changed();
+    void contrast_changed();
   };
 };

@@ -114,6 +114,29 @@ FrameGrabberOne::~FrameGrabberOne() {
   close(fd);
 };
 
+void FrameGrabberOne::set_contrast(int contrast) {
+  string scontrast;
+  num_to_string(contrast, scontrast);
+  debug("setting contrast to " + scontrast);
+  picture.contrast = 256 * contrast;
+  if (ioctl(fd, VIDIOCSPICT, &picture) < 0 ) {
+    close(fd);
+    throw CameraReadException(" set picture attributes failed");
+  }
+};
+
+void FrameGrabberOne::set_brightness(int brightness) {
+  string sbrightness;
+  num_to_string(brightness, sbrightness);
+  debug("setting brightness to " + sbrightness);
+  picture.brightness = 256 * brightness;
+  if (ioctl(fd, VIDIOCSPICT, &picture) < 0 ) {
+    close(fd);
+    throw CameraReadException(" set picture attributes failed");
+  }
+};
+
+
 Frame * FrameGrabberOne::makeFrame() {
   int bpp = 0;
   switch (picture.palette) {

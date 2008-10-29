@@ -7,7 +7,9 @@ class FrameGrabber {
  public:
   virtual Frame * makeFrame() = 0;
   virtual void grabFrame(Frame *frame) = 0;
-  virtual ~FrameGrabber(){};
+  virtual ~FrameGrabber() {};
+  virtual void set_contrast(int contrast) {};
+  virtual void set_brightness(int brightness) {};
 };
 
 class FrameGrabberFactory {
@@ -36,6 +38,8 @@ class FrameGrabberOne : public FrameGrabber {
   ~FrameGrabberOne();
   Frame * makeFrame();
   void grabFrame(Frame *frame);
+  void set_contrast(int contrast);
+  void set_brightness(int brightness);
 };
 #endif
 

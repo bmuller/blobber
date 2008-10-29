@@ -51,6 +51,16 @@ namespace blobber {
     }
   };
 
+  void Camarea::set_brightness(int brightness) {
+    if(!hascam) return;
+    fg->set_brightness(brightness);
+  };
+
+  void Camarea::set_contrast(int contrast) {
+    if(!hascam) return;
+    fg->set_contrast(contrast);
+  };
+  
   void Camarea::set_device(string _device) { 
     hascam = false;
     device = _device;

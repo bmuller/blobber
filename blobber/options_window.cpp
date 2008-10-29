@@ -24,8 +24,8 @@ namespace blobber {
   OptionsWindow::OptionsWindow(Camarea *cam) : 
     area(cam), 
     okButton(Gtk::Stock::OK),
-    brightnessScale(1, 100, 1.0),
-    contrastScale(1, 100, 1.0),
+    brightnessScale(1, 128, 1.0),
+    contrastScale(1, 256, 1.0),
     poiCriteriaWindow(1, 100, 1.0),
     lblCamDevice("Camera devices: "),
     modsFrame("Available Modules"),
@@ -47,12 +47,15 @@ namespace blobber {
 
     // Get the brightness and contrast from the config file
     string slidePosition;
-    config->get_set("brightness", slidePosition, "50");
+    config->get_set("brightness", slidePosition, "64");
     brightnessScale.set_value(string_to_int(slidePosition));
-    config->get_set("contrast", slidePosition, "50");
+    config->get_set("contrast", slidePosition, "32");
     contrastScale.set_value(string_to_int(slidePosition));
     config->get_set("default_criteria_window", slidePosition, DEFAULT_CRITERIA_WINDOW_SIZE);
     poiCriteriaWindow.set_value(string_to_int(slidePosition));
+    // after loading settings, need to update camera
+    brightness_changed();
+    contrast_changed();
 
     add(mainBox);
     mainBox.pack_start(modsFrame, Gtk::PACK_SHRINK);
@@ -67,14 +70,16 @@ namespace blobber {
     camDevice.pack_start(lblCamDevice, Gtk::PACK_SHRINK);
     modsFrame.add(modsBox);
 
+    brightnessScale.signal_value_changed().connect(sigc::mem_fun(*this, &OptionsWindow::brightness_changed));
+    contrastScale.signal_value_changed().connect(sigc::mem_fun(*this, &OptionsWindow::contrast_changed));    
+
+
     for(std::map<string, string>::iterator it=availableModules.begin(); it!=availableModules.end(); it++) {
       string modname = it->first;
       string description = it->second;
       modButtons[modname] = Gtk::manage(new Gtk::CheckButton(modname + ": " + description));
-      for (vector<string>::iterator itt = preLoadedMods.begin(); itt < preLoadedMods.end(); itt++)
-      {
-	      if (*itt == modFiles[modname])
-	      {
+      for (vector<string>::iterator itt = preLoadedMods.begin(); itt < preLoadedMods.end(); itt++) {
+	      if (*itt == modFiles[modname]) {
 		      modButtons[modname]->set_active();
 		      break;
 	      }
@@ -89,9 +94,21 @@ namespace blobber {
       if(files[i].substr(0,5).compare("video") == 0)
         cboCamDevice.append_text(Glib::build_filename(devDir, files[i]));
     }
-
+    string device;
+    config->get("device", device, DEFAULT_DEVICE);
+    cboCamDevice.set_active_text(device);
     camDevice.pack_start(cboCamDevice, Gtk::PACK_SHRINK);
     show_all_children();
+  };
+
+  void OptionsWindow::contrast_changed() {
+    int contrast = (int) contrastScale.get_value();
+    area->set_contrast(contrast);
+  };
+
+  void OptionsWindow::brightness_changed() {
+    int brightness = (int) brightnessScale.get_value();
+    area->set_brightness(brightness);
   };
 
   void OptionsWindow::ok() {
