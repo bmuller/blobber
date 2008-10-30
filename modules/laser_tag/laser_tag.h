@@ -11,5 +11,6 @@ class LaserTag : public ModInterface {
  protected:
   COORD lastpoint;
   unsigned int missing_counter;
-  vector<COORD> points;
+  TIMEKEEPER timekeeper;
+  double line_width;
 };

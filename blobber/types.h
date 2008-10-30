@@ -242,4 +242,20 @@ namespace blobber {
 
 #define HALF_PROPORTION PROPORTION(0.5, 0.5)
 
+  struct TIMEKEEPER {
+    clock_t current;
+    int clocks_per_millisecond;
+    TIMEKEEPER() {
+      current = clock();
+      clocks_per_millisecond = (CLOCKS_PER_SEC / 1000);
+    };
+    // get milliseconds since last called
+    long int set_marker() {
+      clock_t old = current;   
+      current = clock();
+      return (current - old) / clocks_per_millisecond;
+    };
+  };
 };
+
+
