@@ -22,7 +22,7 @@ namespace blobber {
 
   using namespace std;
 
-  Camarea::Camarea() : device(), hascam(true), manual_align(false), fg(NULL), frame(NULL) {
+  Camarea::Camarea() : device(), hascam(true), manual_align(false), fg(NULL), frame(NULL), mouse_clicked(false) {
     add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
     string dev, red, green, blue;    
     Configuration *config = Configuration::get_config();
@@ -64,13 +64,11 @@ namespace blobber {
   void Camarea::set_device(string _device) { 
     hascam = false;
     device = _device;
-    if(fg)
-    {
+    if(fg) {
       delete fg;
       fg = NULL;
     };
-    if(frame)
-    {
+    if(frame) {
       delete frame;
       frame = NULL;
     };
@@ -82,16 +80,14 @@ namespace blobber {
       hascam = true;
     } catch(NoSuchVideoDeviceException &e) {
       debug("No video device found");
-      noCam = Cairo::ImageSurface::create_from_png(string(DATAROOTDIR) + string("/nocam.png"));
+      noCam = Cairo::ImageSurface::create_from_png(Glib::build_filename(string(DATAROOTDIR), "nocam.png"));
       hascam = false;
       dimensions.width = 352;
       dimensions.height = 288;
-    }
-    catch(exception &e)
-    {
+    } catch(exception &e) {
       // not sure if the above catch is necessary?
       debug(e.what());
-      noCam = Cairo::ImageSurface::create_from_png(string(DATAROOTDIR) + string("/nocam.png"));
+      noCam = Cairo::ImageSurface::create_from_png(Glib::build_filename(string(DATAROOTDIR), "nocam.png"));
       hascam = false;
       dimensions.width = 352;
       dimensions.height = 288;
@@ -103,6 +99,11 @@ namespace blobber {
     bounds.copy(b);
   };
 
+  bool Camarea::on_motion_notify_event(GdkEventMotion* event) {  
+    COORD c((int) event->x, (int) event->y);
+    if(mouse_clicked && hascam && c.distance_from(mouse_click) > 2) 
+      mouse_drawing.from_coords(mouse_click, c);
+  };
 
   bool Camarea::on_button_press_event(GdkEventButton* event) { 
 #ifdef DEBUG
@@ -114,12 +115,14 @@ namespace blobber {
     cout.flush();
 #endif
     if(hascam) {
+      mouse_clicked = true;
       mouse_click.x = (int) event->x;
       mouse_click.y = (int) event->y;
     }
   };
 
   bool Camarea::on_button_release_event(GdkEventButton* event) { 
+    mouse_clicked = false;
     Configuration * config = Configuration::get_config();
     COORD c((int) event->x, (int) event->y);
     // event->button is 1 if left mouse button, 3 is right mouse button
@@ -240,32 +243,32 @@ namespace blobber {
   };
 
   
-  void Camarea::draw_bounds(BOUNDS &b) {
+  void Camarea::draw_bounds(BOUNDS &b, COLOR c) {
     unsigned char * data = (unsigned char *) frame->data;
 
     // These will place a border on the camera window to show what it "sees"                                                                                          
     for(int index=(b.top*dimensions.width+b.left); index<(b.top*dimensions.width+b.right); index++) {
-      data[index*4] = 0;
-      data[index*4+1] = 0;
-      data[index*4+2] = 210;
+      data[index*4] = c.blue;
+      data[index*4+1] = c.green;
+      data[index*4+2] = c.red;
     }
 
     for(int index=(b.bottom*dimensions.width+b.left); index<(b.bottom*dimensions.width+b.right); index++) {
-      data[index*4] = 0;
-      data[index*4+1] = 0;
-      data[index*4+2] = 210;
+      data[index*4] = c.blue;
+      data[index*4+1] = c.green;
+      data[index*4+2] = c.red;
     }
     
     for(int index=(b.top*dimensions.width+b.left); index<(b.bottom*dimensions.width+b.left); index+=dimensions.width) {
-      data[index*4] = 0;
-      data[index*4+1] = 0;
-      data[index*4+2] = 210;
+      data[index*4] = c.blue;
+      data[index*4+1] = c.green;
+      data[index*4+2] = c.red;
     }
     
     for(int index=(b.top*dimensions.width+b.right); index<(b.bottom*dimensions.width+b.right); index+=dimensions.width) {
-      data[index*4] = 0;
-      data[index*4+1] = 0;
-      data[index*4+2] = 210;
+      data[index*4] = c.blue;
+      data[index*4+1] = c.green;
+      data[index*4+2] = c.red;
     }
   };
 

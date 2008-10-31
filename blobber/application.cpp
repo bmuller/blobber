@@ -134,6 +134,10 @@ namespace blobber {
       win.area.draw_bounds(visible_bounds);
     }
 
+    if(win.area.mouse_clicked) {
+      win.area.draw_bounds(win.area.mouse_drawing, BLUE);
+    }
+
     // if an expose event occured in project window alert modules
     if(win.area.hascam && proj.i_exposed_myself) {
       for(unsigned int i=0; i<mods.size(); i++) {

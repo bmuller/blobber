@@ -30,7 +30,11 @@ using namespace std;
    bool hascam, manual_align;
    DIMENSION dimensions;
    Frame *frame;
-   BOUNDS bounds;
+   // bounds are the visible bounds in the camera's field of vision, 
+   // and mouse_drawing is the bounds being drawn by the mouse 
+   // (which will exist every time mouse_clicked is true)
+   BOUNDS bounds, mouse_drawing;
+   bool mouse_clicked;
    
    Camarea();
    ~Camarea();
@@ -42,8 +46,9 @@ using namespace std;
    void update_frame();
    void set_device(string _device);
    void set_bounds(BOUNDS &b);
-   void draw_bounds(BOUNDS &b);
+   void draw_bounds(BOUNDS &b, COLOR c=RED);
    void register_poi_criteria(string modname, CRANGE range, int maxPoints);
+   bool on_motion_notify_event (GdkEventMotion* event);  
    // register poi but use the default criteria
    void register_poi(string modname, int maxPoints);
    void get_poi(string modname, vector<PIXEL> &poi);

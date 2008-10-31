@@ -44,7 +44,7 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
     long int interval = timekeeper.set_marker();
     // if the time since our last call is under two seconds, set line width appropriately
     if(interval < 2000) {
-      line_width = (double) interval / 500.0;
+      line_width = ((double) interval / 500.0) + 2;
     } else {
       line_width = 5.0;
     }
