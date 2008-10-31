@@ -48,9 +48,12 @@ namespace blobber {
       blue = string_to_int(parts[1]);
       green = string_to_int(parts[2]);
     };
-	bool brighter_than(COLOR &c) {
-	  return red > c.red || green > c.green || blue > c.blue;
-	};
+    bool brighter_than(COLOR &c) {
+      // make sure at least one color is brighter than other color
+      bool result = red > c.red || green > c.green || blue > c.blue;
+      // if any new colors are less bright shouldn't be "too much" less bright
+      return result && (c.red - red) < 50 && (c.green - green) < 50 && (c.blue - blue) < 50;
+    };
   };
   
 #define RED COLOR(255,0,0)
