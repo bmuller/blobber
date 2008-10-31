@@ -20,6 +20,20 @@
 
 namespace blobber {
 
+template<class T>
+string showbits(T val) {
+  string out;
+  char cmp, *ptr = (char*) &val;
+  for(unsigned int i = 0; i < sizeof(T); i++) {
+    cmp = 0x01;
+    for(unsigned int j = 0; j < 8; j++) {
+      if( (*(ptr + i) & (cmp << j) ) > 0) { out += '1'; }
+      else { out += '0'; }
+    }
+  }
+  return(out);
+}
+
   using namespace std;
 
   static int xioctl(int fd, int request, void *arg) {
@@ -182,4 +196,45 @@ namespace blobber {
     }
   };
 
-};
+  void FrameGrabberTwo::set_contrast(int contrast) {\
+    struct v4l2_queryctrl qcon;
+    struct v4l2_control con;
+    qcon.id = V4L2_CID_CONTRAST;
+    // query the control structure for contrast
+    if (ioctl(fd, VIDIOC_QUERYCTRL, &qcon) < 0) {
+      close(fd);
+      throw CameraReadException(" query contrast control failed: " + string(strerror(errno)));
+    }
+    if(qcon.flags & (V4L2_CTRL_FLAG_DISABLED | V4L2_CTRL_FLAG_GRABBED | V4L2_CTRL_FLAG_READ_ONLY) ) { return; }
+    con.id = qcon.id;
+    if(contrast < qcon.minimum) { con.value = qcon.minimum; }
+    else if(contrast > qcon.maximum) { con.value = qcon.maximum; }
+    else { con.value = contrast; }
+    // set the control structure for contrast
+    if (ioctl(fd, VIDIOC_S_CTRL, &con) < 0) {
+      close(fd);
+      throw CameraReadException(" error setting contrast: " + string(strerror(errno)));
+    }
+  };
+
+  void FrameGrabberTwo::set_brightness(int brightness) {
+    struct v4l2_queryctrl qcon;
+    struct v4l2_control con;
+    qcon.id = V4L2_CID_BRIGHTNESS;
+    // query the control structure for brightness
+    if (ioctl(fd, VIDIOC_QUERYCTRL, &qcon) < 0) {
+      close(fd);
+      throw CameraReadException(" query brightness control failed: " + string(strerror(errno)));
+    }
+    if(qcon.flags & (V4L2_CTRL_FLAG_DISABLED | V4L2_CTRL_FLAG_GRABBED | V4L2_CTRL_FLAG_READ_ONLY) ) { return; }
+    con.id = qcon.id;
+    if(brightness < qcon.minimum) { con.value = qcon.minimum; }
+    else if(brightness > qcon.maximum) { con.value = qcon.maximum; }
+    else { con.value = brightness; }
+    // set the control structure for brightness
+    if (ioctl(fd, VIDIOC_S_CTRL, &con) < 0) {
+      close(fd);
+      throw CameraReadException(" error setting brightness: " + string(strerror(errno)));
+    }
+  };
+}; //  blobber namespace

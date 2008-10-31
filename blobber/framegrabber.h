@@ -49,7 +49,7 @@ class FrameGrabberTwo : public FrameGrabber {
  public:
   int fd;                            ///< File handle for open device                                                    
   struct v4l2_capability caps;       ///< Capabilities                                                                   
-  struct v4l2_format fmt;
+  struct v4l2_format fmt;            ///< Buffer/Pixel format
   struct v4l2_requestbuffers req;
   struct buffer *buffers;
   unsigned int n_buffers;
@@ -58,6 +58,8 @@ class FrameGrabberTwo : public FrameGrabber {
   ~FrameGrabberTwo();
   Frame * makeFrame();
   void grabFrame(Frame *frame);
+  void set_contrast(int contrast);
+  void set_brightness(int brightness);
 };
 #endif
 
