@@ -167,6 +167,11 @@ namespace blobber {
     bool contains(BOUNDS &b) {
       return b.left >= left && b.right <= right && b.top >= top && b.bottom <= bottom;
     };
+    void random_coordinate(COORD &c) {
+      Glib::Rand rand;
+      c.x = rand.get_int_range(left, right+1);
+      c.y = rand.get_int_range(top, bottom+1);
+    };
   };
 
   struct PIXEL {

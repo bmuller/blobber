@@ -23,11 +23,14 @@ using namespace blobber;
 
 Duckhunt::Duckhunt() : ModInterface("duckhunt", "like the old nintendo game") { 
   duck = NULL;
+  deadduck = NULL;
 };
 
 Duckhunt::~Duckhunt() {
   if(duck != NULL) 
     delete duck;
+  if(deadduck != NULL)
+    delete deadduck;
 };
 
 void Duckhunt::projection_window_exposed(ProjectionWindow &pw) {
@@ -40,10 +43,11 @@ void Duckhunt::projection_window_exposed(ProjectionWindow &pw) {
 };
 
 void Duckhunt::init(Camarea &area, ProjectionWindow &pw) {
-  direction = 1;
+  score = show_dead_count = 0;
+
+  // start duck in middle of screen
   DIMENSION drawing_area;
   pw.get_drawing_area_dimensions(drawing_area);
-
   COORD center((drawing_area.width / 2), (drawing_area.height / 2));
 
   string filelocation;
@@ -51,14 +55,20 @@ void Duckhunt::init(Camarea &area, ProjectionWindow &pw) {
   duck = new Sprite(filelocation, center, COLOR(51, 204, 255));
   duck->paint(pw);
 
+  // make deadduck but don't paint
+  get_resource_path(filelocation, "deadduck.png");
+  deadduck = new Sprite(filelocation, center, COLOR(51, 204, 255));
+
   // get the proprtion we are to the projection window and save it
   duck->dimensions.get_proportion(duck_proportion, pw.dimensions);
 
   // use default CRANGE criteria
   register_poi(area, 2);
 
+  // set up sky area and pick a random coordinate
   BOUNDS sb(0, drawing_area.height-120, 110, drawing_area.width-40); 
   sky.copy(sb);
+  sky.random_coordinate(destination);
 };
 
 
@@ -66,21 +76,36 @@ void Duckhunt::update(Camarea &area, ProjectionWindow &pw) {
   vector<PIXEL> poi;
   get_poi(area, poi);
  
-
+  // see if duck just got shot
   BOUNDS b;
   duck->get_bounds(b);
-  if(!sky.contains(b))
-    direction = -direction;
+  if(b.contains(poi[0].coord)) {
+    duck->clear(pw);
+    deadduck->center.copy(duck->center);
+    deadduck->paint(pw);
+    show_dead_count = 1;
+    score++;
+  }
 
-  //string location;
-  //duck->center.to_s(location);
-  //cout << "location: " << location << endl;
+  if(show_dead_count > 0 && show_dead_count < 100) {
+    show_dead_count++;
+    return;
+  }
 
-  int x = (direction * 10) + duck->center.x;
-  duck->move(COORD(x, duck->center.y), pw);
+  if(show_dead_count > 0) {
+    show_dead_count = 0;
+    deadduck->clear(pw);
+    duck->paint(pw);
+  }
+    
 
-  //int y = (direction * 10) + duck->center.y;
-  //duck->move(COORD(duck->center.x, y), pw);
+  // if duck has arrived at random location, pick a new one
+  if(destination.distance_from(duck->center) < 3)
+    sky.random_coordinate(destination);
+
+  duck->move(4, destination, pw);
+
+
 };
 
 

@@ -40,6 +40,23 @@ namespace blobber {
     paint(pw);
   };
 
+  /** 
+   * Move object a certain distance toward a newcenter
+   * 
+   * @param distance Distance to move
+   * @param newcenter "direction" to move toward
+   * @param pw Projection window to draw on
+   * @param first_clear Whether or not the clear method should be called first
+   */
+  void MovableObject::move(double distance, COORD newcenter, ProjectionWindow &pw, bool first_clear) {
+    double ratio = distance / center.distance_from(newcenter);
+    double xdistance = fabs(double(center.x - newcenter.x));
+    double ydistance = fabs(double(center.y - newcenter.y));
+    newcenter.x = ratio * xdistance;
+    newcenter.y = ratio * ydistance;
+    move(newcenter, pw, first_clear);
+  };
+
   // assume the movable object is just one pixel in size
   void MovableObject::get_bounds(BOUNDS &bounds) {
     BOUNDS b(center.y, center.y, center.x, center.x);

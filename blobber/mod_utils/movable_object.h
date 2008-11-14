@@ -6,6 +6,8 @@ namespace blobber {
     MovableObject(COORD middle, COLOR c);
     // @param first_clear Specify whether or not old position should be cleared
     void move(COORD newcenter, ProjectionWindow &pw, bool first_clear=true);
+    // move distance toward newcenter rather than just moving to newcenter
+    void move(double distance, COORD newcenter, ProjectionWindow &pw, bool first_clear=true);
     virtual bool in_bounds(COORD c) = 0;
     virtual void paint(ProjectionWindow &pw) = 0;
     virtual void clear(ProjectionWindow &pw);

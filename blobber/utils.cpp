@@ -58,18 +58,6 @@ namespace blobber {
     pick = things[rand.get_int_range(0, things.size())];
   };
 
-  /** 
-   * Pick a random coordinate in the given bounds
-   * 
-   * @param b The bounding region to pick a coordinate in
-   * @param c The resulting coordinate
-   */
-  void random_coordinate(BOUNDS &b, COORD &c) {
-    Glib::Rand rand;
-    c.x = rand.get_int_range(b.left, b.right+1);
-    c.y = rand.get_int_range(b.top, b.bottom+1);
-  };
-
   /** convert integer to string */
   void int_to_string(int i, std::string& s) {
     char c_int[100];

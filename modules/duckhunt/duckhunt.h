@@ -11,7 +11,9 @@ class Duckhunt : public ModInterface {
   void projection_window_exposed(ProjectionWindow &pw);
  protected:
   Sprite * duck;
+  Sprite * deadduck;
   PROPORTION duck_proportion;
   BOUNDS sky;
-  int direction;
+  COORD destination;
+  int score, show_dead_count;
 };
