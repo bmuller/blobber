@@ -189,7 +189,7 @@ namespace blobber {
       width_percent = 1.0;
       height_percent = 1.0;
     };
-    PROPORTION(int width, int height) {
+    PROPORTION(double width, double height) {
       width_percent = width;
       height_percent = height;
     };

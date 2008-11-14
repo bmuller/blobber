@@ -24,6 +24,7 @@ using namespace blobber;
 Duckhunt::Duckhunt() : ModInterface("duckhunt", "like the old nintendo game") { 
   duck = NULL;
   deadduck = NULL;
+  xhairs = NULL;
 };
 
 Duckhunt::~Duckhunt() {
@@ -31,11 +32,15 @@ Duckhunt::~Duckhunt() {
     delete duck;
   if(deadduck != NULL)
     delete deadduck;
+  if(xhairs != NULL)
+    delete xhairs;
 };
 
 void Duckhunt::projection_window_exposed(ProjectionWindow &pw) {
   duck->scale(duck_proportion, pw);
   duck->paint(pw);
+
+  deadduck->scale(deadduck_proportion, pw);
 
   string filelocation;
   get_resource_path(filelocation, "background.png");
@@ -44,6 +49,10 @@ void Duckhunt::projection_window_exposed(ProjectionWindow &pw) {
 
 void Duckhunt::init(Camarea &area, ProjectionWindow &pw) {
   score = show_dead_count = 0;
+
+  string sspeed;
+  config_get_set("speed", sspeed, "15.0");
+  speed = string_to_double(sspeed);
 
   // start duck in middle of screen
   DIMENSION drawing_area;
@@ -61,6 +70,9 @@ void Duckhunt::init(Camarea &area, ProjectionWindow &pw) {
 
   // get the proprtion we are to the projection window and save it
   duck->dimensions.get_proportion(duck_proportion, pw.dimensions);
+  deadduck->dimensions.get_proportion(deadduck_proportion, pw.dimensions);
+
+  xhairs = new MovableCrosshairs(10, COORD(0,0), RED, COLOR(51, 204, 255));
 
   // use default CRANGE criteria
   register_poi(area, 2);
@@ -75,11 +87,14 @@ void Duckhunt::init(Camarea &area, ProjectionWindow &pw) {
 void Duckhunt::update(Camarea &area, ProjectionWindow &pw) {
   vector<PIXEL> poi;
   get_poi(area, poi);
- 
+
+  if(poi.size() > 0)
+    xhairs->move(poi[0].coord, pw);
+
   // see if duck just got shot
   BOUNDS b;
   duck->get_bounds(b);
-  if(b.contains(poi[0].coord)) {
+  if(poi.size() > 0 && b.contains(poi[0].coord)) { //duck->in_bounds(poi[0].coord)) {
     duck->clear(pw);
     deadduck->center.copy(duck->center);
     deadduck->paint(pw);
@@ -87,7 +102,7 @@ void Duckhunt::update(Camarea &area, ProjectionWindow &pw) {
     score++;
   }
 
-  if(show_dead_count > 0 && show_dead_count < 100) {
+  if(show_dead_count > 0 && show_dead_count < 10) {
     show_dead_count++;
     return;
   }
@@ -95,17 +110,15 @@ void Duckhunt::update(Camarea &area, ProjectionWindow &pw) {
   if(show_dead_count > 0) {
     show_dead_count = 0;
     deadduck->clear(pw);
-    duck->paint(pw);
-  }
-    
+    sky.random_coordinate(destination);
+    duck->move(destination, pw);
+  }  
 
   // if duck has arrived at random location, pick a new one
-  if(destination.distance_from(duck->center) < 3)
+  if(destination.distance_from(duck->center) < ((speed / 2) + 1))
     sky.random_coordinate(destination);
 
-  duck->move(4, destination, pw);
-
-
+  duck->move(speed, destination, pw);
 };
 
 

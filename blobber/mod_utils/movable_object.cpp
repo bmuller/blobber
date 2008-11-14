@@ -19,16 +19,17 @@
 #include "../blobber.h"
 
 namespace blobber {
-  MovableObject::MovableObject(COORD middle, COLOR c) {
+  MovableObject::MovableObject(COORD middle, COLOR c, COLOR bg) {
     center.copy(middle);
     color.copy(c);
     selected = false;
+    background.copy(bg);
   };
 
   void MovableObject::clear(ProjectionWindow &pw) {
     COLOR oldcolor;
     oldcolor.copy(color);
-    color.copy(BLACK);
+    color.copy(background);
     paint(pw);
     color.copy(oldcolor);
   };
@@ -50,10 +51,10 @@ namespace blobber {
    */
   void MovableObject::move(double distance, COORD newcenter, ProjectionWindow &pw, bool first_clear) {
     double ratio = distance / center.distance_from(newcenter);
-    double xdistance = fabs(double(center.x - newcenter.x));
-    double ydistance = fabs(double(center.y - newcenter.y));
-    newcenter.x = ratio * xdistance;
-    newcenter.y = ratio * ydistance;
+    double xdistance = double(newcenter.x - center.x);
+    double ydistance = double(newcenter.y - center.y);
+    newcenter.x = (ratio * xdistance) + center.x;
+    newcenter.y = (ratio * ydistance) + center.y;
     move(newcenter, pw, first_clear);
   };
 

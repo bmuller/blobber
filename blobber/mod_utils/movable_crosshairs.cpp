@@ -21,9 +21,9 @@
 namespace blobber {
 
   // @param _size is the width and the height
-  MovableCrosshairs::MovableCrosshairs(int _size, COORD center, COLOR c) : MovableObject(center, c) {
+  MovableCrosshairs::MovableCrosshairs(int _size, COORD center, COLOR c, COLOR bg) : MovableObject(center, c, bg) {
     size = _size;
-  }
+  };
 
   bool MovableCrosshairs::in_bounds(COORD c) {
     int hsize = size / 2;

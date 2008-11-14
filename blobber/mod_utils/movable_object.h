@@ -3,7 +3,7 @@ namespace blobber {
   // basically, a moveable sprite
   class MovableObject {
   public:
-    MovableObject(COORD middle, COLOR c);
+    MovableObject(COORD middle, COLOR c, COLOR bg=BLACK);
     // @param first_clear Specify whether or not old position should be cleared
     void move(COORD newcenter, ProjectionWindow &pw, bool first_clear=true);
     // move distance toward newcenter rather than just moving to newcenter
@@ -14,6 +14,6 @@ namespace blobber {
     virtual void get_bounds(BOUNDS &bounds);
     bool selected;
     COORD center;
-    COLOR color;
+    COLOR color, background;
   };
 };

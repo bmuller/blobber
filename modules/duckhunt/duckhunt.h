@@ -12,8 +12,10 @@ class Duckhunt : public ModInterface {
  protected:
   Sprite * duck;
   Sprite * deadduck;
-  PROPORTION duck_proportion;
+  PROPORTION duck_proportion, deadduck_proportion;
   BOUNDS sky;
   COORD destination;
   int score, show_dead_count;
+  double speed;
+  MovableCrosshairs * xhairs;
 };

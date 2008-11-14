@@ -48,9 +48,11 @@ namespace blobber {
   };
 
   int string_to_int(string s) {
-    int i;
-    sscanf(s.c_str(), "%d", &i);
-    return i;
+    return atoi(s.c_str());
+  };
+
+  double string_to_double(string s) {
+    return atof(s.c_str());
   };
 
   template <class T> void random_choice(vector<T> things, T &pick) {

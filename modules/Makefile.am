@@ -68,5 +68,5 @@ endif
 if DUCKHUNT
   pkglib_LTLIBRARIES += libduckhunt.la
   libduckhunt_la_SOURCES = duckhunt/duckhunt.cpp
-  nobase_dist_pkgdata_DATA += duckhunt/duck.png duckhunt/background.png
+  nobase_dist_pkgdata_DATA += duckhunt/duck.png duckhunt/deadduck.png duckhunt/background.png
 endif
