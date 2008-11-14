@@ -54,31 +54,33 @@ void Duckhunt::init(Camarea &area, ProjectionWindow &pw) {
   // get the proprtion we are to the projection window and save it
   duck->dimensions.get_proportion(duck_proportion, pw.dimensions);
 
-  cout << duck_proportion.width_percent << " " << duck_proportion.height_percent << endl;
-
   // use default CRANGE criteria
   register_poi(area, 2);
+
+  BOUNDS sb(0, drawing_area.height-120, 110, drawing_area.width-40); 
+  sky.copy(sb);
 };
 
 
 void Duckhunt::update(Camarea &area, ProjectionWindow &pw) {
   vector<PIXEL> poi;
   get_poi(area, poi);
+ 
 
   BOUNDS b;
   duck->get_bounds(b);
-  if(!pw.in_visible_bounds(b))
+  if(!sky.contains(b))
     direction = -direction;
 
   //string location;
   //duck->center.to_s(location);
   //cout << "location: " << location << endl;
 
-  //int x = (direction * 10) + duck->center.x;
-  //duck->move(COORD(x, duck->center.y), pw);
+  int x = (direction * 10) + duck->center.x;
+  duck->move(COORD(x, duck->center.y), pw);
 
-  int y = (direction * 10) + duck->center.y;
-  duck->move(COORD(duck->center.x, y), pw);
+  //int y = (direction * 10) + duck->center.y;
+  //duck->move(COORD(duck->center.x, y), pw);
 };
 
 

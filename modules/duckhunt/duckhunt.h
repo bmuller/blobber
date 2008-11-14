@@ -12,5 +12,6 @@ class Duckhunt : public ModInterface {
  protected:
   Sprite * duck;
   PROPORTION duck_proportion;
+  BOUNDS sky;
   int direction;
 };

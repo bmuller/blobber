@@ -14,5 +14,6 @@ namespace blobber {
   vector<string> explode(string s, string e);
   // return true if s ends with end, false otherwise
   bool ends_with(string s, string end);
+  void random_coordinate(BOUNDS &b, COORD &c);
 };
 

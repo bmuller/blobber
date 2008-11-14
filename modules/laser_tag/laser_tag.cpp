@@ -30,9 +30,25 @@ LaserTag::LaserTag() : ModInterface("LaserTag", "Basic drawing module"), missing
 void LaserTag::init(Camarea &area, ProjectionWindow &pw) {
   // use default CRANGE criteria
   register_poi(area, 2);
-  timekeeper.set_marker();
 };
 
+/** 
+ * Smooth out the line.
+ * 
+ * @param previous Previous width
+ * @param next Next (new) width
+ * 
+ * @return fixed, smoothed version of next
+ */
+double LaserTag::smooth(double previous, double next) {
+  int sfactor = 1;
+  // if getting bigger
+  if(next > previous && (next - previous) > sfactor)
+    return previous + sfactor;
+  else if(previous > next && (previous - next) > sfactor)
+    return previous - sfactor;
+  return next;
+};
 
 void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
   vector<PIXEL> poi;
@@ -41,16 +57,13 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
   if(poi.size() == 0)
     missing_counter++;
   else {
-    long int interval = timekeeper.set_marker();
-    // if the time since our last call is under two seconds, set line width appropriately
-    if(interval < 2000) {
-      //line_width = (double) interval / 10.0;
-    } else {
-      line_width = 5.0;
-    }
-
-    if(lastpoint.x!=0 && lastpoint.y!=0 && missing_counter < 2)
+    if(lastpoint.x!=0 && lastpoint.y!=0 && missing_counter < 2) {
+      double previous = line_width;
+      line_width = 40.0 / (double) lastpoint.distance_from(poi[0].coord);
+      line_width = min(line_width, 15.0);
+      line_width = smooth(previous, line_width);
       pw.draw_line(lastpoint, poi[0].coord, pw.colors[pw.preferred_color], line_width);    
+    } else line_width = 7.0;
     lastpoint.copy(poi[0].coord);
   }
 
