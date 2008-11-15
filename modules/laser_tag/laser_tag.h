@@ -6,6 +6,7 @@ class LaserTag : public ModInterface {
  public:
   LaserTag();
   ~LaserTag() {};
+  void projection_window_exposed(ProjectionWindow &pw);
   double smooth(double previous, double next);
   void update(Camarea &area, ProjectionWindow &pw);
   void init(Camarea &area, ProjectionWindow &pw);

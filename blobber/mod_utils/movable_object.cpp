@@ -41,6 +41,12 @@ namespace blobber {
     paint(pw);
   };
 
+  bool MovableObject::in_bounds(COORD c, ProjectionWindow &pw) {
+    COORD translated;
+    pw.translate_coordinates(c, translated);
+    return in_bounds(translated);
+  };
+
   /** 
    * Move object a certain distance toward a newcenter
    * 

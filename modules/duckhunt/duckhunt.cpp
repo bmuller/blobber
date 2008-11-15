@@ -92,9 +92,7 @@ void Duckhunt::update(Camarea &area, ProjectionWindow &pw) {
     xhairs->move(poi[0].coord, pw);
 
   // see if duck just got shot
-  BOUNDS b;
-  duck->get_bounds(b);
-  if(poi.size() > 0 && b.contains(poi[0].coord)) { //duck->in_bounds(poi[0].coord)) {
+  if(poi.size() > 0 && duck->in_bounds(poi[0].coord, pw)) {
     duck->clear(pw);
     deadduck->center.copy(duck->center);
     deadduck->paint(pw);

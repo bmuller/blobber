@@ -32,6 +32,13 @@ void LaserTag::init(Camarea &area, ProjectionWindow &pw) {
   register_poi(area, 2);
 };
 
+void LaserTag::projection_window_exposed(ProjectionWindow &pw) {
+  string background;
+  config_get_set("background", background, "");
+  if(background != "")
+    pw.set_background_image(background);
+};
+
 /** 
  * Smooth out the line.
  * 
