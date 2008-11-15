@@ -344,6 +344,7 @@ namespace blobber {
 
   void ProjectionWindow::clear(COLOR c) {
     set_background(c);
+    i_exposed_myself = true;
   };
 
 };
