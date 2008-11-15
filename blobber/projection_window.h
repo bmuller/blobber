@@ -9,6 +9,7 @@ namespace blobber {
     bool is_fullscreen;
     bool need_alignment; 
     bool i_exposed_myself;
+    string current_message;
     // These are the bounds of the visible projection area - see 
     // http://trac.butterfat.net/public/blobber/wiki/DevDocs
     BOUNDS vprojbounds;
@@ -29,7 +30,7 @@ namespace blobber {
     void set_background_image(string filelocation);
     void clear(COLOR c=BLACK);
     bool on_key_press_event(GdkEventKey* eventData);
-    void show_message(string msg, COLOR c=WHITE);
+    void show_message(string msg, COLOR c=WHITE, COLOR clear=BLACK);
     void set_color(Cairo::RefPtr<Cairo::Context> cr, COLOR c);
     void get_drawing_area_dimensions(DIMENSION &d);
 

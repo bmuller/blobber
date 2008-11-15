@@ -45,6 +45,8 @@ void Duckhunt::projection_window_exposed(ProjectionWindow &pw) {
   string filelocation;
   get_resource_path(filelocation, "background.png");
   pw.set_background_image(filelocation);
+
+  //pw.draw_box(COORD(sky.left, sky.top), sky.width(), sky.height(), RED);
 };
 
 void Duckhunt::init(Camarea &area, ProjectionWindow &pw) {
@@ -78,7 +80,7 @@ void Duckhunt::init(Camarea &area, ProjectionWindow &pw) {
   register_poi(area, 2);
 
   // set up sky area and pick a random coordinate
-  BOUNDS sb(0, drawing_area.height-120, 110, drawing_area.width-40); 
+  BOUNDS sb(0, drawing_area.height-100, 120, drawing_area.width-20); 
   sky.copy(sb);
   sky.random_coordinate(destination);
 };
@@ -92,16 +94,24 @@ void Duckhunt::update(Camarea &area, ProjectionWindow &pw) {
     xhairs->move(poi[0].coord, pw);
 
   // see if duck just got shot
-  if(poi.size() > 0 && duck->in_bounds(poi[0].coord, pw)) {
+  if(poi.size() > 0 && duck->center.distance_from(poi[0].coord) < 25 && show_dead_count == 0) {
     duck->clear(pw);
     deadduck->center.copy(duck->center);
     deadduck->paint(pw);
     show_dead_count = 1;
     score++;
+
+    string sscore = "";
+    for(unsigned int i=0; i<score; i++)
+      sscore += "|";
+    pw.show_message("Score: " + sscore, BLACK, COLOR(51, 204, 255));
   }
 
   if(show_dead_count > 0 && show_dead_count < 10) {
     show_dead_count++;
+    COORD ground(deadduck->center.x, sky.bottom);
+    if(deadduck->center.distance_from(ground) > 6)
+      deadduck->move(10, ground, pw);
     return;
   }
 

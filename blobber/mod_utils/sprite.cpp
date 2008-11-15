@@ -27,19 +27,22 @@ namespace blobber {
     dimensions.height = img->get_height();
     // half_dimensions is used to figure out where the center of the dimensions is
     half_dimensions.scale(HALF_PROPORTION, dimensions);
+    untranslated_half_dimensions.copy(half_dimensions);
     blkimg = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, img->get_bits_per_sample(), 
 				 dimensions.width, dimensions.height);
     blkimg->fill(color.to_int());
   };
 
   bool Sprite::in_bounds(COORD c) {
-    return c.x < (center.x + half_dimensions.width) && c.x > (center.x - half_dimensions.width) && \
-      c.y > (center.y - half_dimensions.height) && c.y < (center.y + half_dimensions.height);
+    return c.x < (center.x + untranslated_half_dimensions.width) \
+      && c.x > (center.x - untranslated_half_dimensions.width) \
+      && c.y > (center.y - untranslated_half_dimensions.height) \
+      && c.y < (center.y + untranslated_half_dimensions.height);
   };
 
   void Sprite::paint(ProjectionWindow &pw) {
     // convert coords which are middle to top left
-    COORD old_coord(center.x - half_dimensions.width, center.y - half_dimensions.height);
+    COORD old_coord(center.x - untranslated_half_dimensions.width, center.y - untranslated_half_dimensions.height);
     COORD new_coord;
     pw.translate_coordinates(old_coord, new_coord);
     pw.get_window()->draw_pixbuf(pw.get_style()->get_black_gc(), img, 0, 0, new_coord.x, 
@@ -48,7 +51,7 @@ namespace blobber {
 
   void Sprite::clear(ProjectionWindow &pw) {
     // convert coords which are middle to top left
-    COORD old_coord(center.x - half_dimensions.width, center.y - half_dimensions.height);
+    COORD old_coord(center.x - untranslated_half_dimensions.width, center.y - untranslated_half_dimensions.height);
     COORD new_coord;
     pw.translate_coordinates(old_coord, new_coord);
     pw.get_window()->draw_pixbuf(pw.get_style()->get_black_gc(), blkimg, 0, 0, new_coord.x, 
@@ -56,8 +59,8 @@ namespace blobber {
   };
 
   void Sprite::get_bounds(BOUNDS &bounds) {
-    BOUNDS b(center.y - half_dimensions.height, center.y + half_dimensions.height, 
-	     center.x - half_dimensions.width, center.x + half_dimensions.width);
+    BOUNDS b(center.y - untranslated_half_dimensions.height, center.y + untranslated_half_dimensions.height, 
+	     center.x - untranslated_half_dimensions.width, center.x + untranslated_half_dimensions.width);
     bounds.copy(b);
   };
 

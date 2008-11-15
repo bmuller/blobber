@@ -8,7 +8,8 @@ namespace blobber {
     void clear(ProjectionWindow &pw);
     void get_bounds(BOUNDS &bounds);
     void scale(PROPORTION p, ProjectionWindow &pw);
-    DIMENSION dimensions, half_dimensions;
+    // untranslated_half_dimensions is half of the original image dimensions
+    DIMENSION dimensions, half_dimensions, untranslated_half_dimensions;
   private:
     Glib::RefPtr<Gdk::Pixbuf> img;
     Glib::RefPtr<Gdk::Pixbuf> blkimg;

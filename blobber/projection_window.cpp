@@ -62,6 +62,8 @@ namespace blobber {
     }
     config->get("preferred_color", value, "4"); 
     preferred_color = string_to_int(value);
+
+    current_message = "";
   };
 
   void ProjectionWindow::finish() {
@@ -152,16 +154,26 @@ namespace blobber {
     current_color.copy(c);
   };
 
-  void ProjectionWindow::show_message(string msg, COLOR c) {
+  void ProjectionWindow::show_message(string msg, COLOR c, COLOR clear) {
     Cairo::RefPtr<Cairo::Context> cr;
     if(!get_context(cr))
       return;
 
+    if(current_message != "") {
+      COLOR old_color(current_color);
+      cr->move_to(10, (dimensions.height / 30.0));
+      set_color(cr, clear);
+      cr->show_text(current_message);
+      set_color(cr, old_color);
+    }
+      
+    cr->set_font_size(dimensions.height / 30.0);
     COLOR old_color(current_color);
-    cr->move_to(10, 10);
+    cr->move_to(10, (dimensions.height / 30.0));
     set_color(cr, c);
     cr->show_text(msg);
     set_color(cr, old_color);
+    current_message = msg;
   };
   
   bool ProjectionWindow::get_context(Cairo::RefPtr<Cairo::Context> &cr) {
