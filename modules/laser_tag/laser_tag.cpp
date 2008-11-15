@@ -66,11 +66,12 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
   else {
     if(lastpoint.x!=0 && lastpoint.y!=0 && missing_counter < 2) {
       double previous = line_width;
-      line_width = 40.0 / (double) lastpoint.distance_from(poi[0].coord);
+      line_width = 35.0 / (double) lastpoint.distance_from(poi[0].coord);
       line_width = min(line_width, 15.0);
       line_width = smooth(previous, line_width);
+      cout << line_width << endl;
       pw.draw_line(lastpoint, poi[0].coord, pw.colors[pw.preferred_color], line_width);    
-    } else line_width = 7.0;
+    } else line_width = 15.0;
     lastpoint.copy(poi[0].coord);
   }
 
