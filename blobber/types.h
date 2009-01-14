@@ -13,7 +13,9 @@ namespace blobber {
       red = green = blue = 0;
     };
     COLOR(int r, int g, int b) {
-      red=r; green=g; blue=b;
+      red = restrict_range(r, 0, 255); 
+      green = restrict_range(g, 0, 255); 
+      blue = restrict_range(b, 0, 255);
     };
     COLOR(const COLOR &c) {
       copy(c);
@@ -99,6 +101,12 @@ namespace blobber {
       lower.copy(c.lower);
       upper.copy(c.upper);
     };
+    void to_string(string &s) {
+      string supper, slower;
+      lower.to_string(slower);
+      upper.to_string(supper);
+      s = "CRANGE(LOWER(" + slower + "), UPPER(" + supper + "))";
+    };
   };
   
   struct COORD {
@@ -112,7 +120,7 @@ namespace blobber {
     void copy(COORD &c) {
       x = c.x; y = c.y;
     };
-    void to_s(string &s) {
+    void to_string(string &s) {
       string xs, ys;
       num_to_string(x, xs);
       num_to_string(y, ys);

@@ -83,6 +83,19 @@ namespace blobber {
     return ret;
   };
 
+  /** 
+   * Restrict a given integer to an upper/lower range
+   * 
+   * @param x Integer to be restricted
+   * @param lower The lower bounds (inclusive)
+   * @param upper The upper bounds (inclusive)
+   * 
+   * @return An integer value within the given range.
+   */
+  int restrict_range(int x, int lower, int upper) {
+    return max(min(x, upper), lower);
+  };
+
   bool ends_with(string s, string end) {
     int ssize = s.size();
     int esize = end.size();

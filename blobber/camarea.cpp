@@ -24,7 +24,7 @@ namespace blobber {
 
   Camarea::Camarea() : device(), hascam(true), manual_align(false), fg(NULL), frame(NULL), mouse_clicked(false) {
     add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
-    string dev, red, green, blue;    
+    string dev;    
     Configuration *config = Configuration::get_config();
     config->get("device", dev, DEFAULT_DEVICE);
     set_device(dev);
@@ -42,6 +42,10 @@ namespace blobber {
     // Our range for the default criterea will include a range +-default_criteria_window from the default color
     CRANGE range(lower, default_criteria_window);
     default_criteria.copy(range);
+
+    string srange;
+    range.to_string(srange);
+    debug("Default criteria: " + srange);
   };
 
   Camarea::~Camarea() {
