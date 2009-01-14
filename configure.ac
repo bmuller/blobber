@@ -3,6 +3,8 @@ AC_DEFINE([PACKAGE_URL],["http://trac.butterfat.net/public/blobber"],[project ur
 AM_CONFIG_HEADER(blobber/config.h)
 AM_INIT_AUTOMAKE()
 
+AC_CONFIG_MACRO_DIR([m4])
+
 AC_PROG_CXX
 AC_PROG_CXXCPP
 AC_LANG_CPLUSPLUS
