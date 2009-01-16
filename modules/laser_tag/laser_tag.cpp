@@ -25,11 +25,15 @@ LaserTag::LaserTag() : ModInterface("LaserTag", "Basic drawing module"), missing
   lastpoint.x = 0; 
   lastpoint.y = 0;
   line_width = 5.0;
+  should_drip = false;
 };
 
 void LaserTag::init(Camarea &area, ProjectionWindow &pw) {
   // use default CRANGE criteria
   register_poi(area, 2);
+  string sdrip;
+  config_get_set("drip", sdrip, "0");
+  should_drip = (sdrip == "1");
 };
 
 void LaserTag::projection_window_exposed(ProjectionWindow &pw) {
@@ -69,7 +73,9 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
       line_width = 35.0 / (double) lastpoint.distance_from(poi[0].coord);
       line_width = min(line_width, 15.0);
       line_width = smooth(previous, line_width);
-      pw.draw_line(lastpoint, poi[0].coord, pw.colors[pw.preferred_color], line_width);    
+      pw.draw_line(lastpoint, poi[0].coord, pw.colors[pw.preferred_color], line_width);
+      if(should_drip)
+	drip(lastpoint, poi[0].coord, pw);
     } else line_width = 15.0;
     lastpoint.copy(poi[0].coord);
   }
@@ -78,6 +84,9 @@ void LaserTag::update(Camarea &area, ProjectionWindow &pw) {
     missing_counter = 0;
 };
 
+void LaserTag::drip(COORD &source, COORD &sink, ProjectionWindow &pw) {
+
+};
 
 extern "C" {
   ModInterface *get_module() { 

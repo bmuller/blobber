@@ -14,4 +14,6 @@ class LaserTag : public ModInterface {
   COORD lastpoint;
   unsigned int missing_counter;
   double line_width;
+  bool should_drip;
+  void drip(COORD &source, COORD &sink, ProjectionWindow &pw);
 };
