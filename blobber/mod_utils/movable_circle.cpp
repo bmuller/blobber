@@ -20,7 +20,13 @@
 
 namespace blobber {
   
-  // @param _size is radius
+  /** 
+   * 
+   * 
+   * @param _size radius
+   * @param center 
+   * @param c 
+   */
   MovableCircle::MovableCircle(int _size, COORD center, COLOR c) : MovableObject(center, c) {
     radius = _size;
   }
@@ -28,7 +34,7 @@ namespace blobber {
   bool MovableCircle::in_bounds(COORD c) {
     return center.distance_from(c) <= radius;
   };
-  
+
   void MovableCircle::paint(ProjectionWindow &pw) {
     pw.draw_circle(center, radius, color, true);
   };

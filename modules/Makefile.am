@@ -70,3 +70,14 @@ if DUCKHUNT
   libduckhunt_la_SOURCES = duckhunt/duckhunt.cpp
   nobase_dist_pkgdata_DATA += duckhunt/duck.png duckhunt/deadduck.png duckhunt/background.png
 endif
+
+if THEREMIN
+  pkglib_LTLIBRARIES += libtheremin.la
+  stkdir = theremin/stk
+  libtheremin_la_SOURCES = theremin/theremin.cpp ${stkdir}/ADSR.cpp ${stkdir}/FileRead.cpp ${stkdir}/Filter.cpp \
+	${stkdir}/Generator.cpp ${stkdir}/SineWave.cpp ${stkdir}/TwoZero.cpp ${stkdir}/WvIn.cpp ${stkdir}/Envelope.cpp \
+	${stkdir}/FileWvIn.cpp ${stkdir}/FM.cpp ${stkdir}/Instrmnt.cpp ${stkdir}/RtAudio.cpp ${stkdir}/Stk.cpp \
+	${stkdir}/WaveLoop.cpp ${stkdir}/BeeThree.cpp
+  libtheremin_la_CPPFLAGS = -I${stkdir} -D__GXX__ -D__LITTLE_ENDIAN__  -D__LINUX_ALSA__ -D__LINUX_ALSASEQ__ 
+  libtheremin_la_LDFLAGS = -lasound
+endif

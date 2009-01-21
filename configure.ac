@@ -126,6 +126,10 @@ duckhunt=false
 AC_ARG_ENABLE(duckhunt-module, AC_HELP_STRING([[--enable-duckhunt-module]], [enable duckhunt game module]), [duckhunt=true])
 AM_CONDITIONAL(DUCKHUNT, $duckhunt || $allmods)
 
+theremin=false
+AC_ARG_ENABLE(theremin-module, AC_HELP_STRING([[--enable-theremin-module]], [enable theremin sound module]), [theremin=true])
+AM_CONDITIONAL(THEREMIN, $theremin || $allmods)
+
 AC_CONFIG_FILES([
  Makefile
  blobber/Makefile

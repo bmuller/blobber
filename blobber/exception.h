@@ -39,6 +39,11 @@ namespace blobber {
     ModuleListException(std::string s) : BlobberException(s) {};
   };
 
+  class ModuleRuntimeException : public BlobberException {
+  public:
+    ModuleRuntimeException(std::string s) : BlobberException(s) {};
+  };
+
   class ConfigurationException : public BlobberException {
   public:
     ConfigurationException(std::string s) : BlobberException(s) {};
