@@ -33,4 +33,6 @@ class Theremin : public ModInterface {
   RtAudio dac;
   TickData data;
   bool note_is_on;
+  RtAudio::StreamParameters parameters;
+  unsigned int bufferFrames;
 };

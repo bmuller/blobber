@@ -55,11 +55,10 @@ Theremin::Theremin() : ModInterface("Theremin", "Theremin music making module"),
   Stk::setRawwavePath( "/home/bmuller/blobber/modules/theremin" );
 
   // Figure out how many bytes in an StkFloat and setup the RtAudio stream.
-  RtAudio::StreamParameters parameters;
   parameters.deviceId = dac.getDefaultOutputDevice();
   parameters.nChannels = 1;
   RtAudioFormat format = ( sizeof(StkFloat) == 8 ) ? RTAUDIO_FLOAT64 : RTAUDIO_FLOAT32;
-  unsigned int bufferFrames = RT_BUFFER_SIZE;
+  bufferFrames = RT_BUFFER_SIZE;
   try {
     dac.openStream( &parameters, NULL, format, (unsigned int)Stk::sampleRate(), &bufferFrames, &tick, (void *)&data );
     data.instrument = new BeeThree();
@@ -70,17 +69,22 @@ Theremin::Theremin() : ModInterface("Theremin", "Theremin music making module"),
   } catch ( StkError & ) {
     throw ModuleRuntimeException("Could not open audio stream for Theremin module");
   }
+  debug("in theremin constructor");
 };
 
 void Theremin::init(Camarea &area, ProjectionWindow &pw) {
+  /*
+  debug("initing theremin module");
   // use default CRANGE criteria
   register_poi(area, 2);
   note_on(440.0);
   Stk::sleep(3000);
   note_off();
+  */
 };
 
 Theremin::~Theremin() {
+/*
   debug("HERE OK");
   // Shut down the callback and output stream.
   try {
@@ -92,6 +96,7 @@ Theremin::~Theremin() {
   }
 
   delete data.instrument;
+  */
 };
 
 void Theremin::note_on(double frequency) {
