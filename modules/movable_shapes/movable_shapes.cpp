@@ -31,16 +31,8 @@ MovableShapes::~MovableShapes() {
 };
 
 void MovableShapes::init(Camarea &area, ProjectionWindow &pw) {
-  // adjust these as necessary for different light/laser sources.  Any pixel
-  // with the threshold you set will be considered in the input.
-  string red, green, blue;
-  // get config values - and set them to defaults if they are not set already
-  config_get_set("red", red, "60");
-  config_get_set("blue", blue, "0");
-  config_get_set("green", green, "0");
+  register_poi(area, 2);
 
-  CRANGE range(COLOR(string_to_int(red), string_to_int(blue), string_to_int(green)));
-  register_poi_criteria(area, range, 1);
 
   DIMENSION visible_dimensions;
   pw.get_drawing_area_dimensions(visible_dimensions);
