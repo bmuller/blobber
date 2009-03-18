@@ -24,7 +24,10 @@ class Theremin : public ModInterface {
   void note_on(double frequency);
   void note_off();
  protected:
+  DIMENSION dimensions;
+  COORD lastpoint;
   float min_frequency, max_frequency;
+  int missing_counter;
   RtAudio dac;
   TickData data;
   bool note_is_on;

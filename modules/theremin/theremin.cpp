@@ -40,8 +40,10 @@ int tick( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
 /////////////////////////////////////////////////////////////////////
 
-Theremin::Theremin() : ModInterface("Theremin", "Theremin music making module"), note_is_on(false) {
+Theremin::Theremin() : ModInterface("Theremin", "Theremin music making module"), note_is_on(false), missing_counter(0) {
   // can't do much here cause we can't open a device until we're inited
+  lastpoint.x = 0;
+  lastpoint.y = 0;
 };
 
 
@@ -109,7 +111,7 @@ void Theremin::note_off() {
 
 
 void Theremin::projection_window_exposed(ProjectionWindow &pw) {
-
+  pw.get_drawing_area_dimensions(dimensions);
 };
 
 
@@ -119,15 +121,18 @@ void Theremin::update(Camarea &area, ProjectionWindow &pw) {
 
   if(poi.size() == 0) {
     missing_counter++;
-    return;
+    if(missing_counter > 5)
+      note_off();
+  } else {
+    missing_counter = 0;
+    // make noise if laser has moved - frequency is based on x coordinate
+    if(poi[0].coord.distance_from(lastpoint) > 5) {
+      note_off();
+      double frequency = min_frequency + ((max_frequency - min_frequency) * (poi[0].coord.x / dimensions.width));
+      note_on(frequency);
+    }
+    lastpoint.copy(poi[0].coord);
   }
-  
-  
-
-  missing_counter = 0;
-};
-
-
 };
 
 

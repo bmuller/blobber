@@ -1,5 +1,3 @@
-#ifndef __BLOBBER_TYPES_H
-#define __BLOBBER_TYPES_H
 
 namespace blobber {
   using namespace std;
@@ -283,4 +281,4 @@ namespace blobber {
   };
 };
 
-#endif  /* __BLOBBER_TYPES_H */
+
