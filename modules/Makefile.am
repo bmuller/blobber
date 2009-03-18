@@ -78,6 +78,7 @@ if THEREMIN
 	${stkdir}/Generator.cpp ${stkdir}/SineWave.cpp ${stkdir}/TwoZero.cpp ${stkdir}/WvIn.cpp ${stkdir}/Envelope.cpp \
 	${stkdir}/FileWvIn.cpp ${stkdir}/FM.cpp ${stkdir}/Instrmnt.cpp ${stkdir}/RtAudio.cpp ${stkdir}/Stk.cpp \
 	${stkdir}/WaveLoop.cpp ${stkdir}/BeeThree.cpp
-  libtheremin_la_CPPFLAGS = -I${stkdir} -D__GXX__ -D__LITTLE_ENDIAN__  -D__LINUX_ALSA__ -D__LINUX_ALSASEQ__ 
-  libtheremin_la_LDFLAGS = -lasound
+  libtheremin_la_CPPFLAGS = ${AM_CPPFLAGS} -I${stkdir} -D__GXX__ -D__LITTLE_ENDIAN__  -D__LINUX_ALSA__ -D__LINUX_ALSASEQ__ 
+  libtheremin_la_LDFLAGS = ${AM_CPPFLAGS} -lasound
+  nobase_dist_pkgdata_DATA += theremin/fwavblnk.raw theremin/sinewave.raw
 endif

@@ -33,16 +33,7 @@ int tick( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
   for ( unsigned int i=0; i<nBufferFrames; i++ ) {
     *samples++ = data->instrument->tick();
-    /*
-    if ( ++data->counter % 2000 == 0 ) {
-      data->scaler += 0.025;
-      data->instrument->setFrequency( data->frequency * data->scaler );
-    }
-    */
   }
-
-  //if ( data->counter > 80000 )
-  //  data->done = true;
 
   return 0;
 }
@@ -50,9 +41,24 @@ int tick( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 /////////////////////////////////////////////////////////////////////
 
 Theremin::Theremin() : ModInterface("Theremin", "Theremin music making module"), note_is_on(false) {
+  // can't do much here cause we can't open a device until we're inited
+};
+
+
+void Theremin::init(Camarea &area, ProjectionWindow &pw) {
+  // use default CRANGE criteria
+  register_poi(area, 2);
+
+  // Load config information
+  string smin_frequency, smax_frequency;
+  config_get_set("min_frequency", smin_frequency, "55.0");
+  config_get_set("max_frequency", smax_frequency, "1760.0");
+  min_frequency = string_to_double(smin_frequency);
+  max_frequency = string_to_double(smax_frequency);
+
   // Set the global sample rate and rawwave path before creating class instances.
   Stk::setSampleRate( 44100.0 );
-  Stk::setRawwavePath( "/home/bmuller/blobber/modules/theremin" );
+  Stk::setRawwavePath( string(DATAROOTDIR) + "/theremin" );
 
   // Figure out how many bytes in an StkFloat and setup the RtAudio stream.
   parameters.deviceId = dac.getDefaultOutputDevice();
@@ -62,31 +68,16 @@ Theremin::Theremin() : ModInterface("Theremin", "Theremin music making module"),
   try {
     dac.openStream( &parameters, NULL, format, (unsigned int)Stk::sampleRate(), &bufferFrames, &tick, (void *)&data );
     data.instrument = new BeeThree();
-    dac.startStream();
   } catch ( RtError& error ) {
     error.printMessage();
     throw ModuleRuntimeException("Could not open audio stream for Theremin module");
   } catch ( StkError & ) {
     throw ModuleRuntimeException("Could not open audio stream for Theremin module");
   }
-  debug("in theremin constructor");
 };
 
-void Theremin::init(Camarea &area, ProjectionWindow &pw) {
-  /*
-  debug("initing theremin module");
-  // use default CRANGE criteria
-  register_poi(area, 2);
-  note_on(440.0);
-  Stk::sleep(3000);
-  note_off();
-  */
-};
 
 Theremin::~Theremin() {
-/*
-  debug("HERE OK");
-  // Shut down the callback and output stream.
   try {
     dac.closeStream();
   }
@@ -96,30 +87,49 @@ Theremin::~Theremin() {
   }
 
   delete data.instrument;
-  */
 };
+
 
 void Theremin::note_on(double frequency) {
   if(note_is_on)
     note_off();
+  dac.startStream();
   data.frequency = frequency;
   data.instrument->noteOn( data.frequency, 0.5 );
   note_is_on = true;
 };
 
-void Theremin::note_off() {
+
+void Theremin::note_off() {  
   if(!note_is_on) return;
   data.instrument->noteOff(0.5);
   note_is_on = false;
+  dac.stopStream();
 };
+
 
 void Theremin::projection_window_exposed(ProjectionWindow &pw) {
 
 };
 
+
 void Theremin::update(Camarea &area, ProjectionWindow &pw) {
+  vector<PIXEL> poi;
+  get_poi(area, poi);
+
+  if(poi.size() == 0) {
+    missing_counter++;
+    return;
+  }
+  
+  
+
+  missing_counter = 0;
+};
+
 
 };
+
 
 extern "C" {
   ModInterface *get_module() {

@@ -9,13 +9,7 @@ using namespace blobber;
 struct TickData {
   Instrmnt *instrument;
   StkFloat frequency;
-  StkFloat scaler;
-  long counter;
-  bool done;
-
-  // Default constructor.                                                                                                                                             
-  TickData()
-  : instrument(0), scaler(1.0), counter(0), done( false ) {}
+  TickData() : instrument(0) {}
 };
 
 
@@ -30,6 +24,7 @@ class Theremin : public ModInterface {
   void note_on(double frequency);
   void note_off();
  protected:
+  float min_frequency, max_frequency;
   RtAudio dac;
   TickData data;
   bool note_is_on;
