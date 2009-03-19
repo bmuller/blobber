@@ -118,4 +118,7 @@ namespace blobber {
     config->module_get(key, values, name);
   };
 
+  void ModInterface::mod_debug(string s) {
+    debug(name + ": " + s);
+  };
 };

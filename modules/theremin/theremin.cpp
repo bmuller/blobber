@@ -95,6 +95,11 @@ Theremin::~Theremin() {
 void Theremin::note_on(double frequency) {
   if(note_is_on)
     note_off();
+
+  string sfreq;
+  num_to_string(frequency, sfreq);
+  mod_debug("Note on at " + sfreq + "hz");
+
   dac.startStream();
   data.frequency = frequency;
   data.instrument->noteOn( data.frequency, 0.5 );
@@ -104,6 +109,7 @@ void Theremin::note_on(double frequency) {
 
 void Theremin::note_off() {  
   if(!note_is_on) return;
+  mod_debug("Note off");
   data.instrument->noteOff(0.5);
   note_is_on = false;
   dac.stopStream();
@@ -127,8 +133,7 @@ void Theremin::update(Camarea &area, ProjectionWindow &pw) {
     missing_counter = 0;
     // make noise if laser has moved - frequency is based on x coordinate
     if(poi[0].coord.distance_from(lastpoint) > 5) {
-      note_off();
-      double frequency = min_frequency + ((max_frequency - min_frequency) * (poi[0].coord.x / dimensions.width));
+      double frequency = min_frequency + ((max_frequency - min_frequency) * ((double) poi[0].coord.x / (double) dimensions.width));
       note_on(frequency);
     }
     lastpoint.copy(poi[0].coord);
