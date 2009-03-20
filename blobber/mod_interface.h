@@ -1,6 +1,10 @@
 
 namespace blobber {
 
+  /** 
+   * \interface ModInterface
+   * This is the interface that all modules must implement.
+   */
   class ModInterface {
   public:
     string name, description;
@@ -10,10 +14,12 @@ namespace blobber {
     virtual void clear() {};
     virtual void init(Camarea &area, ProjectionWindow &pw) {};
     virtual void projection_window_exposed(ProjectionWindow &pw) {};
-    /**
-       Get a path for the given resource file.
-       @param path A reference to the string to put the result in.
-       @param resource The resource filename.
+
+    /** 
+     * Get a path for the given resource file.
+     * 
+     * @param path A reference to the string to put the result in.
+     * @param resource resource The resource filename.
      */
     void get_resource_path(string &path, string resource);
     static ModInterface * load_module(string modname, bool make_resident=true);

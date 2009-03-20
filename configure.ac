@@ -24,7 +24,7 @@ fi]
 
 # provide flag --enable-doxygen
 HAVE_DOXYGEN="no"
-AC_ARG_ENABLE(doxygen, AC_HELP_STRING([[--enable-doxygen]], [enable doxygen api docs output]),
+AC_ARG_ENABLE(doxygen, AC_HELP_STRING([[--enable-doxygen]], [enable doxygen api docs output with make dox]),
 [if test "$enableval" = "yes"; then
   AC_PATH_PROG([DOXYGEN],[doxygen],[false])
   if test "${DOXYGEN}" = "false" ; then
