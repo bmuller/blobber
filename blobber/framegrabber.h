@@ -45,19 +45,30 @@ class FrameGrabberOne : public FrameGrabber {
 
 // v4l 2
 #ifdef HAVE_V4L2
+
+#define FG2_DEFAULT_BUFFERS  5        ///< Default number of buffers
+#define FG2_DEFAULT_WIDTH    640      ///< Default frame width
+#define FG2_DEFAULT_HEIGHT   480      ///< Default frame height 
+#define FG2_GRAB_FRAME       (1<<0)   ///< Flag set on first call to grabFrame
+
 class FrameGrabberTwo : public FrameGrabber {
+ protected:
+  int                     fd;         ///< File handle for open device                                                    
+  struct v4l2_capability  caps;       ///< Capabilities        
+  struct v4l2_fmtdesc *   fmtds;      ///< Available formats
+  unsigned int            nfmtd;      ///< Number of available formats
+  unsigned int            sfmtd;      ///< Index of the selected format                                            
+  struct v4l2_format      fmt;        ///< Buffer/pixel format
+  struct buffer *         bufs;       ///< Memory buffers
+  unsigned int            nbuf;       ///< Number of memory buffers
+  struct v4l2_buffer      cbuf;       ///< Current buffer info
+  colormap *              cmap;       ///< Colormapping function pointer
+  unsigned int            flags;      ///< Flags used internally
  public:
-  int fd;                            ///< File handle for open device                                                    
-  struct v4l2_capability caps;       ///< Capabilities                                                                   
-  struct v4l2_format fmt;            ///< Buffer/Pixel format
-  struct v4l2_requestbuffers req;
-  struct buffer *buffers;
-  unsigned int n_buffers;
-  YUYVtoRGB32* conv;
   FrameGrabberTwo(string dev);
   ~FrameGrabberTwo();
   Frame * makeFrame();
-  void grabFrame(Frame *frame);
+  void grabFrame(Frame * frame);
   void set_contrast(int contrast);
   void set_brightness(int brightness);
 };

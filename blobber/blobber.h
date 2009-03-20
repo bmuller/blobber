@@ -52,12 +52,13 @@
 #include <sys/ioctl.h>
 #include <sys/dir.h>
 
-#include "pixconverter.h" 
+
 #include "exception.h"
 #include "utils.h"
 #include "types.h"
 #include "configuration.h"
 #include "frame.h"
+#include "colormap.h" 
 #include "framegrabber.h"
 #include "projection_window.h"
 #include "camarea.h"
