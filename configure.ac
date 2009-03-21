@@ -127,7 +127,11 @@ AC_ARG_ENABLE(duckhunt-module, AC_HELP_STRING([[--enable-duckhunt-module]], [ena
 AM_CONDITIONAL(DUCKHUNT, $duckhunt || $allmods)
 
 theremin=false
-AC_ARG_ENABLE(theremin-module, AC_HELP_STRING([[--enable-theremin-module]], [enable theremin sound module]), [theremin=true])
+AC_ARG_ENABLE(theremin-module, AC_HELP_STRING([[--enable-theremin-module]], [enable theremin sound module]), [
+  AC_CHECK_LIB(asound, snd_pcm_open, [theremin=true], [AC_MSG_ERROR([
+    Could not find ALSA library, which is required for the theremin module.
+  ])])
+])
 AM_CONDITIONAL(THEREMIN, $theremin || $allmods)
 
 AC_CONFIG_FILES([

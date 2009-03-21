@@ -1,0 +1,3 @@
+This is where modules go that are distributed with the base blobber program.
+The libs directory contains any 3rd party OSS libs or code that is needed
+for the modules.

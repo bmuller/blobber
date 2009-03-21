@@ -60,7 +60,7 @@ void Theremin::init(Camarea &area, ProjectionWindow &pw) {
 
   // Set the global sample rate and rawwave path before creating class instances.
   Stk::setSampleRate( 44100.0 );
-  Stk::setRawwavePath( string(DATAROOTDIR) + "/theremin" );
+  Stk::setRawwavePath( string(DATAROOTDIR) + "/libs/stk" );
 
   // Figure out how many bytes in an StkFloat and setup the RtAudio stream.
   parameters.deviceId = dac.getDefaultOutputDevice();
