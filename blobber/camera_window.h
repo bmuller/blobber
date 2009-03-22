@@ -1,3 +1,6 @@
+#ifndef __CAMERA_WINDOW_H
+#define __CAMERA_WINDOW_H
+
 
 namespace blobber {
 
@@ -24,3 +27,6 @@ namespace blobber {
   };
 
 };
+
+#endif /* __CAMERA_WINDOW_H */
+

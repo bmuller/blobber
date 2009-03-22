@@ -16,7 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "blobber.h"
+#include <gtkmm/stock.h>
+
+#include "options_window.h"
+#include "mod_interface.h"
+#include "application.h"
 
 namespace blobber {
   using namespace std;

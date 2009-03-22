@@ -1,3 +1,7 @@
+#ifndef __MOD_INTERFACE_H
+#define __MOD_INTERFACE_H
+
+#include "projection_window.h"
 
 namespace blobber {
 
@@ -47,4 +51,7 @@ namespace blobber {
 
 };
 
+
+
+#endif /* __MOD_INTERFACE_H */
 

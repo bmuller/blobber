@@ -1,3 +1,6 @@
+#ifndef __PROJECTION_WINDOW_H
+#define __PROJECTION_WINDOW_H
+
 namespace blobber {
   using namespace std;
 
@@ -50,3 +53,6 @@ namespace blobber {
     void save_to_file();
   };
 };
+
+#endif /* __PROJECTION_WINDOW_H */
+

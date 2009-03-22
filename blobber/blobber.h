@@ -1,3 +1,6 @@
+#ifndef __BLOBBER_H
+#define __BLOBBER_H
+
 #include <glibmm/keyfile.h>
 
 #include <gtkmm/scale.h>
@@ -70,3 +73,6 @@
 #include "mod_utils/sprite.h"
 
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
+
+#endif /* __BLOBBER_H */
+

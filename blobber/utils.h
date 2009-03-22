@@ -1,3 +1,9 @@
+#ifndef __UTILS_H
+#define __UTILS_H
+
+#include <iostream>
+#include <vector>
+
 namespace blobber {
   using namespace std;
 
@@ -17,4 +23,7 @@ namespace blobber {
   bool ends_with(string s, string end);
   int restrict_range(int x, int lower, int upper);
 };
+
+
+#endif /* __UTILS_H */
 

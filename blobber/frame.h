@@ -1,3 +1,6 @@
+#ifndef __FRAME_H
+#define __FRAME_H
+
 namespace blobber {
 
   // The frame class encapsulates all the information necessary to keep track of a single frame.
@@ -13,3 +16,6 @@ namespace blobber {
   };
 
 };
+
+#endif /* __FRAME_H */
+

@@ -1,3 +1,6 @@
+#ifndef __COLORMAP_H
+#define __COLORMAP_H
+
 #define CLIP(color) (unsigned char) (((color)>0xFF)?0xFF:(((color)<0)?0:(color)))
 
 typedef void (colormap) (unsigned char * , unsigned char *, unsigned int);
@@ -18,3 +21,6 @@ struct colorspace {
 };
 
 extern struct colorspace colorspaces[];
+
+#endif /* __COLORMAP_H */
+

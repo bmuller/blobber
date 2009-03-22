@@ -1,3 +1,10 @@
+#ifndef __CAMAREA_H
+#define __CAMAREA_H
+
+#include <gtkmm/drawingarea.h>
+
+#include "types.h"
+#include "framegrabber.h"
 
 namespace blobber {
 
@@ -56,3 +63,6 @@ using namespace std;
  };
 
 };
+
+#endif /* __CAMAREA_H */
+

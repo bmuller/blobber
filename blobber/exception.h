@@ -1,3 +1,6 @@
+#ifndef __EXCEPTION_H
+#define __EXCEPTION_H
+
 
 namespace blobber {
 
@@ -59,3 +62,6 @@ namespace blobber {
     NoSuchFeatureException(std::string s) : BlobberException(s) {};
   };
 };
+
+#endif /* __EXCEPTION_H */
+

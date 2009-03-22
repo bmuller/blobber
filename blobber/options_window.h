@@ -1,3 +1,15 @@
+#ifndef __OPTIONS_WINDOW_H
+#define __OPTIONS_WINDOW_H
+
+#include <gtkmm/window.h>
+#include <gtkmm/label.h>
+#include <gtkmm/box.h>
+#include <gtkmm/scale.h>
+#include <gtkmm/comboboxentrytext.h>
+#include <gtkmm/frame.h>
+
+#include "camarea.h"
+#include "configuration.h"
 
 namespace blobber {
   using namespace std;
@@ -33,3 +45,6 @@ namespace blobber {
     void contrast_changed();
   };
 };
+
+#endif /* __OPTIONS_WINDOW_H */
+
