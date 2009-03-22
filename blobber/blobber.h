@@ -1,8 +1,3 @@
-#include "config.h"
-#define DEFAULT_DEVICE "/dev/video0"
-// size of the default POI criteria window
-#define DEFAULT_CRITERIA_WINDOW_SIZE "15"
-
 #include <glibmm/keyfile.h>
 
 #include <gtkmm/scale.h>
@@ -40,6 +35,8 @@
 #include <linux/kernel.h>
 #include <linux/types.h>
 
+#include "config.h"
+
 #ifdef HAVE_V4L1
 #include <linux/videodev.h>
 #endif
@@ -51,7 +48,6 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <sys/dir.h>
-
 
 #include "exception.h"
 #include "utils.h"
