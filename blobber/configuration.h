@@ -2,6 +2,7 @@
 #define __CONFIGURATION_H
 
 #include "types.h"
+#include <glibmm/keyfile.h>
 
 namespace blobber {
   using namespace std;

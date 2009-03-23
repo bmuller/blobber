@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../blobber.h"
+#include "movable_object.h"
 
 namespace blobber {
   MovableObject::MovableObject(COORD middle, COLOR c, COLOR bg) {

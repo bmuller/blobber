@@ -2,6 +2,8 @@
 #define __TYPES_H
 
 #include "utils.h"
+#include <cmath>
+#include <glibmm/random.h>
 
 namespace blobber {
   using namespace std;

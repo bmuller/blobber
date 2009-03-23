@@ -1,4 +1,9 @@
-#include "blobber.h"
+#ifdef HAVE_V4L2
+#include <linux/videodev2.h>
+
+#include "config.h"
+#include "colormap.h"
+#include <cstdlib>
 
 struct colorspace colorspaces[] = {
   { V4L2_PIX_FMT_BGR24,  &map_bgr24  }, \
@@ -111,3 +116,5 @@ void map_rgb555(unsigned char * dst, unsigned char * src, unsigned int sizeimage
     srcbuf += 2;
   }
 }
+
+#endif

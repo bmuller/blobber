@@ -1,4 +1,10 @@
 
+#include "../types.h"
+
+
+y
+
+
 namespace blobber {
   // basically, a moveable sprite
   class MovableObject {

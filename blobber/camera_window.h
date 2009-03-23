@@ -1,6 +1,12 @@
 #ifndef __CAMERA_WINDOW_H
 #define __CAMERA_WINDOW_H
 
+#include <gtkmm/table.h>
+#include <gtkmm/uimanager.h>
+#include <gtkmm/window.h>
+
+#include "camarea.h"
+#include "options_window.h"
 
 namespace blobber {
 

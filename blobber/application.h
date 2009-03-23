@@ -2,6 +2,8 @@
 #define __APPLICATION_H
 
 #include "camera_window.h"
+#include "projection_window.h"
+#include "mod_interface.h"
 
 namespace blobber {
 

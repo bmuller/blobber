@@ -2,6 +2,7 @@
 #define __MOD_INTERFACE_H
 
 #include "projection_window.h"
+#include "camarea.h"
 
 namespace blobber {
 

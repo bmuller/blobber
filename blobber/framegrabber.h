@@ -14,6 +14,9 @@
 #include "frame.h"
 #include "colormap.h"
 
+#include <vector>
+#include <iostream>
+
 namespace blobber {
 
 using namespace std;

@@ -1,4 +1,12 @@
-#include "blobber.h"
+#include "configuration.h"
+#include "exception.h"
+
+#include <glibmm/miscutils.h>
+#include <glibmm/fileutils.h>
+
+#include <fcntl.h>
+
+#include <fstream>
 
 namespace blobber {
   Configuration * Configuration::_inst = 0;

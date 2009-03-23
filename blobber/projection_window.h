@@ -1,6 +1,10 @@
 #ifndef __PROJECTION_WINDOW_H
 #define __PROJECTION_WINDOW_H
 
+#include <gtkmm/window.h>
+#include "types.h"
+#include "configuration.h"
+
 namespace blobber {
   using namespace std;
 

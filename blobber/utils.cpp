@@ -16,7 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "blobber.h"
+#include "utils.h"
+
+#include <cstdlib>
+#include <iostream>
+
+#include <glibmm/random.h>
 
 namespace blobber {
   using namespace std;
