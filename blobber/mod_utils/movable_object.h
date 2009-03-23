@@ -1,9 +1,5 @@
-
 #include "../types.h"
-
-
-y
-
+#include "../projection_window.h"
 
 namespace blobber {
   // basically, a moveable sprite

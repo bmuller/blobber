@@ -1,3 +1,5 @@
+#include "movable_object.h"
+
 namespace blobber {
 
   class Sprite : public MovableObject {
