@@ -16,7 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "blobber.h"
+#include <gtkmm/stock.h>
+
+#include "options_window.h"
+#include "mod_interface.h"
+#include "application.h"
 
 namespace blobber {
   using namespace std;
@@ -117,9 +121,9 @@ namespace blobber {
     
     vector<string> push;
     push.clear();
-    for(std::map<string, Gtk::CheckButton*>::iterator it = modButtons.begin(); it != modButtons.end(); it++)
-    {
-	    if (it->second->get_active()) push.push_back(modFiles[it->first]);
+    for(std::map<string, Gtk::CheckButton*>::iterator it = modButtons.begin(); it != modButtons.end(); it++) {
+      if (it->second->get_active()) 
+	push.push_back(modFiles[it->first]);
     }
     // set config options then save config file
     config->set("mods_enabled", push);

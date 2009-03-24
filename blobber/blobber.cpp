@@ -34,7 +34,9 @@ You can find out more at http://trac.butterfat.net/public/blobber
 \li Zenko B. Klapko Jr. <CovertCodeOp1@gmail.com>
 */
 
-#include "blobber.h"
+#include "application.h"
+
+#include <gtkmm/main.h>
 
 using namespace blobber;
 

@@ -16,7 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "blobber.h"
+#include "utils.h"
+
+#include <cstdlib>
+#include <iostream>
+
+#include <glibmm/random.h>
 
 namespace blobber {
   using namespace std;
@@ -35,16 +40,16 @@ namespace blobber {
   };
 
   /** convert integer to string */
-  void num_to_string(int i, std::string& s) {
+  void num_to_string(int i, string& s) {
     char c_int[100];
     sprintf(c_int, "%ld", i);
-    s = std::string(c_int);
+    s = string(c_int);
   };
 
-  void num_to_string(double i, std::string& s) {
+  void num_to_string(double i, string& s) {
     char c_int[100];
     sprintf(c_int, "%f", i);
-    s = std::string(c_int);
+    s = string(c_int);
   };
 
   int string_to_int(string s) {
@@ -61,10 +66,10 @@ namespace blobber {
   };
 
   /** convert integer to string */
-  void int_to_string(int i, std::string& s) {
+  void int_to_string(int i, string& s) {
     char c_int[100];
     sprintf(c_int, "%ld", i);
-    s = std::string(c_int);
+    s = string(c_int);
   };
 
   /** Split a string s into parts by value e */

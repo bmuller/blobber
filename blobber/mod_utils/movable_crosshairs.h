@@ -1,3 +1,8 @@
+#ifndef MOVABLE_CROSSHAIRS_H
+#define MOVABLE_CROSSHAIRS_H
+
+#include "movable_object.h"
+
 namespace blobber {
   class MovableCrosshairs : public MovableObject {
   public:
@@ -10,3 +15,5 @@ namespace blobber {
   };
 
 };
+
+#endif /* MOVABLE_CROSSHAIRS_H */

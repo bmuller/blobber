@@ -1,3 +1,8 @@
+#ifndef MOVABLE_OBJECT_H
+#define MOVABLE_OBJECT_H
+
+#include "../types.h"
+#include "../projection_window.h"
 
 namespace blobber {
   // basically, a moveable sprite
@@ -26,3 +31,5 @@ namespace blobber {
     COLOR color, background;
   };
 };
+
+#endif  /* MOVABLE_OBJECT_H */

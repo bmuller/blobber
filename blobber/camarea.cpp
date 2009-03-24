@@ -16,7 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "blobber.h"
+#include "camarea.h"
+#include "configuration.h"
+#include "exception.h"
+
+#include <string>
 
 namespace blobber {
 

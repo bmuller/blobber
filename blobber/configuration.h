@@ -1,3 +1,9 @@
+#ifndef __CONFIGURATION_H
+#define __CONFIGURATION_H
+
+#include "types.h"
+#include <glibmm/keyfile.h>
+
 namespace blobber {
   using namespace std;
 
@@ -36,3 +42,6 @@ namespace blobber {
     void set_color(COLOR &c, string prefix, string groupname="blobber");
   };
 };
+
+#endif /* __CONFIGURATION_H */
+

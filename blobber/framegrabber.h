@@ -1,3 +1,21 @@
+#ifndef __FRAMEGRABBER_H
+#define __FRAMEGRABBER_H
+
+#include "config.h"
+
+#ifdef HAVE_V4L1
+#include <linux/videodev.h>
+#endif
+
+#ifdef HAVE_V4L2
+#include <linux/videodev2.h>
+#endif
+
+#include "frame.h"
+#include "colormap.h"
+
+#include <vector>
+#include <string>
 
 namespace blobber {
 
@@ -75,3 +93,6 @@ class FrameGrabberTwo : public FrameGrabber {
 #endif
 
 };
+
+#endif /* __FRAMEGRABBER_H */
+

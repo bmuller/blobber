@@ -16,7 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "blobber.h"
+#include "framegrabber.h"
+#include "utils.h"
+#include "exception.h"
 
 namespace blobber {
 

@@ -16,7 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "blobber.h"
+#include "camera_window.h"
+#include "exception.h"
+
+#include <gtkmm/stock.h>
+#include <gtkmm/messagedialog.h>
 
 namespace blobber {
   using namespace std;

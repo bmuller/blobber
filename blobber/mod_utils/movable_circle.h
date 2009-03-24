@@ -1,3 +1,8 @@
+#ifndef MOVABLE_CIRCLE_H
+#define MOVABLE_CIRCLE_H
+
+#include "movable_object.h"
+
 namespace blobber {
 
   class MovableCircle : public MovableObject {
@@ -11,3 +16,5 @@ namespace blobber {
   };
 
 };
+
+#endif  /* MOVABLE_CIRCLE_H */
