@@ -1,3 +1,6 @@
+#ifndef MOVABLE_CIRCLE_H
+#define MOVABLE_CIRCLE_H
+
 #include "movable_object.h"
 
 namespace blobber {
@@ -13,3 +16,5 @@ namespace blobber {
   };
 
 };
+
+#endif  /* MOVABLE_CIRCLE_H */

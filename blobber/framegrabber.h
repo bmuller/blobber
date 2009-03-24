@@ -15,7 +15,7 @@
 #include "colormap.h"
 
 #include <vector>
-#include <iostream>
+#include <string>
 
 namespace blobber {
 

@@ -1,3 +1,6 @@
+#ifndef MOVABLE_SQUARE_H
+#define MOVABLE_SQUARE_H
+
 #include "movable_object.h"
 
 namespace blobber {
@@ -13,3 +16,5 @@ namespace blobber {
   };
 
 };
+
+#endif  /* MOVABLE_SQUARE_H */

@@ -1,3 +1,6 @@
+#ifndef SPRITE_H
+#define SPRITE_H
+
 #include "movable_object.h"
 
 namespace blobber {
@@ -19,3 +22,5 @@ namespace blobber {
   };
 
 };
+
+#endif  /* SPRITE_H */

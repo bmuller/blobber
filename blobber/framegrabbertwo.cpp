@@ -16,11 +16,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "blobber.h"
+#include "framegrabber.h"
+#include "exception.h"
+#include "types.h"
+
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/mman.h>
+#include <cstring>
+#include <cerrno>
+#include <cstdlib>
+
+#define CLEAR(x) memset (&(x), 0, sizeof (x))
 
 namespace blobber {
 
-  using namespace std;\
+  using namespace std;
 
   /*
   static int xioctl(int fd, int request, void *arg) {

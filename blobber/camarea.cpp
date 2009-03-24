@@ -20,7 +20,7 @@
 #include "configuration.h"
 #include "exception.h"
 
-#include <iostream>
+#include <string>
 
 namespace blobber {
 
