@@ -21,6 +21,7 @@
 #include "exception.h"
 
 #include <string>
+#include <iostream>
 
 namespace blobber {
 

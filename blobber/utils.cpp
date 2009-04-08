@@ -17,6 +17,7 @@
 */
 
 #include "utils.h"
+#include "config.h"
 
 #include <cstdlib>
 #include <iostream>
