@@ -162,6 +162,19 @@ namespace blobber {
   };
   
   FrameGrabberTwo::~FrameGrabberTwo() {
+    // Stop streaming video
+    cbuf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    if (ioctl(fd, VIDIOC_STREAMOFF, &cbuf.type) < 0) {
+      close(fd); throw CameraReadException(" error stopping video stream");
+    }
+
+    // Free memory map
+    for (int i = 0; i < nbuf; ++i) {
+      if (munmap(bufs[i].start, bufs[i].length) == -1) {
+        close(fd); throw CameraReadException(" error releasing memory");
+      }
+    }
+
     close(fd);
   };
 
