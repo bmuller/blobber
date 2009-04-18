@@ -48,6 +48,8 @@ namespace blobber {
     bool on_button_release_event(GdkEventButton* event);
     void set_brightness(int brightness);
     void set_contrast(int contrast);
+    void set_saturation(int saturation);
+    void set_exposure(int exposure, bool isAuto);
     void update_screen();
     void update_frame();
     void set_device(string _device);

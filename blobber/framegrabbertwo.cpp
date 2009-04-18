@@ -207,45 +207,92 @@ namespace blobber {
       
   };
 
-  void FrameGrabberTwo::set_contrast(int contrast) {\
-    struct v4l2_queryctrl qcon;
-    struct v4l2_control con;
-    qcon.id = V4L2_CID_CONTRAST;
+  bool FrameGrabberTwo::set_brightness(double percent)
+  {
+    string spercent;
+    num_to_string(percent, spercent);
+    debug("setting brightness to " + spercent + "%");
 
-    // query the control structure for contrast
-    if (ioctl(fd, VIDIOC_QUERYCTRL, &qcon) < 0) {
-      close(fd); throw CameraReadException(" query contrast control failed: " + string(strerror(errno)));
-    }
-    if(qcon.flags & (V4L2_CTRL_FLAG_DISABLED | V4L2_CTRL_FLAG_GRABBED | V4L2_CTRL_FLAG_READ_ONLY) ) { return; }
-    con.id = qcon.id;
-    if(contrast < qcon.minimum) { con.value = qcon.minimum; }
-    else if(contrast > qcon.maximum) { con.value = qcon.maximum; }
-    else { con.value = contrast; }
+    struct v4l2_queryctrl queryControl;
+    struct v4l2_control control;
+    queryControl.id = V4L2_CID_BRIGHTNESS;
+    if (ioctl(fd, VIDIOC_QUERYCTRL, &queryControl) == -1) return 0;
 
-    // set the control structure for contrast
-    if (ioctl(fd, VIDIOC_S_CTRL, &con) < 0) {
-      close(fd); throw CameraReadException(" error setting contrast: " + string(strerror(errno)));
-    }
-  };
+    control.id = queryControl.id;
+    control.value = queryControl.minimum +
+                    (percent / 100) * 
+                    (queryControl.maximum - queryControl.minimum);
 
-  void FrameGrabberTwo::set_brightness(int brightness) {
-    struct v4l2_queryctrl qcon;
-    struct v4l2_control con;
-    qcon.id = V4L2_CID_BRIGHTNESS;
+    if (ioctl(fd, VIDIOC_S_CTRL, &control) == -1) return 0;
 
-    // query the control structure for brightness
-    if (ioctl(fd, VIDIOC_QUERYCTRL, &qcon) < 0) {
-      close(fd); throw CameraReadException(" query brightness control failed: " + string(strerror(errno)));
-    }
-    if(qcon.flags & (V4L2_CTRL_FLAG_DISABLED | V4L2_CTRL_FLAG_GRABBED | V4L2_CTRL_FLAG_READ_ONLY) ) { return; }
-    con.id = qcon.id;
-    if(brightness < qcon.minimum) { con.value = qcon.minimum; }
-    else if(brightness > qcon.maximum) { con.value = qcon.maximum; }
-    else { con.value = brightness; }
+    return 1;
+  }
 
-    // set the control structure for brightness
-    if (ioctl(fd, VIDIOC_S_CTRL, &con) < 0) {
-      close(fd); throw CameraReadException(" error setting brightness: " + string(strerror(errno)));
-    }
-  };
+  bool FrameGrabberTwo::set_contrast(double percent)
+  {
+    string spercent;
+    num_to_string(percent, spercent);
+    debug("setting contrast to " + spercent + "%");
+
+    struct v4l2_queryctrl queryControl;
+    struct v4l2_control control;
+    queryControl.id = V4L2_CID_CONTRAST;
+    if (ioctl(fd, VIDIOC_QUERYCTRL, &queryControl) == -1) return 0;
+    control.id = queryControl.id;
+    control.value = queryControl.minimum +
+                    (percent / 100) * 
+                    (queryControl.maximum - queryControl.minimum);
+
+    if (ioctl(fd, VIDIOC_S_CTRL, &control) == -1) return 0;
+
+    return 1;
+  }
+
+  bool FrameGrabberTwo::set_saturation(double percent)
+  {
+    string spercent;
+    num_to_string(percent, spercent);
+    debug("setting saturation to " + spercent + "%");
+
+    struct v4l2_queryctrl queryControl;
+    struct v4l2_control control;
+    queryControl.id = V4L2_CID_SATURATION;
+    if (ioctl(fd, VIDIOC_QUERYCTRL, &queryControl) == -1) return 0;
+    control.id = queryControl.id;
+    control.value = queryControl.minimum +
+                    (percent / 100) * 
+                    (queryControl.maximum - queryControl.minimum);
+
+    if (ioctl(fd, VIDIOC_S_CTRL, &control) == -1) return 0;
+
+    return 1;
+  }
+
+  bool FrameGrabberTwo::set_exposure(double percent, bool isAuto)
+  {
+    string spercent;
+    num_to_string(percent, spercent);
+    debug("setting exposure to " + spercent + "%");
+    if (isAuto) debug("Auto exposure selected");
+    else debug("Manual Exposure selected");
+
+    struct v4l2_queryctrl queryControl;
+    struct v4l2_control control;
+
+    queryControl.id = V4L2_CID_EXPOSURE_AUTO;
+    if (ioctl(fd, VIDIOC_QUERYCTRL, &queryControl) == -1) return 0;
+    control.id = queryControl.id;
+    control.value = (isAuto ? V4L2_EXPOSURE_APERTURE_PRIORITY : V4L2_EXPOSURE_MANUAL);
+    if (ioctl(fd, VIDIOC_S_CTRL, &control) == -1) return 0;
+
+    queryControl.id = V4L2_CID_EXPOSURE_ABSOLUTE;
+    if (ioctl(fd, VIDIOC_QUERYCTRL, &queryControl) == -1) return 0;
+    control.id = queryControl.id;
+    control.value = queryControl.minimum +
+                    (percent / 100) * 
+                    (queryControl.maximum - queryControl.minimum);
+    if (ioctl(fd, VIDIOC_S_CTRL, &control) == -1) return 0;
+
+    return 1;
+  }
 }; //  blobber namespace

@@ -69,6 +69,16 @@ namespace blobber {
     if(!hascam) return;
     fg->set_contrast(contrast);
   };
+
+  void Camarea::set_saturation(int saturation){
+    if(!hascam) return;
+    fg->set_saturation(saturation);
+  }
+
+  void Camarea::set_exposure(int exposure, bool isAuto) {
+    if (!hascam) return;
+    fg->set_exposure(exposure, isAuto);
+  }
   
   void Camarea::set_device(string _device) { 
     hascam = false;

@@ -28,13 +28,18 @@ namespace blobber {
   OptionsWindow::OptionsWindow(Camarea *cam) : 
     area(cam), 
     okButton(Gtk::Stock::OK),
-    brightnessScale(1, 128, 1.0),
-    contrastScale(1, 256, 1.0),
+    brightnessScale(0, 100, 1.0),
+    contrastScale(0, 100, 1.0),
+    saturationScale(0, 100, 1.0),
+    exposureScale(0, 100, 1.0),
+    exposureAuto("Automatic Exposure Control"),
     poiCriteriaWindow(1, 100, 1.0),
     lblCamDevice("Camera devices: "),
     modsFrame("Available Modules"),
     brightnessFrame("Brightness"),
     contrastFrame("Contrast"),
+    saturationFrame("Saturation"),
+    exposureFrame("Exposure"),
     poiCriteriaWindowFrame("Laser Color Window")
   { 
 
@@ -49,12 +54,19 @@ namespace blobber {
 
     ModInterface::get_available_modules(availableModules, modFiles);
 
-    // Get the brightness and contrast from the config file
+    // Get required settings from the config file
     string slidePosition;
-    config->get_set("brightness", slidePosition, "64");
+    string isAuto;
+    config->get_set("brightness", slidePosition, "80");
     brightnessScale.set_value(string_to_int(slidePosition));
-    config->get_set("contrast", slidePosition, "32");
+    config->get_set("contrast", slidePosition, "75");
     contrastScale.set_value(string_to_int(slidePosition));
+    config->get_set("saturation", slidePosition, "75");
+    saturationScale.set_value(string_to_int(slidePosition));
+    config->get_set("exposure", slidePosition, "5");
+    exposureScale.set_value(string_to_int(slidePosition));
+    config->get_set("autoExposure", isAuto, "0");
+    if (string_to_int(isAuto)) exposureAuto.set_active();
     config->get_set("default_criteria_window", slidePosition, DEFAULT_CRITERIA_WINDOW_SIZE);
     poiCriteriaWindow.set_value(string_to_int(slidePosition));
     // after loading settings, need to update camera
@@ -69,14 +81,21 @@ namespace blobber {
     brightnessFrame.add(brightnessScale);
     mainBox.pack_end(contrastFrame, Gtk::PACK_SHRINK);
     contrastFrame.add(contrastScale);
+    mainBox.pack_end(saturationFrame, Gtk::PACK_SHRINK);
+    saturationFrame.add(saturationScale);
+    mainBox.pack_end(exposureFrame, Gtk::PACK_SHRINK);
+    exposureFrame.add(exposureScale);
+    mainBox.pack_end(exposureAuto);
     mainBox.pack_end(poiCriteriaWindowFrame, Gtk::PACK_SHRINK);
     poiCriteriaWindowFrame.add(poiCriteriaWindow);
     camDevice.pack_start(lblCamDevice, Gtk::PACK_SHRINK);
     modsFrame.add(modsBox);
 
     brightnessScale.signal_value_changed().connect(sigc::mem_fun(*this, &OptionsWindow::brightness_changed));
-    contrastScale.signal_value_changed().connect(sigc::mem_fun(*this, &OptionsWindow::contrast_changed));    
-
+    contrastScale.signal_value_changed().connect(sigc::mem_fun(*this, &OptionsWindow::contrast_changed));
+    saturationScale.signal_value_changed().connect(sigc::mem_fun(*this, &OptionsWindow::saturation_changed));
+    exposureScale.signal_value_changed().connect(sigc::mem_fun(*this, &OptionsWindow::exposure_changed));
+    exposureAuto.signal_toggled().connect(sigc::mem_fun(*this, &OptionsWindow::exposure_changed));
 
     for(std::map<string, string>::iterator it=availableModules.begin(); it!=availableModules.end(); it++) {
       string modname = it->first;
@@ -114,6 +133,14 @@ namespace blobber {
     int brightness = (int) brightnessScale.get_value();
     area->set_brightness(brightness);
   };
+  
+  void OptionsWindow::saturation_changed() {
+    area->set_saturation(saturationScale.get_value());
+  }
+
+  void OptionsWindow::exposure_changed() {
+    area->set_exposure(exposureScale.get_value(), exposureAuto.get_active());
+  }
 
   void OptionsWindow::ok() {
     string device = cboCamDevice.get_entry()->get_text().raw();

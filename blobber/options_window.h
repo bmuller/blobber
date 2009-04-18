@@ -27,10 +27,15 @@ namespace blobber {
     Gtk::Frame modsFrame;
     Gtk::Frame brightnessFrame;
     Gtk::Frame contrastFrame;
+    Gtk::Frame saturationFrame;
+    Gtk::Frame exposureFrame;
     Gtk::Frame poiCriteriaWindowFrame;
     Gtk::VBox modsBox;
     Gtk::HScale brightnessScale;
     Gtk::HScale contrastScale;
+    Gtk::HScale saturationScale;
+    Gtk::HScale exposureScale;
+    Gtk::CheckButton exposureAuto;
     // this is for the default_criteria_window config option
     Gtk::HScale poiCriteriaWindow;
     Camarea *area;
@@ -43,6 +48,8 @@ namespace blobber {
     Configuration *config;
     void brightness_changed();
     void contrast_changed();
+    void saturation_changed();
+    void exposure_changed();
   };
 };
 

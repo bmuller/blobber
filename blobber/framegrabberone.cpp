@@ -122,29 +122,6 @@ FrameGrabberOne::~FrameGrabberOne() {
   close(fd);
 };
 
-void FrameGrabberOne::set_contrast(int contrast) {
-  string scontrast;
-  num_to_string(contrast, scontrast);
-  debug("setting contrast to " + scontrast);
-  picture.contrast = 256 * contrast;
-  if (ioctl(fd, VIDIOCSPICT, &picture) < 0 ) {
-    close(fd);
-    throw CameraReadException(" set picture attributes failed");
-  }
-};
-
-void FrameGrabberOne::set_brightness(int brightness) {
-  string sbrightness;
-  num_to_string(brightness, sbrightness);
-  debug("setting brightness to " + sbrightness);
-  picture.brightness = 256 * brightness;
-  if (ioctl(fd, VIDIOCSPICT, &picture) < 0 ) {
-    close(fd);
-    throw CameraReadException(" set picture attributes failed");
-  }
-};
-
-
 Frame * FrameGrabberOne::makeFrame() {
   int bpp = 0;
   switch (picture.palette) {
@@ -232,5 +209,35 @@ void FrameGrabberOne::grabFrame(Frame *frame) {
   // Move along to the next one
   cur_frame = capture_frame;
 };
+
+bool FrameGrabberOne::set_contrast(double percent) {
+  string spercent;
+  num_to_string(percent, spercent);
+  debug("setting contrast to " + spercent);
+  picture.contrast = 256 * percent;
+  if (ioctl(fd, VIDIOCSPICT, &picture) < 0 ) return 0;
+  return 1;
+};
+
+bool FrameGrabberOne::set_brightness(double percent) {
+  string spercent;
+  num_to_string(percent, spercent);
+  debug("setting brightness to " + spercent);
+  picture.brightness = 256 * percent;
+  if (ioctl(fd, VIDIOCSPICT, &picture) < 0 ) {
+    close(fd);
+    throw CameraReadException(" set picture attributes failed");
+  }
+};
+
+bool FrameGrabberOne::set_saturation(double percent)
+{
+  debug("V4L1 does not support setting saturation");
+}
+
+bool FrameGrabberOne::set_exposure(double percent, bool isAuto)
+{
+  debug("V4L1 does not support controlling exposure");
+}
 
 };

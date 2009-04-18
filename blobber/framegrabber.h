@@ -26,8 +26,10 @@ class FrameGrabber {
   virtual Frame * makeFrame() = 0;
   virtual void grabFrame(Frame *frame) = 0;
   virtual ~FrameGrabber() {};
-  virtual void set_contrast(int contrast) {};
-  virtual void set_brightness(int brightness) {};
+  virtual bool set_contrast(double percent) {};
+  virtual bool set_brightness(double percent) {};
+  virtual bool set_saturation(double percent) {};
+  virtual bool set_exposure(double percent, bool isAuto) {};
 };
 
 class FrameGrabberFactory {
@@ -56,8 +58,11 @@ class FrameGrabberOne : public FrameGrabber {
   ~FrameGrabberOne();
   Frame * makeFrame();
   void grabFrame(Frame *frame);
-  void set_contrast(int contrast);
-  void set_brightness(int brightness);
+  bool set_contrast(double percent);
+  bool set_brightness(double percent);
+  bool set_saturation(double percent);
+  bool set_exposure(double percent, bool isAuto);
+
 };
 #endif
 
@@ -87,8 +92,10 @@ class FrameGrabberTwo : public FrameGrabber {
   ~FrameGrabberTwo();
   Frame * makeFrame();
   void grabFrame(Frame * frame);
-  void set_contrast(int contrast);
-  void set_brightness(int brightness);
+  bool set_contrast(double percent);
+  bool set_brightness(double percent);
+  bool set_saturation(double percent);
+  bool set_exposure(double percent, bool isAuto);
 };
 #endif
 
