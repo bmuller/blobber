@@ -156,12 +156,19 @@ namespace blobber {
     config->set("mods_enabled", push);
     config->set("device", device);
     string slider;
+    string isAuto;
     num_to_string(brightnessScale.get_value(), slider);
     config->set("brightness", slider);
     num_to_string(contrastScale.get_value(), slider);
     config->set("contrast", slider);
     num_to_string(poiCriteriaWindow.get_value(), slider);
     config->set("default_criteria_window", slider);
+    num_to_string(saturationScale.get_value(), slider);
+    config->set("saturation", slider);
+    num_to_string(exposureScale.get_value(), slider);
+    config->set("exposure", slider);
+    num_to_string(exposureAuto.get_active(), isAuto);
+    config->set("autoExposure", slider);
 
     // reload config
     Application::get_app()->reload_config();
