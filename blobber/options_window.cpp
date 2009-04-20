@@ -168,7 +168,7 @@ namespace blobber {
     num_to_string(exposureScale.get_value(), slider);
     config->set("exposure", slider);
     num_to_string(exposureAuto.get_active(), isAuto);
-    config->set("autoExposure", slider);
+    config->set("autoExposure", isAuto);
 
     // reload config
     Application::get_app()->reload_config();
