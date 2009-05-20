@@ -18,6 +18,8 @@
 
 #include "green_screen.h"
 #include <fstream>
+#include <cstring>
+
 
 using namespace blobber;
 using namespace std;
