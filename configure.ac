@@ -138,6 +138,20 @@ AC_ARG_ENABLE(theremin-module, AC_HELP_STRING([[--enable-theremin-module]], [ena
 ])
 AM_CONDITIONAL(THEREMIN, $theremin || $allmods)
 
+pointer=false
+AC_ARG_ENABLE(pointer-module, AC_HELP_STRING([[--enable-pointer-module]], [enable pointer module]), [ 
+  pointer=true
+  AC_CHECK_HEADER([X11/Xlib.h], [],  [pointer=false]
+    [AC_MSG_ERROR([Could not find X11/Xlib.h required for pointer module.])])
+  AC_CHECK_HEADER([X11/extensions/XTest.h], [], [pointer=false]
+    [AC_MSG_ERROR([Could not find X11/extensions/XTest.h required for pointer module.])])
+  AC_CHECK_LIB([Xtst], [XTestFakeMotionEvent], [], [pointer=false]
+    [AC_MSG_ERROR([Could not find Xtst library function XTestFakeMotionEvent.])])
+  AC_CHECK_LIB([Xtst], [XTestFakeButtonEvent], [], [pointer=false]
+    [AC_MSG_ERROR([Could not find Xtst library function XTestFakeButtonEvent.])])
+])
+AM_CONDITIONAL(POINTER, $pointer)
+
 AC_CONFIG_FILES([
  Makefile
  blobber/Makefile

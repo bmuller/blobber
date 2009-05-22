@@ -82,3 +82,9 @@ if THEREMIN
   libtheremin_la_LDFLAGS = ${AM_CPPFLAGS} -lasound
   nobase_dist_pkgdata_DATA += ${stkdir}/fwavblnk.raw ${stkdir}/sinewave.raw
 endif
+
+if POINTER
+  pkglib_LTLIBRARIES += libpointer.la
+  libpointer_la_SOURCES = pointer/pointer.cpp
+  libpointer_la_LDFLAGS = ${AM_CPPFLAGS} -lX11 -lXtst
+endif
