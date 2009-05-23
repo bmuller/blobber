@@ -150,7 +150,7 @@ AC_ARG_ENABLE(pointer-module, AC_HELP_STRING([[--enable-pointer-module]], [enabl
   AC_CHECK_LIB([Xtst], [XTestFakeButtonEvent], [], [pointer=false]
     [AC_MSG_ERROR([Could not find Xtst library function XTestFakeButtonEvent.])])
 ])
-AM_CONDITIONAL(POINTER, $pointer)
+AM_CONDITIONAL(POINTER, $pointer || $allmods)
 
 AC_CONFIG_FILES([
  Makefile
