@@ -1,5 +1,6 @@
 #include "blobber.h"
-#include <time.h>
+#include <string>
+#include <ctime>
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/extensions/XTest.h>
@@ -16,13 +17,13 @@ class Pointer : public ModInterface {
   void init(Camarea &area, ProjectionWindow &pw);
   void update(Camarea &area, ProjectionWindow &pw);
   void update_mode_timed(Camarea &area, ProjectionWindow &pw);
-
+  void translate_coordinates( Camarea &area, COORD &camera, COORD &screen );
   void key(GdkEventKey * event);
-  void expose(GdkEventExpose* event);
 
  private:
   int     mod;   //current mode
-  COORD   shw;   //screen height and width
+  int     sch;   //X screen height 
+  int     scw;   //X screen width
   COORD   loc;   //last location of pointer
   clock_t clk;   //clock at last location
   
