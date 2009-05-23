@@ -131,26 +131,29 @@ AC_ARG_ENABLE(duckhunt-module, AC_HELP_STRING([[--enable-duckhunt-module]], [ena
 AM_CONDITIONAL(DUCKHUNT, $duckhunt || $allmods)
 
 theremin=false
-AC_ARG_ENABLE(theremin-module, AC_HELP_STRING([[--enable-theremin-module]], [enable theremin sound module]), [
+AC_ARG_ENABLE(theremin-module, AC_HELP_STRING([[--enable-theremin-module]], [enable theremin sound module]), 
+  [theremin=true])
+if ( $theremin || $allmods ) then
   AC_CHECK_LIB(asound, snd_pcm_open, [theremin=true], [AC_MSG_ERROR([
-    Could not find ALSA library, which is required for the theremin module.
-  ])])
-])
-AM_CONDITIONAL(THEREMIN, $theremin || $allmods)
+    Could not find ALSA library, which is required for the theremin module. ])  
+  ])
+fi
+AM_CONDITIONAL(THEREMIN, $theremin)
 
 pointer=false
 AC_ARG_ENABLE(pointer-module, AC_HELP_STRING([[--enable-pointer-module]], [enable pointer module]), [ 
-  pointer=true
-  AC_CHECK_HEADER([X11/Xlib.h], [],  [pointer=false]
+  pointer=true])
+if ( $pointer || $allmods ) then
+  AC_CHECK_HEADER([X11/Xlib.h], [pointer=true],  
     [AC_MSG_ERROR([Could not find X11/Xlib.h required for pointer module.])])
-  AC_CHECK_HEADER([X11/extensions/XTest.h], [], [pointer=false]
+  AC_CHECK_HEADER([X11/extensions/XTest.h], [pointer=true],
     [AC_MSG_ERROR([Could not find X11/extensions/XTest.h required for pointer module.])])
-  AC_CHECK_LIB([Xtst], [XTestFakeMotionEvent], [], [pointer=false]
+  AC_CHECK_LIB([Xtst], [XTestFakeMotionEvent], [pointer=true], 
     [AC_MSG_ERROR([Could not find Xtst library function XTestFakeMotionEvent.])])
-  AC_CHECK_LIB([Xtst], [XTestFakeButtonEvent], [], [pointer=false]
+  AC_CHECK_LIB([Xtst], [XTestFakeButtonEvent], [pointer=true],
     [AC_MSG_ERROR([Could not find Xtst library function XTestFakeButtonEvent.])])
-])
-AM_CONDITIONAL(POINTER, $pointer || $allmods)
+fi 
+AM_CONDITIONAL(POINTER, $pointer)
 
 AC_CONFIG_FILES([
  Makefile
