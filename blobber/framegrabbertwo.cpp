@@ -56,7 +56,7 @@ namespace blobber {
     debug(mesg + cstr);
   };
 
-  FrameGrabberTwo::FrameGrabberTwo(string dev) : nbuf(0) {
+  FrameGrabberTwo::FrameGrabberTwo(string dev) : nbuf(0), flags(0) {
 
     char desc[32];
 
@@ -88,6 +88,8 @@ namespace blobber {
       fmtds[nfmtd].type  = V4L2_BUF_TYPE_VIDEO_CAPTURE;
       fmtds[nfmtd].index = nfmtd; 
     } while( ioctl(fd, VIDIOC_ENUM_FMT, &fmtds[nfmtd]) >= 0 ); 
+    
+    // Select a format for which there is a mapping (to RGB24) function 
     for(unsigned int i = 0; i < nfmtd; i++ ) {
       for(colorspace * col = colorspaces; col->color != -1; col++) { 
         if( fmtds[i].pixelformat == col->color ) { 
@@ -185,13 +187,14 @@ namespace blobber {
 
   void FrameGrabberTwo::grabFrame(Frame * frame) {
  
-    // queue last buffer
+    // queue last buffer if grabFrame has been called before (FG2_GRAB_FRAME flag set)
     if( flags & FG2_GRAB_FRAME ) { 
       if( ioctl(fd, VIDIOC_QBUF, &cbuf) < 0 ) {
         close(fd); throw CameraReadException(" error queueing buffer");
       }
     }
-    else { flags |= FG2_GRAB_FRAME; }  
+    // if this is first call to grabFrame set FG2_GRAB_FRAME flag
+    else { flags |= FG2_GRAB_FRAME; }
 
     // dequeue next buffer 
     memset( (void *) &cbuf, 0, sizeof(struct v4l2_buffer));
