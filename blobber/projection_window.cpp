@@ -51,6 +51,7 @@ namespace blobber {
     }
 
     // load colors in config
+    config->get_keys(colornames, groupname);
     string sblack;
     BLACK.to_string(sblack);
     for(unsigned int i=0; i<colornames.size(); i++) {
