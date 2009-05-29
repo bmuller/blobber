@@ -79,8 +79,8 @@ class FrameGrabberTwo : public FrameGrabber {
   int                     fd;         ///< File handle for open device                                                    
   struct v4l2_capability  caps;       ///< Capabilities        
   struct v4l2_fmtdesc *   fmtds;      ///< Available formats
-  unsigned int            nfmtd;      ///< Number of available formats
-  unsigned int            sfmtd;      ///< Index of the selected format                                            
+  int                     nfmtd;      ///< Number of available formats
+  int                     sfmtd;      ///< Index of the selected format                                            
   struct v4l2_format      fmt;        ///< Buffer/pixel format
   struct buffer *         bufs;       ///< Memory buffers
   unsigned int            nbuf;       ///< Number of memory buffers
