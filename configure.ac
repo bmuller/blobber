@@ -86,6 +86,14 @@ AC_CHECK_HEADER([linux/videodev2.h], [
 ])
 
 
+# enable libv4lconvert
+AC_ARG_ENABLE(libv4lconvert, AC_HELP_STRING([[--enable-libv4lconvert]], [enable libv4lconvert support]), 
+  [AC_CHECK_HEADER([libv4lconvert.h], [], AC_MSG_ERROR([Could not find libv4lconvert header file - please install the libv4lconvert development headers.]))]
+  [AC_CHECK_LIB([v4lconvert], [v4lconvert_create], [], AC_MSG_ERROR([Could not find libv4lconvert library - please install the libv4lconvert library or configure without --enable-libv4lconvert]))]
+  [AC_DEFINE([USE_LIBV4LCONVERT], 1, [use libv4lconvert])]
+)
+ 
+
 # enable modules as necessary
 allmods=false
 AC_ARG_ENABLE(all-modules, AC_HELP_STRING([[--enable-all-modules]], [enable all modules]), [allmods=true])

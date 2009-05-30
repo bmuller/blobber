@@ -7,6 +7,7 @@ namespace blobber {
   typedef void (colormap) (unsigned char * , unsigned char *, unsigned int);
 
   /* set of functions for mapping to rgb24 (32 bit) */
+  colormap map_rgb24_special;
   colormap map_rgb24;
   colormap map_bgr24;
   colormap map_rgb32;

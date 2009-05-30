@@ -43,8 +43,34 @@ namespace blobber {
     { -1 }
   };
 
+  void map_rgb24_special(unsigned char * dst, unsigned char * src, unsigned int sizeimage) {
+    unsigned char *dstbuf, *dstend, *srcbuf;
+    dstbuf = dst;
+    dstend = dstbuf + sizeimage; 
+    srcbuf = src;
+    while (dstbuf < dstend) {
+      dstbuf[2] = srcbuf[0];
+      dstbuf[1] = srcbuf[1];
+      dstbuf[0] = srcbuf[2];
+      dstbuf[3] = 0;
+      dstbuf += 4;
+      srcbuf += 3;
+    }
+  }
+
   void map_rgb24(unsigned char * dst, unsigned char * src, unsigned int sizeimage) {
-    memcpy(dst, src, sizeimage);
+    unsigned char *dstbuf, *dstend, *srcbuf;
+    dstbuf = dst;
+    dstend = dstbuf + sizeimage; 
+    srcbuf = src;
+    while (dstbuf < dstend) {
+      dstbuf[0] = srcbuf[0];
+      dstbuf[1] = srcbuf[1];
+      dstbuf[2] = srcbuf[2];
+      dstbuf[3] = 0;
+      dstbuf += 4;
+      srcbuf += 3;
+    }
   }
 
   void map_bgr24(unsigned char * dst, unsigned char * src, unsigned int sizeimage) {
@@ -75,7 +101,7 @@ namespace blobber {
       dstbuf[1] = srcbuf[1];
       dstbuf[2] = srcbuf[0];
       dstbuf += 4;
-    srcbuf += 4;
+      srcbuf += 4;
     }
   }
 
