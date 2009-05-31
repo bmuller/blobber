@@ -3,6 +3,7 @@ using namespace blobber;
 class Ball  {
  public:
   Ball();
+  Ball(int posx, int posy, int radius, int s, DIMENSION c);
 
   void move();
   void setCourtHeight(int h);

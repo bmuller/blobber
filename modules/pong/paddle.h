@@ -3,7 +3,7 @@ using namespace blobber;
 class Paddle  {
  public:
   Paddle();
-  Paddle(int posx, int posy, int w, int h, int s);
+  Paddle(int posx, int posy, int w, int h, int s, DIMENSION c);
 
   void moveUp();
   void moveDown();

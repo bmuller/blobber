@@ -1,11 +1,13 @@
 #include "pongmod.h"
 
-Paddle::Paddle(int posx, int posy, int w, int h, int s) {
+Paddle::Paddle(int posx, int posy, int w, int h, int s, DIMENSION c) {
   pos.x = posx;
   pos.y = posy;
   width = w;
   height = h;
   speed = s;
+  court_height = c.height;
+  court_width = c.width;
 }
 
 Paddle::Paddle()  {
@@ -17,8 +19,9 @@ Paddle::Paddle()  {
 }
 
 void Paddle::moveUp()  {
-  if(pos.y-3 >= 0)
+  if(pos.y-3 >= 0) {
     pos.y -= speed;
+  }
 }
 
 void Paddle::moveDown()  {

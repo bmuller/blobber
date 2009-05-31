@@ -4,14 +4,21 @@
 using namespace std;
 
 Ball::Ball()  {
-  pos.x = 6;
-  pos.y = 6;
+  DIMENSION d;
+  d.height = 150;
+  d.width = 250;
+  Ball(6,6,5,5,d);
+}
+
+Ball::Ball(int posx, int posy, int r, int s, DIMENSION c) {
+  pos.x = posx;
+  pos.y = posy;
+  radius = r;
+  speed = s;
   x_dir = 1;
   y_dir = 1;
-  speed = 5;
-  radius = 5;
-  court_height = 150;
-  court_width = 250;
+  court_height = c.height;
+  court_width = c.width;
 }
 
 void Ball::move()  {
