@@ -301,6 +301,18 @@ namespace blobber {
     cr->stroke();
   };
 
+  void ProjectionWindow::draw_circle_absolute(COORD coords, int radius, COLOR c, bool fill) {
+    Cairo::RefPtr<Cairo::Context> cr;
+    if(!get_context(cr))
+      return;
+
+    cr->arc(coords.x, coords.y, radius, 0.0, 2.0 * M_PI); // full circle
+    set_color(cr, c);
+    if(fill)
+      cr->fill_preserve();
+    cr->stroke();
+  };
+
   void ProjectionWindow::draw_box(COORD coord, int width, int height, COLOR c, bool fill) {
     Cairo::RefPtr<Cairo::Context> cr;
     if(!get_context(cr))
