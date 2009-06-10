@@ -38,7 +38,7 @@ namespace blobber {
     area.register_poi(name, maxPoi);
   };
 
-  void ModInterface::get_poi(Camarea &area, vector<PIXEL> &modpoi) {
+  void ModInterface::get_poi(Camarea &area, BVector<PIXEL> &modpoi) {
     area.get_poi(name, modpoi);
   };
 
@@ -74,7 +74,7 @@ namespace blobber {
   void ModInterface::get_available_modules(map<string, string> &mods, map<string, string> &files) {
     mods.clear();
     files.clear();
-    vector<string> fnames;
+    BVector<string> fnames;
     try {
       Glib::Dir dir(LIBDIR);
       fnames.assign(dir.begin(), dir.end());
@@ -100,7 +100,7 @@ namespace blobber {
     config->module_set(key, value, name);
   };
 
-  void ModInterface::config_set(string key, vector<string> values) {
+  void ModInterface::config_set(string key, BVector<string> values) {
     config->module_set(key, values, name);
   };
 
@@ -115,7 +115,7 @@ namespace blobber {
     config_set(key, value);
   };
 
-  void ModInterface::config_get(string key, vector<string> &values) {
+  void ModInterface::config_get(string key, BVector<string> &values) {
     config->module_get(key, values, name);
   };
 

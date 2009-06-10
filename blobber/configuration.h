@@ -21,20 +21,20 @@ namespace blobber {
 
     // get/set values for main program
     void set(string key, string value, string groupname="blobber");
-    void set(string key, vector<string> values, string groupname="blobber");   
+    void set(string key, BVector<string> values, string groupname="blobber");   
     bool is_set(string key, string groupname="blobber");
     void get(string key, string &value, string vdefault, string groupname="blobber");
     // get if exists, set if not
     void get_set(string key, string &value, string vdefault, string groupname="blobber");
-    void get(string key, vector<string> &values, string groupname="blobber");
+    void get(string key, BVector<string> &values, string groupname="blobber");
 
-    void get_keys(vector<string> &keys, string groupname);
+    void get_keys(BVector<string> &keys, string groupname);
 
     // get/set values for modules
     void module_set(string key, string value, string modname);
-    void module_set(string key, vector<string> values, string modname);   
+    void module_set(string key, BVector<string> values, string modname);   
     void module_get(string key, string &value, string vdefault, string modname);
-    void module_get(string key, vector<string> &values, string modname);
+    void module_get(string key, BVector<string> &values, string modname);
 
     // storing colors
     void get_color(COLOR &c, COLOR &vdefault, string prefix, string groupname="blobber");

@@ -28,7 +28,7 @@ namespace blobber {
     config = Configuration::get_config();
     string groupname = "default_colors";
     string key, value;
-    vector<string> colornames;
+    BVector<string> colornames;
     config->get_keys(colornames, groupname);
 
     // initialize height, width
@@ -36,7 +36,7 @@ namespace blobber {
 
     // set default colors if non existant
     if(colornames.size() == 0) {
-      vector<COLOR> default_colors;
+      BVector<COLOR> default_colors;
       default_colors.push_back(BLUE);
       default_colors.push_back(RED);
       default_colors.push_back(GREEN);
@@ -240,7 +240,7 @@ namespace blobber {
   };
 
 
-  void ProjectionWindow::draw_curve(vector<COORD> points, COLOR c, double line_width) {
+  void ProjectionWindow::draw_curve(BVector<COORD> points, COLOR c, double line_width) {
     Cairo::RefPtr<Cairo::Context> cr;
     if(!get_context(cr) || points.size()!=4)
       return;

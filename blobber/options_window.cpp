@@ -18,6 +18,7 @@
 
 #include <gtkmm/stock.h>
 
+#include "utils.h"
 #include "options_window.h"
 #include "mod_interface.h"
 #include "application.h"
@@ -49,7 +50,7 @@ namespace blobber {
     okButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::ok));
 
     config = Configuration::get_config();
-    vector<string> preLoadedMods;
+    BVector<string> preLoadedMods;
     config->get("mods_enabled", preLoadedMods);
 
     ModInterface::get_available_modules(availableModules, modFiles);
@@ -101,12 +102,9 @@ namespace blobber {
       string modname = it->first;
       string description = it->second;
       modButtons[modname] = Gtk::manage(new Gtk::CheckButton(modname + ": " + description));
-      for (vector<string>::iterator itt = preLoadedMods.begin(); itt < preLoadedMods.end(); itt++) {
-	      if (*itt == modFiles[modname]) {
-		      modButtons[modname]->set_active();
-		      break;
-	      }
-      }
+      // if module is active, make box checked
+      if(preLoadedMods.includes(modname))
+      	modButtons[modname]->set_active();
       modsBox.add(*modButtons[modname]);
     }
 
@@ -147,7 +145,6 @@ namespace blobber {
     if (device == "") config->get("device", device, DEFAULT_DEVICE);
     
     vector<string> push;
-    push.clear();
     for(std::map<string, Gtk::CheckButton*>::iterator it = modButtons.begin(); it != modButtons.end(); it++) {
       if (it->second->get_active()) 
 	push.push_back(modFiles[it->first]);

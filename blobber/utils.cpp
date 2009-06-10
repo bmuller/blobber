@@ -22,8 +22,6 @@
 #include <cstdlib>
 #include <iostream>
 
-#include <glibmm/random.h>
-
 namespace blobber {
   using namespace std;
 
@@ -59,11 +57,6 @@ namespace blobber {
 
   double string_to_double(string s) {
     return atof(s.c_str());
-  };
-
-  template <class T> void random_choice(vector<T> things, T &pick) {
-    Glib::Rand rand;
-    pick = things[rand.get_int_range(0, things.size())];
   };
 
   /** convert integer to string */
@@ -108,12 +101,5 @@ namespace blobber {
     if(esize > ssize)
       return false;
     return s.substr((ssize-esize), ssize) == end;
-  };
-
-  template <class T> bool in_vector(vector<T> things, T thing) {
-    for(unsigned int i=0; i<things.size(); i++)
-      if(things[i] == thing)
-	return true;
-    return false;
   };
 };

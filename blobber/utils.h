@@ -13,8 +13,6 @@ namespace blobber {
   int string_to_int(string s);
   double string_to_double(string s);
   void int_to_string(int i, string& s);
-  template <class T> void random_choice(vector<T> things, T &pick);
-  template <class T> bool in_vector(vector<T> things, T thing);
   // join a vector of strings with a bit of joiner text
   void join(vector<string> v, string joiner, string& result);
   // break up a string into parts whereever e occurs

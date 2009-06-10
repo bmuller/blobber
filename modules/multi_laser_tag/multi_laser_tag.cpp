@@ -33,12 +33,12 @@ void MultiLaserTag::init(Camarea &area, ProjectionWindow &pw) {
 
 
 void MultiLaserTag::update(Camarea &area, ProjectionWindow &pw) {
-  vector<PIXEL> poi;
+  BVector<PIXEL> poi;
   get_poi(area, poi);
 
   for(unsigned int i=0; i<lastpoints.size(); i++) {
 
-    vector<PIXEL>::iterator iter = poi.begin();
+    BVector<PIXEL>::iterator iter = poi.begin();
     while(iter != poi.end()) {
       if((*iter).coord.distance_from(lastpoints[i].coord) < 15.0) {
 	pw.draw_line(lastpoints[i].coord, (*iter).coord, pw.colors[pw.preferred_color], 1.0);

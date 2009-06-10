@@ -105,7 +105,7 @@ void Invaders::update(Camarea &area, ProjectionWindow &pw) {
   }
 
   // get the poi
-  vector<PIXEL> poi;
+  BVector<PIXEL> poi;
   get_poi(area, poi);
   
   if(poi.size() > 0) {

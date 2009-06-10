@@ -30,7 +30,7 @@ void Flower::update(Camarea &area, ProjectionWindow &pw) {
   if(!window) { return; }
 
   // get the poi
-  vector<PIXEL> poi;
+  BVector<PIXEL> poi;
   get_poi(area, poi);
    
   // plant flower seed
@@ -48,7 +48,7 @@ void Flower::update(Camarea &area, ProjectionWindow &pw) {
 
 
   // paint flowers
-  for ( vector<Entity>::iterator it = flowers.begin(); it < flowers.end(); it++ ) { 
+  for ( BVector<Entity>::iterator it = flowers.begin(); it < flowers.end(); it++ ) { 
     pw.translate_coordinates( COORD((*it).loc.x,(*it).loc.y), t);
     window->draw_pixbuf(pw.get_style()->get_black_gc(), 
                         image[it->state], 0, 0, t.x - 60, t.y - 70, 

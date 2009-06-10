@@ -31,7 +31,7 @@ namespace blobber {
       mods.push_back("projectionoptions");
       config->set("mods_enabled", mods);
     }
-    vector<string> mods_enabled;
+    BVector<string> mods_enabled;
     config->get("mods_enabled", mods_enabled);
     for(unsigned int i=0; i<mods_enabled.size(); i++)
       add_mod(ModInterface::load_module(mods_enabled[i]));
@@ -44,7 +44,7 @@ namespace blobber {
     }
     mods.clear();
     if(config->is_set("mods_enabled")) {
-      vector<string> mods_enabled;
+      BVector<string> mods_enabled;
       config->get("mods_enabled", mods_enabled);
       // add modules that should be enabled
       for(unsigned int i=0; i<mods_enabled.size(); i++)

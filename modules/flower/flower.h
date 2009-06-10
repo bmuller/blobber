@@ -10,7 +10,7 @@ class Entity {
 
 class Flower : public ModInterface {
  public:
-  vector<Entity> flowers;
+  BVector<Entity> flowers;
   Glib::RefPtr<Gdk::Pixbuf> * image; 
   bool clear;
 

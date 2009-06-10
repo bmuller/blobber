@@ -27,7 +27,7 @@ void Pointer::update(Camarea &area, ProjectionWindow &pw) {
 
 void Pointer::update_mode_timed( Camarea &area, ProjectionWindow &pw ) {
   COORD t;
-  vector<PIXEL> poi;
+  BVector<PIXEL> poi;
   get_poi(area, poi);
   if ( poi.size() != 0 ) {
     translate_coordinates( area, poi[0].coord, t ); 

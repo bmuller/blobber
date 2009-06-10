@@ -188,13 +188,6 @@ namespace blobber {
       for(int y=bounds.top+1; y<bounds.bottom-1; y++) {
 	int index = x+(y*dimensions.width);
 	COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
-	/* bmuller testing
-	if(pixelcolor.blue > 200) {
-	  string s;
-	  num_to_string(pixelcolor.blue, s);
-	  debug("found greater: " + s);
-	}
-	*/
 	if(pixelcolor.brighter_than(blob))
 	  blob.copy(pixelcolor);
       }
