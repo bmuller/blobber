@@ -120,8 +120,12 @@ namespace blobber {
 
   bool Camarea::on_motion_notify_event(GdkEventMotion* event) {  
     COORD c((int) event->x, (int) event->y);
-    if(mouse_clicked && hascam && c.distance_from(mouse_click) > 2) 
+    if(mouse_clicked && hascam && c.distance_from(mouse_click) > 2) {
       mouse_drawing.from_coords(mouse_click, c);
+      // make sure we don't exceed our dimensions (which can happen
+      // if you just keep moving the mouse outside of the window
+      mouse_drawing.normalize(dimensions);
+    }
   };
 
   bool Camarea::on_button_press_event(GdkEventButton* event) { 
@@ -135,8 +139,11 @@ namespace blobber {
 #endif
     if(hascam) {
       mouse_clicked = true;
-      mouse_click.x = (int) event->x;
-      mouse_click.y = (int) event->y;
+      mouse_click.update((int) event->x, (int) event->y);
+      mouse_click.normalize(dimensions);
+      // next line removes any previous box that might exist and prevents
+      // the application from drawing it
+      mouse_drawing.from_coords(mouse_click, mouse_click);
     }
   };
 
@@ -144,6 +151,11 @@ namespace blobber {
     mouse_clicked = false;
     Configuration * config = Configuration::get_config();
     COORD c((int) event->x, (int) event->y);
+
+    // make sure we don't exceed our dimensions (which can happen
+    // if you just keep moving the mouse outside of the window
+    c.normalize(dimensions);
+
     // event->button is 1 if left mouse button, 3 is right mouse button
     if(hascam && c.distance_from(mouse_click) > 2 && event->button == 1) {
       bounds.from_coords(c, mouse_click);
@@ -169,10 +181,20 @@ namespace blobber {
   // Find the brightest color in the bounds of the data
   bool Camarea::find_the_blob(COLOR &blob, BOUNDS &bounds, unsigned char *data) {
     blob.set(0, 0, 0);
-    for(int x=bounds.left; x<bounds.right; x++) {
-      for(int y=bounds.top; y<bounds.bottom; y++) {
+    // there are +1 and -1 modifications to the bounds so that we are looking "inside"
+    // of the drawn rectangle and don't include the pixels of the rectangle (which are 
+    // BLUE).
+    for(int x=bounds.left+1; x<bounds.right-1; x++) {
+      for(int y=bounds.top+1; y<bounds.bottom-1; y++) {
 	int index = x+(y*dimensions.width);
 	COLOR pixelcolor((int) data[index*4+2], (int) data[index*4+1], (int) data[index*4]);
+	/* bmuller testing
+	if(pixelcolor.blue > 200) {
+	  string s;
+	  num_to_string(pixelcolor.blue, s);
+	  debug("found greater: " + s);
+	}
+	*/
 	if(pixelcolor.brighter_than(blob))
 	  blob.copy(pixelcolor);
       }
