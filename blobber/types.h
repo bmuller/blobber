@@ -46,15 +46,15 @@ namespace blobber {
       num_to_string(red, sred);
       num_to_string(blue, sblue);
       num_to_string(green, sgreen);
-      s = sred + "," + sblue + "," + sgreen;
+      s = sred + "," + sgreen + "," + sblue;
     };
     void from_string(string s) {
       vector<string> parts = explode(s, ",");
       if(parts.size() != 3)
 	return;
       red = string_to_int(parts[0]);
-      blue = string_to_int(parts[1]);
-      green = string_to_int(parts[2]);
+      green = string_to_int(parts[1]);
+      blue = string_to_int(parts[2]);
     };
 
     /** 
