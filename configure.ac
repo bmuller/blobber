@@ -135,6 +135,16 @@ if ( $theremin || $allmods ) then
 fi
 AM_CONDITIONAL(THEREMIN, $theremin)
 
+shapesnsounds=false
+AC_ARG_ENABLE(shapesnsounds-module, AC_HELP_STRING([[--enable-shapesnsounds-module]], [enable shapes and sound module]), 
+  [shapesnsounds=true])
+if ( $shapesnsounds || $allmods ) then
+  AC_CHECK_LIB(asound, snd_pcm_open, [shapesnsounds=true], [AC_MSG_ERROR([
+    Could not find ALSA library, which is required for the shapesnsounds module. ])  
+  ])
+fi
+AM_CONDITIONAL(SHAPESNSOUNDS, $shapesnsounds)
+
 pointer=false
 AC_ARG_ENABLE(pointer-module, AC_HELP_STRING([[--enable-pointer-module]], [enable pointer module]), [ 
   pointer=true])

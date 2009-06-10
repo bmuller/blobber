@@ -21,8 +21,9 @@
 namespace blobber {
 
   // @param _size is the width and the height
-  MovableSquare::MovableSquare(int _size, COORD center, COLOR c) : MovableObject(center, c) {
-    size = _size;
+  MovableSquare::MovableSquare(PROPORTION _prop, COORD center, COLOR c) : MovableObject(center, c) {
+    prop.copy(_prop);
+    size = 0;
   }
 
   bool MovableSquare::in_bounds(COORD c) {
@@ -32,6 +33,9 @@ namespace blobber {
   };
 
   void MovableSquare::paint(ProjectionWindow &pw) {
+    // since we are a square with equal height and width, our proportion will be to height+width/2 of the 
+    // projection window
+    size = (int) (double(prop.convert_width(pw.dimensions.width) + prop.convert_height(pw.dimensions.height)) / 2.0);
     int hsize = size / 2;
     COORD topleft((center.x-hsize), (center.y-hsize));
     pw.draw_box(topleft, size, size, color, true);

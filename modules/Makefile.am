@@ -83,6 +83,18 @@ if THEREMIN
   nobase_dist_pkgdata_DATA += ${stkdir}/fwavblnk.raw ${stkdir}/sinewave.raw
 endif
 
+if SHAPESNSOUNDS
+  pkglib_LTLIBRARIES += libshapesnsounds.la
+  stkdir = libs/stk
+  libshapesnsounds_la_SOURCES = shapesnsounds/shapesnsounds.cpp ${stkdir}/ADSR.cpp ${stkdir}/FileRead.cpp ${stkdir}/Filter.cpp \
+	${stkdir}/Generator.cpp ${stkdir}/SineWave.cpp ${stkdir}/TwoZero.cpp ${stkdir}/WvIn.cpp ${stkdir}/Envelope.cpp \
+	${stkdir}/FileWvIn.cpp ${stkdir}/FM.cpp ${stkdir}/Instrmnt.cpp ${stkdir}/RtAudio.cpp ${stkdir}/Stk.cpp \
+	${stkdir}/WaveLoop.cpp ${stkdir}/BeeThree.cpp
+  libshapesnsounds_la_CPPFLAGS = ${AM_CPPFLAGS} -I${stkdir} -D__GXX__ -D__LITTLE_ENDIAN__  -D__LINUX_ALSA__ -D__LINUX_ALSASEQ__ 
+  libshapesnsounds_la_LDFLAGS = ${AM_CPPFLAGS} -lasound
+  nobase_dist_pkgdata_DATA += ${stkdir}/fwavblnk.raw ${stkdir}/sinewave.raw
+endif
+
 if POINTER
   pkglib_LTLIBRARIES += libpointer.la
   libpointer_la_SOURCES = pointer/pointer.cpp

@@ -43,7 +43,7 @@ void MovableShapes::init(Camarea &area, ProjectionWindow &pw) {
 
   middle.x += 20;
   middle.y += 20;
-  MovableCircle *circle = new MovableCircle(30, middle, RED);
+  MovableCircle *circle = new MovableCircle(PROPORTION(0.3, 0.3), middle, RED);
   shapes.push_back(circle);
 };
 

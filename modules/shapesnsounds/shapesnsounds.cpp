@@ -45,7 +45,7 @@ ShapesNSounds::ShapesNSounds() : ModInterface("ShapesNSounds", "Participatory mu
 };
 
 
-void Theremin::init(Camarea &area, ProjectionWindow &pw) {
+void ShapesNSounds::init(Camarea &area, ProjectionWindow &pw) {
   // use default CRANGE criteria
   register_poi(area, 2);
 
@@ -77,20 +77,20 @@ void Theremin::init(Camarea &area, ProjectionWindow &pw) {
 };
 
 
-Theremin::~Theremin() {
+ShapesNSounds::~ShapesNSounds() {
   try {
     dac.closeStream();
   }
   catch ( RtError &error ) {
     error.printMessage();
-    throw ModuleRuntimeException("Problem shutting down the Theremin module");
+    throw ModuleRuntimeException("Problem shutting down the ShapesNSounds module");
   }
 
   delete data.instrument;
 };
 
 
-void Theremin::note_on(double frequency) {
+void ShapesNSounds::note_on(double frequency) {
   if(note_is_on)
     note_off();
 
