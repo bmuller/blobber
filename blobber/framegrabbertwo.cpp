@@ -67,8 +67,9 @@ namespace blobber {
     }
 
     // Get the device capabilities
+    CLEAR(caps);
     if( ioctl(fd, VIDIOC_QUERYCAP, &caps) < 0 ) {
-      close(fd); throw CameraReadException(" query capabilities failed");
+      close(fd); throw CameraReadException(" query capabilities failed: " + string(strerror(errno)) );
     } 
     cam_debug("V4L2: Driver: ", caps.driver, 16);
     cam_debug("V4L2: Camera: ", caps.card, 32);
@@ -78,7 +79,6 @@ namespace blobber {
     }
 
     // Get the pixelformats supported by the device
-#ifdef USE_LIBV4LCONVERT
     cond = v4lconvert_create(fd);
     CLEAR(sfmt);
     CLEAR(dfmt);
@@ -93,36 +93,7 @@ namespace blobber {
     tbuf.length = dfmt.fmt.pix.height * dfmt.fmt.pix.width * 3;
     tbuf.start = (unsigned char *) malloc(tbuf.length);
     if( tbuf.start == NULL ) { close(fd); throw CameraReadException(" memory allocation failed"); }
-#else
-    sfmtd = -1;
-    nfmtd = -1;
-    fmtds = NULL;
-    do {
-      nfmtd++;
-      fmtds = (struct v4l2_fmtdesc *) realloc( (void *) fmtds, (nfmtd + 1) * sizeof(struct v4l2_fmtdesc) );
-      memset( (void *) (fmtds + nfmtd) , 0, sizeof(struct v4l2_fmtdesc));
-      fmtds[nfmtd].type  = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-      fmtds[nfmtd].index = nfmtd; 
-    } while( ioctl(fd, VIDIOC_ENUM_FMT, &fmtds[nfmtd]) >= 0 ); 
-    // Select a format for which there is a mapping (to RGB24) function 
-    for(unsigned int i = 0; i < nfmtd; i++) {
-      for(colorspace * col = colorspaces; col->color != -1; col++) { 
-        if( fmtds[i].pixelformat == col->color ) { 
-          sfmtd = i; 
-          cmap = col->map;
-        }
-      }
-    }
-    if( sfmtd < 0 ) { close(fd); throw CameraReadException(" pixelformat not supported"); }
-    else { cam_debug("V4L2: Using ", fmtds[sfmtd].description, 32); }
 
-    CLEAR(sfmt);
-    sfmt.fmt.pix.pixelformat = fmtds[sfmtd].pixelformat;
-    sfmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
-    sfmt.fmt.pix.height      = FG2_DEFAULT_HEIGHT;
-    sfmt.fmt.pix.width       = FG2_DEFAULT_WIDTH;
-    sfmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-#endif    
     if (ioctl(fd, VIDIOC_S_FMT, &sfmt) < 0) {
       close(fd); throw CameraReadException(" error setting format");
     }
@@ -226,8 +197,7 @@ namespace blobber {
     if( ioctl(fd, VIDIOC_DQBUF, &cbuf) < 0) {
       close(fd); throw CameraReadException(" error queueing buffer");
     }
-   
-#ifdef USE_LIBV4LCONVERT
+    
     // v4lconvert native format to RGB24 (24bit)
     if( v4lconvert_convert( cond, &sfmt, &dfmt,\
         (unsigned char *) bufs[cbuf.index].start, bufs[cbuf.index].length,\
@@ -241,10 +211,6 @@ namespace blobber {
     // convert again, which is an extra unnecessary conversion per frame FIXME
     // bbbbbbbbggggggggrrrrrrrr -> rrrrrrrrggggggggbbbbbbbb00000000
     map_rgb24_special( (unsigned char *) frame->data, (unsigned char *) tbuf.start, frame->sizeimage );
-#else
-    // convert to rgb24 (32 bit)
-    (*cmap)( (unsigned char *) frame->data, (unsigned char *) bufs[cbuf.index].start, frame->sizeimage);
-#endif      
   };
 
   bool FrameGrabberTwo::set_brightness(double percent)

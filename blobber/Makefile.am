@@ -13,10 +13,8 @@ if HAVE_V4L1
 libblobber_la_SOURCES += framegrabberone.cpp
 endif
 
-if HAVE_V4L2
+#framegrabbertwo now default
 libblobber_la_SOURCES += framegrabbertwo.cpp
-endif
-
 
 bin_PROGRAMS = blobber
 blobber_SOURCES = blobber.cpp
