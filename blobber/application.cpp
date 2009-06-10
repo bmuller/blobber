@@ -25,12 +25,8 @@ namespace blobber {
   Application * Application::_inst = 0;
 
   void Application::load_modules() {
-    if(!config->is_set("mods_enabled")) {
-      vector<string> mods;
-      mods.push_back("lasertag");
-      mods.push_back("projectionoptions");
-      config->set("mods_enabled", mods);
-    }
+    // mods_enabled will be set automagically in the options_window constructor
+    // by now
     BVector<string> mods_enabled;
     config->get("mods_enabled", mods_enabled);
     for(unsigned int i=0; i<mods_enabled.size(); i++)

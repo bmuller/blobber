@@ -50,8 +50,14 @@ namespace blobber {
     okButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::ok));
 
     config = Configuration::get_config();
+
     BVector<string> preLoadedMods;
-    config->get("mods_enabled", preLoadedMods);
+    if(!config->is_set("mods_enabled")) {
+      preLoadedMods << "lasertag" << "projectionoptions";
+      config->set("mods_enabled", preLoadedMods);
+    } else {
+      config->get("mods_enabled", preLoadedMods);
+    }
 
     ModInterface::get_available_modules(availableModules, modFiles);
 
@@ -103,7 +109,7 @@ namespace blobber {
       string description = it->second;
       modButtons[modname] = Gtk::manage(new Gtk::CheckButton(modname + ": " + description));
       // if module is active, make box checked
-      if(preLoadedMods.includes(modname))
+      if(preLoadedMods.includes(modFiles[modname]))
       	modButtons[modname]->set_active();
       modsBox.add(*modButtons[modname]);
     }
