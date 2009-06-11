@@ -27,8 +27,9 @@ namespace blobber {
    * @param center 
    * @param c 
    */
-  MovableCircle::MovableCircle(int _size, COORD center, COLOR c) : MovableObject(center, c) {
-    radius = _size;
+  MovableCircle::MovableCircle(PROPORTION _prop, COORD center, COLOR c) : MovableObject(center, c) {
+    radius = 0;
+    prop.copy(_prop);
   }
 
   bool MovableCircle::in_bounds(COORD c) {
@@ -36,6 +37,9 @@ namespace blobber {
   };
 
   void MovableCircle::paint(ProjectionWindow &pw) {
+    // since we are a square with equal height and width, our proportion will be to height+width/2 of the
+    // projection window
+    radius = (int) (double(prop.convert_width(pw.dimensions.width) + prop.convert_height(pw.dimensions.height)) / 2.0);
     pw.draw_circle(center, radius, color, true);
   };
 

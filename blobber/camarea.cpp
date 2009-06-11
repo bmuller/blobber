@@ -167,7 +167,8 @@ namespace blobber {
       if(find_the_blob(blob, blob_bounds, (unsigned char *) frame->data)) {
 	string colors, criteria_window;
 	blob.to_string(colors);
-	num_to_string(default_criteria_window, criteria_window);
+	config->get_set("default_criteria_window", criteria_window, DEFAULT_CRITERIA_WINDOW_SIZE);
+	default_criteria_window = string_to_int(criteria_window);
 	debug("Setting default criteria to look for " + colors + " += " + criteria_window);
 	config->set_color(blob, "default");
         // we've identified the brightest point - now make a range that centers on that 
