@@ -21,8 +21,9 @@
 namespace blobber {
 
   // @param _size is the width and the height
-  MovableCrosshairs::MovableCrosshairs(int _size, COORD center, COLOR c, COLOR bg) : MovableObject(center, c, bg) {
-    size = _size;
+  MovableCrosshairs::MovableCrosshairs(PROPORTION _prop, COORD center, COLOR c, COLOR bg) : MovableObject(center, c, bg) {
+    prop.copy(_prop);
+    size = 0;
   };
 
   bool MovableCrosshairs::in_bounds(COORD c) {
@@ -32,6 +33,9 @@ namespace blobber {
   };
 
   void MovableCrosshairs::paint(ProjectionWindow &pw) {
+    // since we are an object with equal height and width, our proportion will be to height+width/2 of the
+    // projection window
+    size = (int) (double(prop.convert_width(pw.dimensions.width) + prop.convert_height(pw.dimensions.height)) / 2.0);
     int hsize = size / 2;
     pw.draw_line(COORD(center.x-hsize, center.y), COORD(center.x+hsize, center.y), color);
     pw.draw_line(COORD(center.x, center.y-hsize), COORD(center.x, center.y+hsize), color);

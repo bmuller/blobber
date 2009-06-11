@@ -37,7 +37,7 @@ namespace blobber {
   };
 
   void MovableCircle::paint(ProjectionWindow &pw) {
-    // since we are a square with equal height and width, our proportion will be to height+width/2 of the
+    // since we are an object with equal height and width, our proportion will be to height+width/2 of the
     // projection window
     radius = (int) (double(prop.convert_width(pw.dimensions.width) + prop.convert_height(pw.dimensions.height)) / 2.0);
     pw.draw_circle(center, radius, color, true);
@@ -45,7 +45,7 @@ namespace blobber {
 
   void MovableCircle::clear(ProjectionWindow &pw) {
     // no idea why small single pixel border left when clearing
-    radius+=1;
+    radius+=2;
     MovableObject::clear(pw);
     radius-=1;
   };

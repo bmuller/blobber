@@ -21,7 +21,7 @@
 using namespace std;
 using namespace blobber;
 
-MovableShapes::MovableShapes() : ModInterface("MoveableShapes", "Move shapes around"), xhairs(9,COORD(0,0),WHITE) { 
+MovableShapes::MovableShapes() : ModInterface("MoveableShapes", "Move shapes around"), xhairs(PROPORTION(0.02,0.02),COORD(0,0),WHITE) { 
   missing_point_count = 0;
 };
 
@@ -38,12 +38,12 @@ void MovableShapes::init(Camarea &area, ProjectionWindow &pw) {
   pw.get_drawing_area_dimensions(visible_dimensions);
 
   COORD middle(visible_dimensions.width/2, visible_dimensions.height/2);
-  MovableSquare *square = new MovableSquare(20, middle, BLUE);
+  MovableSquare *square = new MovableSquare(PROPORTION(0.1, 0.1), middle, BLUE);
   shapes.push_back(square);
 
   middle.x += 20;
   middle.y += 20;
-  MovableCircle *circle = new MovableCircle(PROPORTION(0.3, 0.3), middle, RED);
+  MovableCircle *circle = new MovableCircle(PROPORTION(0.15, 0.15), middle, RED);
   shapes.push_back(circle);
 };
 
