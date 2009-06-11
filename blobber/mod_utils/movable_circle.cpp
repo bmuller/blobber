@@ -45,9 +45,7 @@ namespace blobber {
 
   void MovableCircle::clear(ProjectionWindow &pw) {
     // no idea why small single pixel border left when clearing
-    radius+=2;
-    MovableObject::clear(pw);
-    radius-=1;
+    pw.draw_circle(center, radius+1, background, true);
   };
 
 };

@@ -77,13 +77,13 @@ void MovableShapes::update(Camarea &area, ProjectionWindow &pw) {
     return;
   }
 
+  xhairs.move(poi[0].coord, pw);
+
   // clear selected attr if we've missed the laser for 3 or more iterations;
   if(missing_point_count > 3) {
     for(unsigned int i=0; i<shapes.size(); i++) 
       shapes[i]->selected = false;
     xhairs.move(poi[0].coord, pw);
-  } else {
-    xhairs.move(poi[0].coord, pw, false);
   }
 
   missing_point_count = 0;
@@ -107,6 +107,7 @@ void MovableShapes::update(Camarea &area, ProjectionWindow &pw) {
   // could be a new selection - but only one can be selected
   if(!isselected) {
     for(unsigned int i=0; i<shapes.size(); i++) {
+      shapes[i]->paint(pw);
       // only one new one can be selected
       if((shapes[i]->selected = shapes[i]->in_bounds(poi[0].coord)))
 	break;

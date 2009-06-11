@@ -43,8 +43,10 @@ namespace blobber {
 
   void MovableCrosshairs::clear(ProjectionWindow &pw) {
     // no idea why small single pixel border left when clearing
-    size+=2;
-    MovableObject::clear(pw);
-    size-=2;
+    size += 4;
+    int hsize = size / 2;
+    pw.draw_line(COORD(center.x-hsize, center.y), COORD(center.x+hsize, center.y), background);
+    pw.draw_line(COORD(center.x, center.y-hsize), COORD(center.x, center.y+hsize), background);
+    size -= 4;
   };
 };

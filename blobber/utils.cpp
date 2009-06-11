@@ -22,6 +22,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <gtkmm/messagedialog.h>
+
 namespace blobber {
   using namespace std;
 
@@ -36,6 +38,11 @@ namespace blobber {
     cout << time_s << "[" << string(PACKAGE_NAME) << "] " << msg << endl;
     cout.flush();
 #endif
+  };
+
+  void error(string msg) {
+    Gtk::MessageDialog md(msg, false, Gtk::MESSAGE_WARNING);
+    md.run();
   };
 
   /** convert integer to string */

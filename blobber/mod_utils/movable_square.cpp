@@ -43,9 +43,11 @@ namespace blobber {
 
   void MovableSquare::clear(ProjectionWindow &pw) {
     // no idea why small single pixel border left when clearing a box
-    size+=2;
-    MovableObject::clear(pw);
-    size-=2;
+    size+=4;
+    int hsize = size / 2;
+    COORD topleft((center.x-hsize), (center.y-hsize));
+    pw.draw_box(topleft, size, size, background, true);
+    size-=4;
   };
 
 };

@@ -40,8 +40,10 @@ int tick( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
 /////////////////////////////////////////////////////////////////////
 
-ShapesNSounds::ShapesNSounds() : ModInterface("ShapesNSounds", "Participatory music making module"), missing_counter(0) {
+ShapesNSounds::ShapesNSounds() : ModInterface("ShapesNSounds", "ShapesNSounds music making module"), note_is_on(false), missing_counter(0) {
   // can't do much here cause we can't open a device until we're inited
+  lastpoint.x = 0;
+  lastpoint.y = 0;
 };
 
 
@@ -70,9 +72,9 @@ void ShapesNSounds::init(Camarea &area, ProjectionWindow &pw) {
     data.instrument = new BeeThree();
   } catch ( RtError& error ) {
     error.printMessage();
-    throw ModuleRuntimeException("Could not open audio stream for Theremin module");
+    throw ModuleRuntimeException("Could not open audio stream for ShapesNSounds module");
   } catch ( StkError & ) {
-    throw ModuleRuntimeException("Could not open audio stream for Theremin module");
+    throw ModuleRuntimeException("Could not open audio stream for ShapesNSounds module");
   }
 };
 
@@ -105,7 +107,7 @@ void ShapesNSounds::note_on(double frequency) {
 };
 
 
-void Theremin::note_off() {  
+void ShapesNSounds::note_off() {  
   if(!note_is_on) return;
   mod_debug("Note off");
   data.instrument->noteOff(0.5);
@@ -114,12 +116,12 @@ void Theremin::note_off() {
 };
 
 
-void Theremin::projection_window_exposed(ProjectionWindow &pw) {
+void ShapesNSounds::projection_window_exposed(ProjectionWindow &pw) {
   pw.get_drawing_area_dimensions(dimensions);
 };
 
 
-void Theremin::update(Camarea &area, ProjectionWindow &pw) {
+void ShapesNSounds::update(Camarea &area, ProjectionWindow &pw) {
   BVector<PIXEL> poi;
   get_poi(area, poi);
 
@@ -141,6 +143,6 @@ void Theremin::update(Camarea &area, ProjectionWindow &pw) {
 
 extern "C" {
   ModInterface *get_module() {
-    return new Theremin();
+    return new ShapesNSounds();
   };
 };

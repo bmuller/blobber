@@ -205,6 +205,8 @@ namespace blobber {
     
     if(need_alignment)
       draw_alignment_graphics();
+
+    clear();
     return true;
   };
 

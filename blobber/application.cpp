@@ -18,6 +18,7 @@
 
 #include "application.h"
 #include <gtkmm/main.h>
+#include <exception>
 
 namespace blobber {
   using namespace std;
@@ -108,8 +109,12 @@ namespace blobber {
       debug("loading canceled - module already loaded");
     } else {
       mi->set_config(config);
-      mi->init(win.area, proj);
-      mods.push_back(mi);
+      try {
+	mi->init(win.area, proj);
+	mods.push_back(mi);
+      } catch(exception &e) {
+	error("Could not initialize module " + mi->name + ".  Error was: " + e.what());
+      }
     }
   };
     
