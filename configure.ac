@@ -67,8 +67,8 @@ PKG_CHECK_MODULES([GTK],[gtkmm-2.4 >= 2.8.0],,[
 # Check for v4l headers
 v4l1=false
 AC_ARG_ENABLE(v4l1, AC_HELP_STRING([[--enable-v4l1]], [enable v4l version 1 support]),
-  [AC_CHECK_HEADER([linux/videodev.h], [AC_DEFINE([HAVE_V4l1], [1], [[have v4l version 1 support]])], [ 
-    AC_MSG_ERROR([Could not find v4l version 1 header file - please reconfigure without --enable-v4l-legacy])]
+  [AC_CHECK_HEADER([linux/videodev.h], [AC_DEFINE([HAVE_V4l1], [1], [[have v4l version 1 support]])] [v4l1=true], [ 
+    AC_MSG_ERROR([Could not find v4l version 1 header file - please reconfigure without --enable-v4l1])]
   )]
 )
 AM_CONDITIONAL(HAVE_V4L1, $v4l1)
