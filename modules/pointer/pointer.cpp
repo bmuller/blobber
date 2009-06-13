@@ -62,8 +62,8 @@ void Pointer::update_mode_timed( Camarea &area, ProjectionWindow &pw ) {
 
 /// Converts camera coordinates to screen coordinates
 void Pointer::translate_coordinates( Camarea &area, COORD &camera, COORD &screen ) {
-  screen.x = (int) ( ( ( (float) camera.x ) / ( (float) area.dimensions.width ) ) * scw );
-  screen.y = (int) ( ( ( (float) camera.y ) / ( (float) area.dimensions.height ) ) * sch );
+  screen.x = (int) ( ( ( (float) camera.x - area.bounds.left ) / ( (float) area.bounds.width() ) ) * scw );
+  screen.y = (int) ( ( ( (float) camera.y - area.bounds.top ) / ( (float) area.bounds.height() ) ) * sch );
 }
 
 void Pointer::key(GdkEventKey * event){}
