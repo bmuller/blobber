@@ -21,6 +21,7 @@ class Pointer : public ModInterface {
   void key(GdkEventKey * event);
 
  private:
+  bool    ena;   //enable
   int     mod;   //current mode
   int     sch;   //X screen height 
   int     scw;   //X screen width

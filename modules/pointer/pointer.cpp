@@ -1,6 +1,6 @@
 #include "pointer.h"
 
-Pointer::Pointer() : ModInterface("Pointer"), mod(POINTER_MODE_TIMED), loc(0, 0) {
+Pointer::Pointer() : ModInterface("Pointer"), mod(POINTER_MODE_TIMED), loc(0, 0), ena(false) {
   Display * dpy = XOpenDisplay( NULL );
   sch = DisplayHeight( dpy, DefaultScreen( dpy ) );
   scw = DisplayWidth( dpy, DefaultScreen( dpy ) );
@@ -34,29 +34,29 @@ void Pointer::update_mode_timed( Camarea &area, ProjectionWindow &pw ) {
   get_poi(area, poi);
   if ( poi.size() != 0 ) {
     translate_coordinates( area, poi[0].coord, t ); 
-    Display * dpy = XOpenDisplay( NULL );
-    XTestFakeMotionEvent( dpy, DefaultScreen( dpy ), t.x, t.y, CurrentTime );
+    if( ena ) { 
+      Display * dpy = XOpenDisplay( NULL );
+      XTestFakeMotionEvent( dpy, DefaultScreen( dpy ), t.x, t.y, CurrentTime );
+      // some debugging stuff
+      //string delString, clkString;
+      //num_to_string( loc.distance_from( poi[0].coord ), delString );
+      //num_to_string( ( (float) ( clock() - clk ) ) / CLOCKS_PER_SEC, clkString );
+      //debug( "pointer: delta = " + delString + " clock = " + clkString );
+      // if new location is  > 20 away, start clock over, reset loc
+      if( loc.distance_from( poi[0].coord ) > 20.0 ) {
+        clk = clock();
+        loc.copy( poi[0].coord );
+      }
 
-    // some debugging stuff
-    //string delString, clkString;
-    //num_to_string( loc.distance_from( poi[0].coord ), delString );
-    //num_to_string( ( (float) ( clock() - clk ) ) / CLOCKS_PER_SEC, clkString );
-    //debug( "pointer: delta = " + delString + " clock = " + clkString );
+      // if 0.3 seconds have passed and pointer has not moved (much), send click
+      if( ( (float) ( clock() - clk ) ) / CLOCKS_PER_SEC > 0.3 ) {
+        XTestFakeButtonEvent( dpy, Button1, True, CurrentTime );
+        XTestFakeButtonEvent( dpy, Button1, False, CurrentTime );
+        clk = clock();
+      }
 
-    // if new location is  > 20 away, start clock over, reset loc
-    if( loc.distance_from( poi[0].coord ) > 20.0 ) {
-      clk = clock();
-      loc.copy( poi[0].coord );
+      XCloseDisplay( dpy );
     }
-
-    // if 0.3 seconds have passed and pointer has not moved (much), send click
-    if( ( (float) ( clock() - clk ) ) / CLOCKS_PER_SEC > 0.3 ) {
-      XTestFakeButtonEvent( dpy, Button1, True, CurrentTime );
-      XTestFakeButtonEvent( dpy, Button1, False, CurrentTime );
-      clk = clock();
-    }
-
-    XCloseDisplay( dpy );
   }
 }
 
@@ -66,7 +66,11 @@ void Pointer::translate_coordinates( Camarea &area, COORD &camera, COORD &screen
   screen.y = (int) ( ( ( (float) camera.y - area.bounds.top ) / ( (float) area.bounds.height() ) ) * sch );
 }
 
-void Pointer::key(GdkEventKey * event){}
+void Pointer::key(GdkEventKey * event){
+  switch( event->keyval ) {
+    case GDK_e : if( ena ) { ena = false; } else { ena = true; } break;
+  }  
+}
 
 extern "C" {
   ModInterface *get_module() { return new Pointer(); };
