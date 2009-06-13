@@ -40,7 +40,7 @@ int tick( void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
 
 /////////////////////////////////////////////////////////////////////
 
-ShapesNSounds::ShapesNSounds() : ModInterface("ShapesNSounds", "ShapesNSounds music making module"), note_is_on(false), missing_counter(0) {
+ShapesNSounds::ShapesNSounds() : ModInterface("ShapesNSounds", "ShapesNSounds music making module"), note_is_on(false), missing_counter(0), xhairs(PROPORTION(0.02,0.02),COORD(0,0),WHITE) {
   // can't do much here cause we can't open a device until we're inited
   lastpoint.x = 0;
   lastpoint.y = 0;
@@ -76,6 +76,19 @@ void ShapesNSounds::init(Camarea &area, ProjectionWindow &pw) {
   } catch ( StkError & ) {
     throw ModuleRuntimeException("Could not open audio stream for ShapesNSounds module");
   }
+
+
+  DIMENSION visible_dimensions;
+  pw.get_drawing_area_dimensions(visible_dimensions);
+
+  COORD middle(visible_dimensions.width/2, visible_dimensions.height/2);
+  MovableSquare *square = new MovableSquare(PROPORTION(0.1, 0.1), middle, BLUE);
+  shapes.push_back(square);
+
+  middle.x += 20;
+  middle.y += 20;
+  MovableCircle *circle = new MovableCircle(PROPORTION(0.15, 0.15), middle, RED);
+  shapes.push_back(circle);
 };
 
 
@@ -89,6 +102,9 @@ ShapesNSounds::~ShapesNSounds() {
   }
 
   delete data.instrument;
+
+  for(unsigned int i=0; i<shapes.size(); i++)
+    delete shapes[i];
 };
 
 
@@ -118,6 +134,10 @@ void ShapesNSounds::note_off() {
 
 void ShapesNSounds::projection_window_exposed(ProjectionWindow &pw) {
   pw.get_drawing_area_dimensions(dimensions);
+
+  for(unsigned int i=0; i<shapes.size(); i++)
+    shapes[i]->paint(pw);
+  xhairs.paint(pw);
 };
 
 
@@ -125,19 +145,69 @@ void ShapesNSounds::update(Camarea &area, ProjectionWindow &pw) {
   BVector<PIXEL> poi;
   get_poi(area, poi);
 
+  // no points means nothing is selected, return 
   if(poi.size() == 0) {
-    missing_counter++;
-    if(missing_counter > 5)
+    // if we just went blank, get rid of old crosshairs  
+    // we should repaint object if it was just selected, or paint  
+    // old crosshairs black if nothing was selected    
+    if(missing_counter == 0) {
+      bool found = false;
+      for(unsigned int i=0; (i<shapes.size() && !found); i++) {
+        if(shapes[i]->selected) {
+          shapes[i]->paint(pw);
+          found = true;
+        }
+      }
+      if(!found)
+        xhairs.clear(pw);
+    } else if(missing_counter > 5) {
       note_off();
-  } else {
-    missing_counter = 0;
-    // make noise if laser has moved - frequency is based on x coordinate
-    if(poi[0].coord.distance_from(lastpoint) > 5) {
-      double frequency = min_frequency + ((max_frequency - min_frequency) * ((double) poi[0].coord.x / (double) dimensions.width));
-      note_on(frequency);
     }
-    lastpoint.copy(poi[0].coord);
+    missing_counter++;
+    return;
   }
+
+  xhairs.move(poi[0].coord, pw);
+
+  // clear selected attr if we've missed the laser for 3 or more iterations; 
+  if(missing_counter > 3) {
+    for(unsigned int i=0; i<shapes.size(); i++)
+      shapes[i]->selected = false;
+    xhairs.move(poi[0].coord, pw);
+  }
+
+  missing_counter = 0;
+
+  // for each point   
+  bool isselected = false;
+  for(unsigned int i=0; i<shapes.size(); i++) {
+    // if previously selected, move, then update all the other shapes 
+    // (in case we were occluding one and need to redraw)                                
+    if(shapes[i]->selected) {
+      shapes[i]->move(poi[0].coord, pw);
+      for(unsigned int j=0; j<shapes.size(); j++)
+        shapes[j]->paint(pw);
+      // make sure selected ends up in front                                               
+      shapes[i]->paint(pw);
+      isselected = true;
+      break;
+    }
+  }
+
+  // could be a new selection - but only one can be selected 
+  if(!isselected) {
+    for(unsigned int i=0; i<shapes.size(); i++) {
+      shapes[i]->paint(pw);
+      // only one new one can be selected 
+      if((shapes[i]->selected = shapes[i]->in_bounds(poi[0].coord))) {
+	note_off();
+	double frequency = min_frequency + ((max_frequency - min_frequency) * ((double) shapes[i]->center.x / (double) dimensions.width));
+	note_on(frequency);
+        break;
+      }
+    }
+  }
+
 };
 
 
