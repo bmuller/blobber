@@ -82,13 +82,21 @@ void ShapesNSounds::init(Camarea &area, ProjectionWindow &pw) {
   pw.get_drawing_area_dimensions(visible_dimensions);
 
   COORD middle(visible_dimensions.width/2, visible_dimensions.height/2);
-  MovableSquare *square = new MovableSquare(PROPORTION(0.1, 0.1), middle, BLUE);
-  shapes.push_back(square);
+  shapes.push_back(new MovableSquare(PROPORTION(0.1, 0.1), middle, BLUE));
 
   middle.x += 20;
   middle.y += 20;
-  MovableCircle *circle = new MovableCircle(PROPORTION(0.15, 0.15), middle, RED);
-  shapes.push_back(circle);
+  shapes.push_back(new MovableCircle(PROPORTION(0.15, 0.15), middle, RED));
+
+  middle.x -= 40;
+  middle.y -= 40;
+  shapes.push_back(new MovableSquare(PROPORTION(0.12, 0.12), middle, GREEN));
+
+  middle.x += 20;
+  shapes.push_back(new MovableCircle(PROPORTION(0.1, 0.1), middle, LIGHT_BLUE));
+
+  middle.y += 20;
+  shapes.push_back(new MovableCircle(PROPORTION(0.13, 0.13), middle, BROWN));
 };
 
 
