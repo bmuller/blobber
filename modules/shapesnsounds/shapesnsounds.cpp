@@ -185,6 +185,11 @@ void ShapesNSounds::update(Camarea &area, ProjectionWindow &pw) {
     // (in case we were occluding one and need to redraw)                                
     if(shapes[i]->selected) {
       shapes[i]->move(poi[0].coord, pw);
+
+      note_off();
+      double frequency = min_frequency + ((max_frequency - min_frequency) * ((double) shapes[i]->center.x / (double) dimensions.width));
+      note_on(frequency);
+
       for(unsigned int j=0; j<shapes.size(); j++)
         shapes[j]->paint(pw);
       // make sure selected ends up in front                                               
@@ -199,12 +204,8 @@ void ShapesNSounds::update(Camarea &area, ProjectionWindow &pw) {
     for(unsigned int i=0; i<shapes.size(); i++) {
       shapes[i]->paint(pw);
       // only one new one can be selected 
-      if((shapes[i]->selected = shapes[i]->in_bounds(poi[0].coord))) {
-	note_off();
-	double frequency = min_frequency + ((max_frequency - min_frequency) * ((double) shapes[i]->center.x / (double) dimensions.width));
-	note_on(frequency);
+      if((shapes[i]->selected = shapes[i]->in_bounds(poi[0].coord)))
         break;
-      }
     }
   }
 
