@@ -37,11 +37,11 @@ void Pointer::update_mode_timed( Camarea &area, ProjectionWindow &pw ) {
     Display * dpy = XOpenDisplay( NULL );
     XTestFakeMotionEvent( dpy, DefaultScreen( dpy ), t.x, t.y, CurrentTime );
 
-    //Haven't got the clicking part down yet
-    string delString, clkString;
-    num_to_string( loc.distance_from( poi[0].coord ), delString );
-    num_to_string( ( (float) ( clock() - clk ) ) / CLOCKS_PER_SEC, clkString );
-    debug( "pointer: delta = " + delString + " clock = " + clkString );
+    // some debugging stuff
+    //string delString, clkString;
+    //num_to_string( loc.distance_from( poi[0].coord ), delString );
+    //num_to_string( ( (float) ( clock() - clk ) ) / CLOCKS_PER_SEC, clkString );
+    //debug( "pointer: delta = " + delString + " clock = " + clkString );
 
     // if new location is  > 20 away, start clock over, reset loc
     if( loc.distance_from( poi[0].coord ) > 20.0 ) {
@@ -49,8 +49,8 @@ void Pointer::update_mode_timed( Camarea &area, ProjectionWindow &pw ) {
       loc.copy( poi[0].coord );
     }
 
-    // if 1.0 seconds have passed and pointer has not moved (much), send click
-    if( ( (float) ( clock() - clk ) ) / CLOCKS_PER_SEC > 1.0 ) {
+    // if 0.3 seconds have passed and pointer has not moved (much), send click
+    if( ( (float) ( clock() - clk ) ) / CLOCKS_PER_SEC > 0.3 ) {
       XTestFakeButtonEvent( dpy, Button1, True, CurrentTime );
       XTestFakeButtonEvent( dpy, Button1, False, CurrentTime );
       clk = clock();
