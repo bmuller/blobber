@@ -66,7 +66,15 @@ namespace blobber {
     // until we do an alignment, just set the projection area and camarea bounds to be the 
     // full visible area of camera
     BOUNDS b(0, win.area.dimensions.height, 0, win.area.dimensions.width);
-    win.area.set_bounds(b);
+
+    if(config->bounds_are_set("camarea_bounds")) {
+      // default bounds in this case are ignored
+      BOUNDS default_bounds;
+      config->get_bounds(win.area.bounds, default_bounds, "camarea_bounds");
+      win.area.manual_align = true;
+    } else {
+      win.area.set_bounds(b);
+    }
     proj.set_bounds(b);
     
     load_modules();

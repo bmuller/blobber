@@ -160,6 +160,7 @@ namespace blobber {
     if(hascam && c.distance_from(mouse_click) > 2 && event->button == 1) {
       bounds.from_coords(c, mouse_click);
       manual_align = true;
+      config->set_bounds(bounds, "camarea_bounds");
     } else if(hascam && c.distance_from(mouse_click) > 2 && event->button == 3) {
       BOUNDS blob_bounds;
       blob_bounds.from_coords(c, mouse_click);

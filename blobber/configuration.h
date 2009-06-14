@@ -40,6 +40,12 @@ namespace blobber {
     void get_color(COLOR &c, COLOR &vdefault, string prefix, string groupname="blobber");
     void get_set_color(COLOR &c, COLOR &vdefault, string prefix, string groupname="blobber");
     void set_color(COLOR &c, string prefix, string groupname="blobber");
+
+    // storing bounds
+    void get_bounds(BOUNDS &b, BOUNDS &vdefault, string prefix, string groupname="blobber");
+    void get_set_bounds(BOUNDS &c, BOUNDS &vdefault, string prefix, string groupname="blobber");
+    void set_bounds(BOUNDS &c, string prefix, string groupname="blobber");
+    bool bounds_are_set(string prefix, string groupname="blobber");
   };
 };
 

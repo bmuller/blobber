@@ -152,6 +152,47 @@ namespace blobber {
     set_color(c, prefix, groupname);
   };
 
+  void Configuration::get_bounds(BOUNDS &b, BOUNDS &vdefault, string prefix, string groupname) {
+    string top, bottom, left, right;
+    string dtop, dbottom, dleft, dright;
+
+    num_to_string(vdefault.top, dtop);
+    num_to_string(vdefault.bottom, dbottom);
+    num_to_string(vdefault.left, dleft);
+    num_to_string(vdefault.right, dright);
+
+    get(prefix + "_top", top, dtop, groupname);
+    get(prefix + "_bottom", bottom, dbottom, groupname);
+    get(prefix + "_left", left, dleft, groupname);
+    get(prefix + "_right", right, dright, groupname);
+    
+    BOUNDS tmp(string_to_int(top), string_to_int(bottom), string_to_int(left), string_to_int(right));
+    b.copy(tmp);
+  };
+
+  void Configuration::get_set_bounds(BOUNDS &c, BOUNDS &vdefault, string prefix, string groupname) {
+    get_bounds(c, vdefault, prefix, groupname);
+    set_bounds(c, prefix, groupname);
+  };
+
+  void Configuration::set_bounds(BOUNDS &c, string prefix, string groupname) {
+    string top, bottom, left, right;
+    num_to_string(c.top, top);
+    num_to_string(c.bottom, bottom);
+    num_to_string(c.left, left);
+    num_to_string(c.right, right);
+
+    set(prefix + "_top", top, groupname);
+    set(prefix + "_bottom", bottom, groupname);
+    set(prefix + "_left", left, groupname);
+    set(prefix + "_right", right, groupname);
+  };
+
+  bool Configuration::bounds_are_set(string prefix, string groupname) {
+    return is_set(prefix+"_top",groupname) && is_set(prefix+"_bottom",groupname) \
+      && is_set(prefix+"_left", groupname) && is_set(prefix+"_right",groupname);
+  };
+
   void Configuration::get_keys(BVector<string> &values, string groupname) {
     if(!config.has_group(groupname)) {
       values.clear();
