@@ -93,13 +93,16 @@ namespace blobber {
     Gtk::MessageDialog cmdAbout(*this, strVersion);
     cmdAbout.set_secondary_text("Blobber tracks lights/colors with an attached webcam and "
 				"then projects their \"reactions\" using an attached projector.\n\n"
-				"Blobber is open source software brougt to you by csclug.org.");
+				"Blobber is open source software brougt to you by csclug.org.\n"
+				"For more information see " + string(PACKAGE_URL));
+    cmdAbout.set_title("About " + string(PACKAGE_NAME));
     cmdAbout.run();
   };
 
   void CameraWindow::help() {
     Glib::ustring strVersion = string(PACKAGE_STRING) + " Help";
     Gtk::MessageDialog cmdHelp(*this, strVersion);
+    cmdHelp.set_title(string(PACKAGE_NAME) + " Help");
     cmdHelp.set_secondary_text("You can find help for blobber at:\n" + string(PACKAGE_URL));
     cmdHelp.run();
   };
@@ -110,33 +113,43 @@ namespace blobber {
     options_window.show();
   };
 
-  bool CameraWindow::on_key_press_event(GdkEventKey* eventData)
-  {
-#ifdef DEBUG
+  bool CameraWindow::on_key_press_event(GdkEventKey* eventData) {
     string ks;
     num_to_string((int) eventData->keyval, ks);
     debug("Key pressed on camera window: "+ks);
-#endif
-    switch(eventData->keyval) 
-    {
+
+    switch(eventData->keyval) {
     case 115: // s
 	save_to_file();
 	break;
     };
   };
-  void CameraWindow::save_to_file() 
-  {
+
+  void CameraWindow::save_to_file() {
 #ifdef CAIRO_HAS_PNG_FUNCTIONS
     string filepath;
     time_t rawTime;
     string nameTime;
 
+    // make sure directory exists
     filepath =  Glib::build_filename(Glib::get_user_data_dir(), "blobber");
+    try {
+      Glib::Dir::Dir dirio(filepath);
+    } catch(Glib::FileError fe) {
+      if(mkdir(filepath.c_str(), S_IRWXU) != 0)
+	throw ConfigurationException("Could not make configuration directory " + filepath);
+    };
+
     rawTime = time(NULL);
     nameTime = string(ctime(&rawTime));
     filepath = Glib::build_filename(filepath, nameTime.substr(0, nameTime.length()-1) + "_camera.png");
     debug("Saving camera screen capture to " + filepath);
-    area.getSurface()->write_to_png(filepath);
+    try {
+      area.getSurface()->write_to_png(filepath);
+      alert("Image saved to " + filepath);
+    } catch(exception &e) {
+      error(e.what());
+    }
 #else
     throw NoSuchFeatureException("Cairo must be compiled with PNG support to save screen captures")
 #endif	

@@ -41,7 +41,16 @@ namespace blobber {
   };
 
   void error(string msg) {
-    Gtk::MessageDialog md(msg, false, Gtk::MESSAGE_WARNING);
+    Gtk::MessageDialog md(string(PACKAGE_STRING) + " Error", false, Gtk::MESSAGE_WARNING);
+    md.set_secondary_text(msg);
+    md.set_title("Error");
+    md.run();
+  };
+
+  void alert(string msg) {
+    Gtk::MessageDialog md(string(PACKAGE_STRING) + " Information", false);
+    md.set_secondary_text(msg);
+    md.set_title("Information");
     md.run();
   };
 
