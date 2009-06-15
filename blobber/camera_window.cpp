@@ -146,7 +146,7 @@ namespace blobber {
     debug("Saving camera screen capture to " + filepath);
     try {
       area.getSurface()->write_to_png(filepath);
-      alert("Image saved to " + filepath);
+      debug("Image saved to " + filepath);
     } catch(exception &e) {
       error(e.what());
     }
