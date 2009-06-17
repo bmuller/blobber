@@ -18,67 +18,16 @@
 
 #include <gtkmm/stock.h>
 
-#include "utils.h"
-#include "options_window.h"
-#include "mod_interface.h"
-#include "application.h"
+#include "help_window.h"
 
 namespace blobber {
   using namespace std;
 
-  OptionsWindow::OptionsWindow(Camarea *cam) : 
-    area(cam), 
-    okButton(Gtk::Stock::OK),
-    brightnessScale(0, 100, 1.0),
-    contrastScale(0, 100, 1.0),
-    saturationScale(0, 100, 1.0),
-    exposureScale(0, 100, 1.0),
-    exposureAuto("Automatic Exposure Control"),
-    poiCriteriaWindow(1, 100, 1.0),
-    lblCamDevice("Camera devices: "),
-    modsFrame("Available Modules"),
-    brightnessFrame("Brightness"),
-    contrastFrame("Contrast"),
-    saturationFrame("Saturation"),
-    exposureFrame("Exposure"),
-    poiCriteriaWindowFrame("Laser Color Window")
-  { 
-
+  OptionsWindow::HelpWindow() : okButton(Gtk::Stock::OK) { 
     set_title(string(PACKAGE_NAME) + " Configuration");
-    set_resizable(false);
+    set_resizable(true);
 
-    okButton.signal_clicked().connect(sigc::mem_fun(*this, &OptionsWindow::ok));
-
-    config = Configuration::get_config();
-
-    BVector<string> preLoadedMods;
-    if(!config->is_set("mods_enabled")) {
-      preLoadedMods << "lasertag" << "projectionoptions";
-      config->set("mods_enabled", preLoadedMods);
-    } else {
-      config->get("mods_enabled", preLoadedMods);
-    }
-
-    ModInterface::get_available_modules(availableModules, modFiles);
-
-    // Get required settings from the config file
-    string slidePosition;
-    string isAuto;
-    config->get_set("brightness", slidePosition, "80");
-    brightnessScale.set_value(string_to_int(slidePosition));
-    config->get_set("contrast", slidePosition, "75");
-    contrastScale.set_value(string_to_int(slidePosition));
-    config->get_set("saturation", slidePosition, "75");
-    saturationScale.set_value(string_to_int(slidePosition));
-    config->get_set("exposure", slidePosition, "5");
-    exposureScale.set_value(string_to_int(slidePosition));
-    config->get_set("autoExposure", isAuto, "0");
-    if (string_to_int(isAuto)) exposureAuto.set_active();
-    config->get_set("default_criteria_window", slidePosition, DEFAULT_CRITERIA_WINDOW_SIZE);
-    poiCriteriaWindow.set_value(string_to_int(slidePosition));
-    // after loading settings, need to update camera
-    brightness_changed();
-    contrast_changed();
+    okButton.signal_clicked().connect(sigc::mem_fun(*this, &HelpWindow::ok));
 
     add(mainBox);
     mainBox.pack_start(modsFrame, Gtk::PACK_SHRINK);
