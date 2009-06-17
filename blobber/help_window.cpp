@@ -17,113 +17,42 @@
 */
 
 #include <gtkmm/stock.h>
+#include <gtkmm/textbuffer.h>
+
+#include "config.h"
 
 #include "help_window.h"
 
 namespace blobber {
   using namespace std;
 
-  OptionsWindow::HelpWindow() : okButton(Gtk::Stock::OK) { 
-    set_title(string(PACKAGE_NAME) + " Configuration");
+  HelpWindow::HelpWindow() : okButton(Gtk::Stock::OK) { 
+    set_title(string(PACKAGE_NAME) + " Help");
     set_resizable(true);
-
+    
     okButton.signal_clicked().connect(sigc::mem_fun(*this, &HelpWindow::ok));
 
+    Glib::RefPtr<Gtk::TextBuffer> tb = textView.get_buffer();
+    tb->set_text(
+		 string(PACKAGE_STRING) + " is a program that tracks light and displays results "
+		 "(based on selected modules) in a window.  In order to use it, you will need a "
+		 "webcam, a computer (running a recent version of the linux kernel), and a "
+		 "projector."
+		);
+
+    textView.set_wrap_mode(Gtk::WRAP_WORD);
+    textView.set_buffer(tb);
+    textView.set_editable(false);
+
+    mainBox.set_size_request(400, 500);
     add(mainBox);
-    mainBox.pack_start(modsFrame, Gtk::PACK_SHRINK);
-    camDevice.pack_end(okButton, Gtk::PACK_SHRINK);
-    mainBox.pack_end(camDevice, Gtk::PACK_SHRINK);
-    mainBox.pack_end(brightnessFrame, Gtk::PACK_SHRINK);
-    brightnessFrame.add(brightnessScale);
-    mainBox.pack_end(contrastFrame, Gtk::PACK_SHRINK);
-    contrastFrame.add(contrastScale);
-    mainBox.pack_end(saturationFrame, Gtk::PACK_SHRINK);
-    saturationFrame.add(saturationScale);
-    mainBox.pack_end(exposureFrame, Gtk::PACK_SHRINK);
-    exposureFrame.add(exposureScale);
-    mainBox.pack_end(exposureAuto);
-    mainBox.pack_end(poiCriteriaWindowFrame, Gtk::PACK_SHRINK);
-    poiCriteriaWindowFrame.add(poiCriteriaWindow);
-    camDevice.pack_start(lblCamDevice, Gtk::PACK_SHRINK);
-    modsFrame.add(modsBox);
+    mainBox.pack_start(textView, Gtk::PACK_SHRINK);
+    mainBox.pack_end(okButton, Gtk::PACK_SHRINK);
 
-    brightnessScale.signal_value_changed().connect(sigc::mem_fun(*this, &OptionsWindow::brightness_changed));
-    contrastScale.signal_value_changed().connect(sigc::mem_fun(*this, &OptionsWindow::contrast_changed));
-    saturationScale.signal_value_changed().connect(sigc::mem_fun(*this, &OptionsWindow::saturation_changed));
-    exposureScale.signal_value_changed().connect(sigc::mem_fun(*this, &OptionsWindow::exposure_changed));
-    exposureAuto.signal_toggled().connect(sigc::mem_fun(*this, &OptionsWindow::exposure_changed));
-
-    for(std::map<string, string>::iterator it=availableModules.begin(); it!=availableModules.end(); it++) {
-      string modname = it->first;
-      string description = it->second;
-      modButtons[modname] = Gtk::manage(new Gtk::CheckButton(modname + ": " + description));
-      // if module is active, make box checked
-      if(preLoadedMods.includes(modFiles[modname]))
-      	modButtons[modname]->set_active();
-      modsBox.add(*modButtons[modname]);
-    }
-
-    string devDir = "/dev"; 
-    Glib::Dir listDev(devDir);
-    vector<string> files(listDev.begin(), listDev.end());
-    for(unsigned int i=0; i<files.size(); i++) {
-      if(files[i].substr(0,5).compare("video") == 0)
-        cboCamDevice.append_text(Glib::build_filename(devDir, files[i]));
-    }
-    string device;
-    config->get("device", device, DEFAULT_DEVICE);
-    cboCamDevice.set_active_text(device);
-    camDevice.pack_start(cboCamDevice, Gtk::PACK_SHRINK);
     show_all_children();
   };
 
-  void OptionsWindow::contrast_changed() {
-    int contrast = (int) contrastScale.get_value();
-    area->set_contrast(contrast);
-  };
-
-  void OptionsWindow::brightness_changed() {
-    int brightness = (int) brightnessScale.get_value();
-    area->set_brightness(brightness);
-  };
-  
-  void OptionsWindow::saturation_changed() {
-    area->set_saturation(saturationScale.get_value());
-  }
-
-  void OptionsWindow::exposure_changed() {
-    area->set_exposure(exposureScale.get_value(), exposureAuto.get_active());
-  }
-
-  void OptionsWindow::ok() {
-    string device = cboCamDevice.get_entry()->get_text().raw();
-    if (device == "") config->get("device", device, DEFAULT_DEVICE);
-    
-    vector<string> push;
-    for(std::map<string, Gtk::CheckButton*>::iterator it = modButtons.begin(); it != modButtons.end(); it++) {
-      if (it->second->get_active()) 
-	push.push_back(modFiles[it->first]);
-    }
-    // set config options then save config file
-    config->set("mods_enabled", push);
-    config->set("device", device);
-    string slider;
-    string isAuto;
-    num_to_string(brightnessScale.get_value(), slider);
-    config->set("brightness", slider);
-    num_to_string(contrastScale.get_value(), slider);
-    config->set("contrast", slider);
-    num_to_string(poiCriteriaWindow.get_value(), slider);
-    config->set("default_criteria_window", slider);
-    num_to_string(saturationScale.get_value(), slider);
-    config->set("saturation", slider);
-    num_to_string(exposureScale.get_value(), slider);
-    config->set("exposure", slider);
-    num_to_string(exposureAuto.get_active(), isAuto);
-    config->set("autoExposure", isAuto);
-
-    // reload config
-    Application::get_app()->reload_config();
+  void HelpWindow::ok() {
     hide();
   };
 

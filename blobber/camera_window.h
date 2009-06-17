@@ -7,6 +7,7 @@
 
 #include "camarea.h"
 #include "options_window.h"
+#include "help_window.h"
 
 namespace blobber {
 
@@ -16,6 +17,7 @@ namespace blobber {
   public:
     Camarea area;
     OptionsWindow options_window;
+    HelpWindow help_window;
     CameraWindow();
     void exit();
     void about();

@@ -19,9 +19,10 @@
 #include "camera_window.h"
 #include "exception.h"
 
-#include <sys/stat.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/messagedialog.h>
+
+#include <fcntl.h>
 
 namespace blobber {
   using namespace std;
@@ -101,11 +102,14 @@ namespace blobber {
   };
 
   void CameraWindow::help() {
+    /*
     Glib::ustring strVersion = string(PACKAGE_STRING) + " Help";
     Gtk::MessageDialog cmdHelp(*this, strVersion);
     cmdHelp.set_title(string(PACKAGE_NAME) + " Help");
     cmdHelp.set_secondary_text("You can find help for blobber at:\n" + string(PACKAGE_URL));
     cmdHelp.run();
+    */
+    help_window.show();
   };
 
   void CameraWindow::options() {
@@ -138,7 +142,7 @@ namespace blobber {
       Glib::Dir::Dir dirio(filepath);
     } catch(Glib::FileError fe) {
       if(mkdir(filepath.c_str(), S_IRWXU) != 0)
-	throw ConfigurationException("Could not make configuration directory " + filepath);
+	throw ConfigurationException("Could not make image directory " + filepath);
     };
 
     rawTime = time(NULL);

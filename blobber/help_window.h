@@ -16,7 +16,7 @@ namespace blobber {
   protected:
     Gtk::VBox mainBox;
     Gtk::Button okButton;
-    Gtk::TextView text;
+    Gtk::TextView textView;
   };
 };
 
