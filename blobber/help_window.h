@@ -4,7 +4,8 @@
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
-#include <gtkmm/textview.h>
+
+#include "gtk_utils/text_box.h"
 
 namespace blobber {
   using namespace std;
@@ -16,7 +17,7 @@ namespace blobber {
   protected:
     Gtk::VBox mainBox;
     Gtk::Button okButton;
-    Gtk::TextView textView;
+    TextBox textBox;
   };
 };
 

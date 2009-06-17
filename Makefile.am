@@ -15,7 +15,7 @@ nobase_include_HEADERS = $(HEADERDIR)/blobber.h $(HEADERDIR)/camera_window.h $(H
 			 $(MODUTILSDIR)/movable_circle.h $(MODUTILSDIR)/movable_square.h \
 			 $(MODUTILSDIR)/movable_crosshairs.h $(MODUTILSDIR)/sprite.h
 
-dist_pkgdata_DATA = blobber/nocam.png
+dist_pkgdata_DATA = blobber/nocam.png blobber/blobber.png
 
 install-exec-hook:
 	ldconfig
