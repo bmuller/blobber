@@ -19,6 +19,7 @@
 #include "camera_window.h"
 #include "exception.h"
 
+#include <sys/stat.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/messagedialog.h>
 
