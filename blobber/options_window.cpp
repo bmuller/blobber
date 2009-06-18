@@ -36,6 +36,7 @@ namespace blobber {
     exposureAuto("Automatic Exposure Control"),
     poiCriteriaWindow(1, 100, 1.0),
     lblCamDevice("Camera devices: "),
+    lblSavedImagesDir("Saved images location: "),
     modsFrame("Available Modules"),
     brightnessFrame("Brightness"),
     contrastFrame("Contrast"),
@@ -81,9 +82,14 @@ namespace blobber {
     contrast_changed();
 
     add(mainBox);
+    savedImagesDirBox.pack_start(lblSavedImagesDir, Gtk::PACK_SHRINK);
+    savedImagesDir.set_width_chars(25);
+    savedImagesDirBox.pack_end(savedImagesDir, Gtk::PACK_SHRINK);
+
     mainBox.pack_start(modsFrame, Gtk::PACK_SHRINK);
     camDevice.pack_end(okButton, Gtk::PACK_SHRINK);
     mainBox.pack_end(camDevice, Gtk::PACK_SHRINK);
+    mainBox.pack_end(savedImagesDirBox, Gtk::PACK_SHRINK);    
     mainBox.pack_end(brightnessFrame, Gtk::PACK_SHRINK);
     brightnessFrame.add(brightnessScale);
     mainBox.pack_end(contrastFrame, Gtk::PACK_SHRINK);
@@ -126,6 +132,11 @@ namespace blobber {
     cboCamDevice.set_active_text(device);
     camDevice.pack_start(cboCamDevice, Gtk::PACK_SHRINK);
     show_all_children();
+
+    string saved_images_directory;
+    string default_filename = Glib::build_filename(Glib::get_user_data_dir(), "blobber");
+    config->get_set("saved_images_directory", saved_images_directory, default_filename);
+    savedImagesDir.set_text(saved_images_directory);
   };
 
   void OptionsWindow::contrast_changed() {
@@ -172,6 +183,8 @@ namespace blobber {
     config->set("exposure", slider);
     num_to_string(exposureAuto.get_active(), isAuto);
     config->set("autoExposure", isAuto);
+
+    config->set("saved_images_directory", savedImagesDir.get_text());
 
     // reload config
     Application::get_app()->reload_config();

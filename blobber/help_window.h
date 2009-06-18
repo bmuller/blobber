@@ -4,6 +4,7 @@
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/scrolledwindow.h>
 
 #include "gtk_utils/text_box.h"
 
@@ -17,6 +18,7 @@ namespace blobber {
   protected:
     Gtk::VBox mainBox;
     Gtk::Button okButton;
+    Gtk::ScrolledWindow sw;
     TextBox textBox;
   };
 };

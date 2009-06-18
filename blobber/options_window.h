@@ -5,6 +5,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/box.h>
 #include <gtkmm/scale.h>
+#include <gtkmm/entry.h>
 #include <gtkmm/comboboxentrytext.h>
 #include <gtkmm/frame.h>
 
@@ -19,9 +20,10 @@ namespace blobber {
     OptionsWindow(Camarea *cam);
     void ok();
   protected:
-    Gtk::Label lblCamDevice;
+    Gtk::Label lblCamDevice, lblSavedImagesDir;
     Gtk::VBox mainBox;
-    Gtk::HBox camDevice;
+    Gtk::HBox camDevice, savedImagesDirBox;
+    Gtk::Entry savedImagesDir;
     Gtk::ComboBoxEntryText cboCamDevice;
     Gtk::Button okButton;
     Gtk::Frame modsFrame;

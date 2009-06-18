@@ -81,7 +81,7 @@ namespace blobber {
     };
     m_Box.pack_start(table);
     table.attach(area, 0, 2, 0, 14);
-    description.set_label("Insert some meaningful text here.");
+    description.set_label("See the help menu item to get started.");
     table.attach(description, 0, 1, 14, 15, Gtk::EXPAND, Gtk::EXPAND); 
     show_all_children();
   };
@@ -137,7 +137,8 @@ namespace blobber {
     string nameTime;
 
     // make sure directory exists
-    filepath =  Glib::build_filename(Glib::get_user_data_dir(), "blobber");
+    string default_filepath = Glib::build_filename(Glib::get_user_data_dir(), "blobber");
+    Configuration::get_config()->get_set("saved_images_directory", filepath, default_filepath);
     try {
       Glib::Dir::Dir dirio(filepath);
     } catch(Glib::FileError fe) {

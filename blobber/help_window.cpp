@@ -17,7 +17,6 @@
 */
 
 #include <gtkmm/stock.h>
-#include <gtkmm/scrolledwindow.h>
 
 #include "config.h"
 
@@ -56,12 +55,12 @@ namespace blobber {
 			"projection in the camera window by drawing a box with your mouse."
 			);
 
-    //Gtk::ScrolledWindow sw;
-    //sw.add(textBox);
+    sw.add(textBox);
+    sw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    sw.set_size_request(320, 464);
     mainBox.set_size_request(400, 500);
     add(mainBox);
-    //mainBox.pack_start(sw, Gtk::PACK_SHRINK);
-    mainBox.pack_start(textBox, Gtk::PACK_SHRINK);
+    mainBox.pack_start(sw, Gtk::PACK_SHRINK);
     mainBox.pack_end(okButton, Gtk::PACK_SHRINK);
 
     show_all_children();
