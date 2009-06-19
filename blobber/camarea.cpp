@@ -17,7 +17,6 @@
 */
 
 #include "camarea.h"
-#include "configuration.h"
 #include "exception.h"
 
 #include <string>
@@ -30,10 +29,21 @@ namespace blobber {
   Camarea::Camarea() : device(), hascam(true), manual_align(false), fg(NULL), frame(NULL), mouse_clicked(false) {
     add_events(Gdk::POINTER_MOTION_MASK | Gdk::POINTER_MOTION_HINT_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
     string dev;    
-    Configuration *config = Configuration::get_config();
+    config = Configuration::get_config();
     config->get("device", dev, DEFAULT_DEVICE);
     set_device(dev);
 
+    reload_default_criteria();
+  };
+
+  Camarea::~Camarea() {
+    if(hascam) {
+      delete fg;
+      delete frame; 
+    }
+  };
+
+  void Camarea::reload_default_criteria() {
     // get default criteria values - and set them to defaults if they are not set already 
     COLOR vdefault(60, 0, 0);
     COLOR lower;
@@ -48,16 +58,9 @@ namespace blobber {
     CRANGE range(lower, default_criteria_window);
     default_criteria.copy(range);
 
-    string srange;
-    range.to_string(srange);
-    debug("Default criteria: " + srange);
-  };
-
-  Camarea::~Camarea() {
-    if(hascam) {
-      delete fg;
-      delete frame; 
-    }
+    string colors;
+    lower.to_string(colors);
+    debug("Setting default criteria to look for " + colors + " += " + window_size);
   };
 
   void Camarea::set_brightness(int brightness) {
@@ -149,7 +152,6 @@ namespace blobber {
 
   bool Camarea::on_button_release_event(GdkEventButton* event) { 
     mouse_clicked = false;
-    Configuration * config = Configuration::get_config();
     COORD c((int) event->x, (int) event->y);
 
     // make sure we don't exceed our dimensions (which can happen
@@ -166,16 +168,8 @@ namespace blobber {
       blob_bounds.from_coords(c, mouse_click);
       COLOR blob;
       if(find_the_blob(blob, blob_bounds, (unsigned char *) frame->data)) {
-	string colors, criteria_window;
-	blob.to_string(colors);
-	config->get_set("default_criteria_window", criteria_window, DEFAULT_CRITERIA_WINDOW_SIZE);
-	default_criteria_window = string_to_int(criteria_window);
-	debug("Setting default criteria to look for " + colors + " += " + criteria_window);
 	config->set_color(blob, "default");
-        // we've identified the brightest point - now make a range that centers on that 
-	// bright point and goes above and below default_criteria_window
-	CRANGE range(blob, default_criteria_window);
-	default_criteria.copy(range);
+	reload_default_criteria();
       } else debug("couldn't find a blob in the coordinates given");
     }
   };

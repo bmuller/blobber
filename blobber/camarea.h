@@ -5,6 +5,7 @@
 
 #include "types.h"
 #include "framegrabber.h"
+#include "configuration.h"
 
 namespace blobber {
   using namespace std;
@@ -13,6 +14,7 @@ namespace blobber {
   private:
     string device;
     FrameGrabber *fg;
+    Configuration *config;
     Cairo::RefPtr< Cairo::ImageSurface > surface;
     Cairo::RefPtr< Cairo::ImageSurface > noCam;
     COORD mouse_click;
@@ -44,6 +46,7 @@ namespace blobber {
     
     Camarea();
     ~Camarea();
+    void reload_default_criteria();
     bool on_button_press_event(GdkEventButton* event);
     bool on_button_release_event(GdkEventButton* event);
     void set_brightness(int brightness);

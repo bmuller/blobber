@@ -6,7 +6,7 @@
 #include <gtkmm/window.h>
 
 #include "camarea.h"
-#include "options_window.h"
+#include "options_window/options_window.h"
 #include "help_window.h"
 
 namespace blobber {

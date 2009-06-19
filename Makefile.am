@@ -7,13 +7,16 @@ pkgconfig_DATA=libblobber.pc
 
 HEADERDIR = blobber
 MODUTILSDIR = $(HEADERDIR)/mod_utils
+OPTIONSDIR = $(HEADERDIR)/options_window
 nobase_include_HEADERS = $(HEADERDIR)/blobber.h $(HEADERDIR)/camera_window.h $(HEADERDIR)/exception.h \
-			 $(HEADERDIR)/frame.h $(HEADERDIR)/options_window.h $(HEADERDIR)/projection_window.h \
+			 $(HEADERDIR)/frame.h $(HEADERDIR)/projection_window.h $(MODUTILSDIR)/sprite.h \
 			 $(HEADERDIR)/utils.h $(HEADERDIR)/camarea.h $(HEADERDIR)/config.h $(HEADERDIR)/types.h \
 			 $(HEADERDIR)/framegrabber.h $(HEADERDIR)/mod_interface.h $(HEADERDIR)/colormap.h \
 			 $(HEADERDIR)/configuration.h $(HEADERDIR)/application.h $(MODUTILSDIR)/movable_object.h \
 			 $(MODUTILSDIR)/movable_circle.h $(MODUTILSDIR)/movable_square.h \
-			 $(MODUTILSDIR)/movable_crosshairs.h $(MODUTILSDIR)/sprite.h
+			 $(MODUTILSDIR)/movable_crosshairs.h $(OPTIONSDIR)/additional_options_tab.h \
+	 		 $(OPTIONSDIR)/camera_options_tab.h $(OPTIONSDIR)/module_options_tab.h \
+			 $(OPTIONSDIR)/options_window.h $(OPTIONSDIR)/poi_options_tab.h
 
 dist_pkgdata_DATA = blobber/nocam.png blobber/blobber.png
 
