@@ -25,7 +25,11 @@ namespace blobber {
   POIOptionsTab::POIOptionsTab(Camarea *_cam) :
     cam(_cam),
     poiCriteriaWindow(1, 100, 1.0),
-    poiCriteriaWindowFrame("Laser Color Window")
+    poiCriteriaRed(1, 256, 1.0),
+    poiCriteriaGreen(1, 256, 1.0),
+    poiCriteriaBlue(1, 256, 1.0),
+    poiCriteriaWindowFrame("Laser Color Window"),
+    poiCriteriaFrame("Tracking Color Options")
   {
     description.set_text("These settings affect which light is tracked.  The RGB settings for the "
 			 "point of interest criteria can be set automatically by drawing a box on "
@@ -42,15 +46,47 @@ namespace blobber {
     pack_start(poiCriteriaWindowFrame, Gtk::PACK_SHRINK);
     poiCriteriaWindowFrame.add(poiCriteriaWindow);
 
+    pack_start(poiCriteriaFrame, Gtk::PACK_SHRINK);
+    poiCriteriaFrame.add(poiCriteriaBox);
+    redLabel.set_text("Red");
+    poiCriteriaBox.pack_start(redLabel, Gtk::PACK_SHRINK);
+    poiCriteriaBox.pack_start(poiCriteriaRed, Gtk::PACK_SHRINK);
+    greenLabel.set_text("Green");
+    poiCriteriaBox.pack_start(greenLabel, Gtk::PACK_SHRINK);
+    poiCriteriaBox.pack_start(poiCriteriaGreen, Gtk::PACK_SHRINK);
+    blueLabel.set_text("Blue");
+    poiCriteriaBox.pack_start(blueLabel, Gtk::PACK_SHRINK);
+    poiCriteriaBox.pack_start(poiCriteriaBlue, Gtk::PACK_SHRINK);
+
     string slidePosition;
     config->get_set("default_criteria_window", slidePosition, DEFAULT_CRITERIA_WINDOW_SIZE);
     poiCriteriaWindow.set_value(string_to_int(slidePosition));
+
+    COLOR color;
+    COLOR dcolor(60, 0, 0);
+    config->get_set_color(color, dcolor, "default");
+    poiCriteriaRed.set_value(color.red);
+    poiCriteriaGreen.set_value(color.green);
+    poiCriteriaBlue.set_value(color.blue);
   };
 
   void POIOptionsTab::save() {
     string slider;
     num_to_string(poiCriteriaWindow.get_value(), slider);
     config->set("default_criteria_window", slider);
+
+    string r, g, b;
+    num_to_string((int) poiCriteriaRed.get_value(), r);
+    num_to_string((int) poiCriteriaGreen.get_value(), g);
+    num_to_string((int) poiCriteriaBlue.get_value(), b);
+    debug("HERE RGB: " + r +", "+g+", "+b);
+
+    COLOR dcolor;
+    dcolor.red = (int) poiCriteriaRed.get_value();
+    dcolor.green = (int) poiCriteriaGreen.get_value();
+    dcolor.blue = (int) poiCriteriaBlue.get_value();
+    config->set_color(dcolor, "default");
+
     cam->reload_default_criteria();
   };
 };

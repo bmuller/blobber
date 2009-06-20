@@ -143,7 +143,7 @@ namespace blobber {
     get(prefix + "_green", green, dgreen, groupname);
     get(prefix + "_blue", blue, dblue, groupname);
     
-    COLOR tmp(string_to_int(red), string_to_int(blue), string_to_int(green));
+    COLOR tmp(string_to_int(red), string_to_int(green), string_to_int(blue));
     c.copy(tmp);
   };
 

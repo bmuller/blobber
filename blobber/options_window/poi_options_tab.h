@@ -19,9 +19,10 @@ namespace blobber {
   protected:
     Camarea *cam;
     Configuration *config;
-    Gtk::Label description;    
-    Gtk::Frame poiCriteriaWindowFrame;
-    Gtk::HScale poiCriteriaWindow;
+    Gtk::Label description, redLabel, greenLabel, blueLabel;    
+    Gtk::Frame poiCriteriaWindowFrame, poiCriteriaFrame;
+    Gtk::VBox poiCriteriaBox;
+    Gtk::HScale poiCriteriaWindow, poiCriteriaRed, poiCriteriaGreen, poiCriteriaBlue;
   };
 };
 
