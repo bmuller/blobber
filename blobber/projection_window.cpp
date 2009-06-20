@@ -17,11 +17,14 @@
 */
 
 #include "projection_window.h"
+#include "exception.h"
+#include "config.h"
 
 namespace blobber {
   using namespace std;
 
   ProjectionWindow::ProjectionWindow(DIMENSION _cam_dimensions) : is_fullscreen(false), need_alignment(false), cam_dimensions(_cam_dimensions) {
+    set_title(string(PACKAGE_NAME) + " projection");
     resize(cam_dimensions.width, cam_dimensions.height);
     i_exposed_myself = false;
 
@@ -65,6 +68,9 @@ namespace blobber {
     preferred_color = string_to_int(value);
 
     current_message = "";
+
+    // move out of the way so not occluded by camera window
+    move(20, 20);
   };
 
   void ProjectionWindow::finish() {
@@ -90,9 +96,18 @@ namespace blobber {
     if(!get_context(cr))
       return;
     sr = cr->get_target();
-    filepath =  Glib::build_filename(Glib::get_user_data_dir(), "blobber");
+    string default_filepath =  Glib::build_filename(Glib::get_user_data_dir(), "blobber");
+    Configuration::get_config()->get_set("saved_images_directory", filepath, default_filepath);
+    try {
+      Glib::Dir::Dir dirio(filepath);
+    } catch(Glib::FileError fe) {
+      if(mkdir(filepath.c_str(), S_IRWXU) != 0)
+        throw ConfigurationException("Could not make image directory " + filepath);
+    };
+
     rawTime = time(NULL);
-    nameTime = string(ctime(&rawTime));
+    // replace spaces with "_"
+    join(explode(string(ctime(&rawTime)), " "), "_", nameTime);
     filepath = Glib::build_filename(filepath, nameTime.substr(0, nameTime.length()-1)+ "_proj.png");
     debug("Saving projection screen capture to " + filepath);
     sr->write_to_png(filepath);
@@ -196,17 +211,14 @@ namespace blobber {
 
   bool ProjectionWindow::on_expose_event(GdkEventExpose* event) {
     debug("Projection window expose event");
-    i_exposed_myself = true;
     Cairo::RefPtr<Cairo::Context> cr;
     if(!get_context(cr))
       return true;
     
-    set_background(BLACK);
-    
     if(need_alignment)
       draw_alignment_graphics();
 
-    clear();
+    i_exposed_myself = true;
     return true;
   };
 

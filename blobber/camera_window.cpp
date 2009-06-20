@@ -18,6 +18,7 @@
 
 #include "camera_window.h"
 #include "exception.h"
+#include "utils.h"
 
 #include <gtkmm/stock.h>
 #include <gtkmm/messagedialog.h>
@@ -28,6 +29,7 @@ namespace blobber {
   using namespace std;
 
   CameraWindow::CameraWindow() : area(), table(2, 15), options_window(&area), description() { 
+    set_title(string(PACKAGE_NAME) + " camera");
     set_default_size(area.dimensions.width, area.dimensions.height+50);
     add(m_Box);
 
@@ -147,7 +149,8 @@ namespace blobber {
     };
 
     rawTime = time(NULL);
-    nameTime = string(ctime(&rawTime));
+    // replace spaces with "_"
+    join(explode(string(ctime(&rawTime)), " "), "_", nameTime);
     filepath = Glib::build_filename(filepath, nameTime.substr(0, nameTime.length()-1) + "_camera.png");
     debug("Saving camera screen capture to " + filepath);
     try {

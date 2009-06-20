@@ -57,7 +57,7 @@ namespace blobber {
 
     sw.add(textBox);
     sw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-    sw.set_size_request(320, 464);
+    sw.set_size_request(300, 464);
     mainBox.set_size_request(400, 500);
     add(mainBox);
     mainBox.pack_start(sw, Gtk::PACK_SHRINK);

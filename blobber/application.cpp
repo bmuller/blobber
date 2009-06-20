@@ -149,6 +149,7 @@ namespace blobber {
 
     // if an expose event occured in project window alert modules
     if(win.area.hascam && proj.i_exposed_myself) {
+      proj.clear();
       for(unsigned int i=0; i<mods.size(); i++) {
 	mods[i]->projection_window_exposed(proj);
       }

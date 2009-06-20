@@ -99,6 +99,23 @@ namespace blobber {
   };
 
   /** 
+   * Join string parts with a joiner string
+   * 
+   * @param v The collection of string parts to join
+   * @param joiner What to use to join the string parts
+   * @param result The result to create with the results
+   */
+  void join(vector<string> v, string joiner, string& result) {
+    result = "";
+    if(v.size() == 0)
+      return;
+    for(unsigned int i=0; i<v.size()-1; i++) {
+      result += v[i] + joiner;
+    }
+    result += v[v.size()-1];
+  };
+
+  /** 
    * Restrict a given integer to an upper/lower range
    * 
    * @param x Integer to be restricted
