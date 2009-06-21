@@ -54,7 +54,7 @@ void MovableShapes::projection_window_exposed(ProjectionWindow &pw) {
 };
 
 void MovableShapes::update(Camarea &area, ProjectionWindow &pw) {
-  BVector<PIXEL> poi;
+  vector<PIXEL> poi;
   get_poi(area, poi);
 
   // no points means nothing is selected, return

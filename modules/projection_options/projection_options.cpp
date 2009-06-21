@@ -51,7 +51,7 @@ void ProjectionOptions::projection_window_exposed(ProjectionWindow &pw) {
 
 
 void ProjectionOptions::update(Camarea &area, ProjectionWindow &pw) {
-  BVector<PIXEL> poi;
+  vector<PIXEL> poi;
   get_poi(area, poi);
 
   for(unsigned int i=0; i<poi.size(); i++) {

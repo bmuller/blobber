@@ -34,7 +34,7 @@ class ShapesNSounds : public ModInterface {
   RtAudio::StreamParameters parameters;
   unsigned int bufferFrames;
 
-  BVector<MovableObject*> shapes;
+  vector<MovableObject*> shapes;
   int picked_shape;
   MovableCrosshairs xhairs;
 };

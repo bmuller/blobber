@@ -75,7 +75,7 @@ namespace blobber {
     config.set_string(groupname, key, value);
   };
 
-  void Configuration::set(string key, BVector<string> values, string groupname) {
+  void Configuration::set(string key, vector<string> values, string groupname) {
     config.set_string_list(groupname, key, values);
   };
 
@@ -91,10 +91,10 @@ namespace blobber {
     set(key, value, groupname);
   };
 
-  void Configuration::get(string key, BVector<string> &values, string groupname) {
+  void Configuration::get(string key, vector<string> &values, string groupname) {
     if(config.has_group(groupname) && config.has_key(groupname, key)) {
       vector<string> l = config.get_string_list(groupname, key);
-      values.from_vector(l);
+      values.assign(l.begin(), l.end());
     } else {
       values.clear();      
     }
@@ -108,7 +108,7 @@ namespace blobber {
     set(key, value, "mod_" + modname);
   };
 
-  void Configuration::module_set(string key, BVector<string> values, string modname) {
+  void Configuration::module_set(string key, vector<string> values, string modname) {
     set(key, values, "mod_" + modname);
   };
 
@@ -116,7 +116,7 @@ namespace blobber {
     get(key, value, vdefault, "mod_" + modname);
   };
 
-  void Configuration::module_get(string key, BVector<string> &values, string modname) {
+  void Configuration::module_get(string key, vector<string> &values, string modname) {
     get(key, values, "mod_" + modname);    
   };
 
@@ -193,12 +193,12 @@ namespace blobber {
       && is_set(prefix+"_left", groupname) && is_set(prefix+"_right",groupname);
   };
 
-  void Configuration::get_keys(BVector<string> &values, string groupname) {
+  void Configuration::get_keys(vector<string> &values, string groupname) {
     if(!config.has_group(groupname)) {
       values.clear();
       return;
     }  
     vector<string> keys = config.get_keys(groupname);
-    values.from_vector(keys);
+    values.assign(keys.begin(), keys.end());
   };
 };

@@ -11,7 +11,7 @@ class MovableShapes : public ModInterface {
   void init(Camarea &area, ProjectionWindow &pw);
   void projection_window_exposed(ProjectionWindow &pw);
  private:
-  BVector<MovableObject*> shapes;
+  vector<MovableObject*> shapes;
   MovableCrosshairs xhairs;
   int missing_point_count;
 };

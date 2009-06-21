@@ -12,7 +12,7 @@ namespace blobber {
   public:
     DIMENSION dimensions;
     int preferred_color; // preferred_color is index in colors
-    BVector<COLOR> colors;
+    vector<COLOR> colors;
     bool is_fullscreen;
     bool need_alignment; 
     bool i_exposed_myself;
@@ -30,7 +30,7 @@ namespace blobber {
     void draw_box(COORD coord, int width, int height, COLOR c, bool fill=false);
     void draw_box_absolute(COORD coord, int width, int height, COLOR c, bool fill=false);
     void draw_circle_absolute(COORD coords, int radius, COLOR c, bool fill=false);
-    void draw_curve(BVector<COORD> points, COLOR c, double line_width=2.0);
+    void draw_curve(vector<COORD> points, COLOR c, double line_width=2.0);
     void show_alignment_graphics();
     void hide_alignment_graphics();
     void set_bounds(BOUNDS &b);

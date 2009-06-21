@@ -32,9 +32,9 @@ namespace blobber {
     // called right before init
     inline void set_config(Configuration *c) { config = c; };
     void config_set(string key, string value);
-    void config_set(string key, BVector<string> values);
+    void config_set(string key, vector<string> values);
     void config_get(string key, string &value, string vdefault);
-    void config_get(string key, BVector<string> &values);
+    void config_get(string key, vector<string> &values);
 
     bool operator==(const ModInterface& other);
     bool operator!=(const ModInterface& other);
@@ -46,7 +46,7 @@ namespace blobber {
     Configuration *config;
     void register_poi_criteria(Camarea &area, CRANGE crange, int maxPoi = -1);
     void register_poi(Camarea &area, int maxPoi = -1);
-    void get_poi(Camarea &area, BVector<PIXEL> &modpoi);
+    void get_poi(Camarea &area, vector<PIXEL> &modpoi);
     void mod_debug(string s);
   };
 

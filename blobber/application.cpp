@@ -28,7 +28,7 @@ namespace blobber {
   void Application::load_modules() {
     // mods_enabled will be set automagically in the options_window constructor
     // by now
-    BVector<string> mods_enabled;
+    vector<string> mods_enabled;
     config->get("mods_enabled", mods_enabled);
     for(unsigned int i=0; i<mods_enabled.size(); i++)
       add_mod(ModInterface::load_module(mods_enabled[i]));
@@ -41,7 +41,7 @@ namespace blobber {
     }
     mods.clear();
     if(config->is_set("mods_enabled")) {
-      BVector<string> mods_enabled;
+      vector<string> mods_enabled;
       config->get("mods_enabled", mods_enabled);
       // add modules that should be enabled
       for(unsigned int i=0; i<mods_enabled.size(); i++)

@@ -8,5 +8,5 @@ class MultiLaserTag : public ModInterface {
   void update(Camarea &area, ProjectionWindow &pw);
   void init(Camarea &area, ProjectionWindow &pw);
  protected:
-  BVector<PIXEL> lastpoints;
+  vector<PIXEL> lastpoints;
 };

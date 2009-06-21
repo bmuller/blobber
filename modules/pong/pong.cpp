@@ -28,7 +28,7 @@ void Pong::init(Camarea &area, ProjectionWindow &pw) {
 }
 
 void Pong::update(Camarea &area, ProjectionWindow &pw) {
-  BVector<PIXEL> poi;
+  vector<PIXEL> poi;
   get_poi(area, poi);
 
   if(poi.size() == 0) {
