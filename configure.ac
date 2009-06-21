@@ -85,10 +85,6 @@ AC_CHECK_LIB([v4lconvert], [v4lconvert_create], [], AC_MSG_ERROR([Could not find
 allmods=false
 AC_ARG_ENABLE(all-modules, AC_HELP_STRING([[--enable-all-modules]], [enable all modules]), [allmods=true])
 
-greenscreen=false
-AC_ARG_ENABLE(greenscreen-module, AC_HELP_STRING([[--enable-greenscreen-module]], [enable greenscreen module]), [greenscreen=true])
-AM_CONDITIONAL(GREENSCREEN, $greenscreen || $allmods)
-
 multicoloredtag=false
 AC_ARG_ENABLE(multicoloredtag-module, AC_HELP_STRING([[--enable-multicoloredtag-module]], [enable multi-color tagging module]), [multicoloredtag=true])
 AM_CONDITIONAL(MULTICOLOREDTAG, $multicoloredtag || $allmods)
@@ -105,14 +101,6 @@ flower=false
 AC_ARG_ENABLE(flower-module, AC_HELP_STRING([[--enable-flower-module]], [enable flower game module]), [flower=true])
 AM_CONDITIONAL(FLOWER, $flower || $allmods)
 
-refreshrate=false
-AC_ARG_ENABLE(refreshrate-module, AC_HELP_STRING([[--enable-refreshrate-module]], [enable refresh-rate info module]), [refreshrate=true])
-AM_CONDITIONAL(REFRESHRATE, $refreshrate || $allmods)
-
-movableshapes=false
-AC_ARG_ENABLE(movableshapes-module, AC_HELP_STRING([[--enable-movableshapes-module]], [enable movableshapes game module]), [movableshapes=true])
-AM_CONDITIONAL(MOVABLESHAPES, $movableshapes || $allmods)
-
 multilasertag=false
 AC_ARG_ENABLE(multilasertag-module, AC_HELP_STRING([[--enable-multilasertag-module]], [enable multilasertag drawing module]), [multilasertag=true])
 AM_CONDITIONAL(MULTILASERTAG, $multilasertag || $allmods)
@@ -120,20 +108,6 @@ AM_CONDITIONAL(MULTILASERTAG, $multilasertag || $allmods)
 colorrandomizer=false
 AC_ARG_ENABLE(colorrandomizer-module, AC_HELP_STRING([[--enable-colorrandomizer-module]], [enable colorrandomizer game module]), [colorrandomizer=true])
 AM_CONDITIONAL(COLORRANDOMIZER, $colorrandomizer || $allmods)
-
-duckhunt=false
-AC_ARG_ENABLE(duckhunt-module, AC_HELP_STRING([[--enable-duckhunt-module]], [enable duckhunt game module]), [duckhunt=true])
-AM_CONDITIONAL(DUCKHUNT, $duckhunt || $allmods)
-
-theremin=false
-AC_ARG_ENABLE(theremin-module, AC_HELP_STRING([[--enable-theremin-module]], [enable theremin sound module]), 
-  [theremin=true])
-if ( $theremin || $allmods ) then
-  AC_CHECK_LIB(asound, snd_pcm_open, [theremin=true], [AC_MSG_ERROR([
-    Could not find ALSA library, which is required for the theremin module. ])  
-  ])
-fi
-AM_CONDITIONAL(THEREMIN, $theremin)
 
 shapesnsounds=false
 AC_ARG_ENABLE(shapesnsounds-module, AC_HELP_STRING([[--enable-shapesnsounds-module]], [enable shapes and sound module]), 

@@ -12,12 +12,6 @@ libprojectionoptions_la_SOURCES = projection_options/projection_options.cpp
 
 
 # Modules that are conditionally compiled
-if GREENSCREEN
-  pkglib_LTLIBRARIES += libgreenscreen.la 
-  libgreenscreen_la_SOURCES = green_screen/green_screen.cpp
-  nobase_dist_pkgdata_DATA += green_screen/stone-640x480.jpg
-endif
-
 if MULTICOLOREDTAG
   pkglib_LTLIBRARIES += libmulticoloredtag.la 
   libmulticoloredtag_la_SOURCES = multi_colored_tag/multi_colored_tag.cpp
@@ -45,16 +39,6 @@ if FLOWER
                               flower/flower10.png
 endif
 
-if REFRESHRATE
-  pkglib_LTLIBRARIES += librefreshrate.la 
-  librefreshrate_la_SOURCES = refresh_rate/refresh_rate.cpp
-endif
-
-if MOVABLESHAPES
-  pkglib_LTLIBRARIES += libmovableshapes.la 
-  libmovableshapes_la_SOURCES = movable_shapes/movable_shapes.cpp
-endif
-
 if MULTILASERTAG
   pkglib_LTLIBRARIES += libmultilasertag.la 
   libmultilasertag_la_SOURCES = multi_laser_tag/multi_laser_tag.cpp
@@ -63,24 +47,6 @@ endif
 if COLORRANDOMIZER
   pkglib_LTLIBRARIES += libcolorrandomizer.la
   libcolorrandomizer_la_SOURCES = color_randomizer/color_randomizer.cpp
-endif
-
-if DUCKHUNT
-  pkglib_LTLIBRARIES += libduckhunt.la
-  libduckhunt_la_SOURCES = duckhunt/duckhunt.cpp
-  nobase_dist_pkgdata_DATA += duckhunt/duck.png duckhunt/deadduck.png duckhunt/background.png
-endif
-
-if THEREMIN
-  pkglib_LTLIBRARIES += libtheremin.la
-  stkdir = libs/stk
-  libtheremin_la_SOURCES = theremin/theremin.cpp ${stkdir}/ADSR.cpp ${stkdir}/FileRead.cpp ${stkdir}/Filter.cpp \
-	${stkdir}/Generator.cpp ${stkdir}/SineWave.cpp ${stkdir}/TwoZero.cpp ${stkdir}/WvIn.cpp ${stkdir}/Envelope.cpp \
-	${stkdir}/FileWvIn.cpp ${stkdir}/FM.cpp ${stkdir}/Instrmnt.cpp ${stkdir}/RtAudio.cpp ${stkdir}/Stk.cpp \
-	${stkdir}/WaveLoop.cpp ${stkdir}/BeeThree.cpp
-  libtheremin_la_CPPFLAGS = ${AM_CPPFLAGS} -I${stkdir} -D__GXX__ -D__LITTLE_ENDIAN__  -D__LINUX_ALSA__ -D__LINUX_ALSASEQ__ 
-  libtheremin_la_LDFLAGS = ${AM_CPPFLAGS} -lasound
-  nobase_dist_pkgdata_DATA += ${stkdir}/fwavblnk.raw ${stkdir}/sinewave.raw
 endif
 
 if SHAPESNSOUNDS
