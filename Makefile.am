@@ -21,7 +21,7 @@ nobase_include_HEADERS = $(HEADERDIR)/blobber.h $(HEADERDIR)/camera_window.h $(H
 dist_pkgdata_DATA = blobber/nocam.png blobber/blobber.png
 
 install-exec-hook:
-	ldconfig
+	/sbin/ldconfig
 
 if HAVE_DOXYGEN
 dox: Doxyfile

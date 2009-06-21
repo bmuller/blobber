@@ -20,6 +20,8 @@
 #include "exception.h"
 #include "config.h"
 
+#include<fcntl.h>
+
 namespace blobber {
   using namespace std;
 
