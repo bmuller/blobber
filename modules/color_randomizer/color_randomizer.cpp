@@ -21,7 +21,7 @@
 using namespace blobber;
 using namespace std;
 
-ColorRandomizer::ColorRandomizer() : ModInterface("ColorRandomizer") {}
+ColorRandomizer::ColorRandomizer() : ModInterface("ColorRandomizer", "Randomly changes colors") {}
 
 void ColorRandomizer::init(Camarea &area, ProjectionWindow &pw) {
 	

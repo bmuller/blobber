@@ -151,7 +151,7 @@ namespace blobber {
       is_fullscreen = !is_fullscreen;
       break;
     case 115: // s for save to file
-      save_to_file();
+      try { save_to_file(); } catch(exception &e) { error(e.what()); }
       break;
     case 65307: // ESC
       unfullscreen();

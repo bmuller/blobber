@@ -5,7 +5,7 @@
 using namespace blobber;
 using namespace std;
 
-Pong::Pong() : ModInterface("Pong") { }
+Pong::Pong() : ModInterface("Pong", "Old school pong") { }
 
 void Pong::init(Camarea &area, ProjectionWindow &pw) {
 

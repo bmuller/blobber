@@ -127,8 +127,8 @@ namespace blobber {
 
     switch(eventData->keyval) {
     case 115: // s
-	save_to_file();
-	break;
+      try { save_to_file(); } catch(exception &e) { error(e.what()); }
+      break;
     };
   };
 

@@ -21,7 +21,7 @@
 using namespace std;
 using namespace blobber;
 
-MultiLaserTag::MultiLaserTag() : ModInterface("MultiLaserTag") { 
+MultiLaserTag::MultiLaserTag() : ModInterface("MultiLaserTag", "Track many lights simultaneously") { 
 
 };
 

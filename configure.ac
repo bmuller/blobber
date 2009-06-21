@@ -85,10 +85,6 @@ AC_CHECK_LIB([v4lconvert], [v4lconvert_create], [], AC_MSG_ERROR([Could not find
 allmods=false
 AC_ARG_ENABLE(all-modules, AC_HELP_STRING([[--enable-all-modules]], [enable all modules]), [allmods=true])
 
-multicoloredtag=false
-AC_ARG_ENABLE(multicoloredtag-module, AC_HELP_STRING([[--enable-multicoloredtag-module]], [enable multi-color tagging module]), [multicoloredtag=true])
-AM_CONDITIONAL(MULTICOLOREDTAG, $multicoloredtag || $allmods)
-
 pong=false
 AC_ARG_ENABLE(pong-module, AC_HELP_STRING([[--enable-pong-module]], [enable pong game module]), [pong=true])
 AM_CONDITIONAL(PONG, $pong || $allmods)

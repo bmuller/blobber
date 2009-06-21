@@ -1,6 +1,6 @@
 #include "flower.h"
 
-Flower::Flower() : ModInterface("Flower"), clear(false) {} 
+Flower::Flower() : ModInterface("Flower", "Draw flowers on the screen"), clear(false) {};
 
 void Flower::init(Camarea &area, ProjectionWindow &pw) {
   string s, red, green, blue;

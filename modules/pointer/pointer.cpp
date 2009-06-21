@@ -1,6 +1,6 @@
 #include "pointer.h"
 
-Pointer::Pointer() : ModInterface("Pointer"), mod(POINTER_MODE_TIMED), loc(0, 0), ena(false) {
+Pointer::Pointer() : ModInterface("Pointer", "Control X11 pointer"), mod(POINTER_MODE_TIMED), loc(0, 0), ena(false) {
   Display * dpy = XOpenDisplay( NULL );
   sch = DisplayHeight( dpy, DefaultScreen( dpy ) );
   scw = DisplayWidth( dpy, DefaultScreen( dpy ) );

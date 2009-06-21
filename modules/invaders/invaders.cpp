@@ -23,7 +23,7 @@ Invaders::Invaders() :
   paused(0x00), 
   level(1), 
   score(0), 
-  ModInterface("invaders") {} 
+  ModInterface("invaders", "Kill descending aliens") {} 
 
 void Invaders::init(Camarea &area, ProjectionWindow &pw) {
   string s;

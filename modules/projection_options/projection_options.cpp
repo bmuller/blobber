@@ -21,7 +21,7 @@
 using namespace std;
 using namespace blobber;
 
-ProjectionOptions::ProjectionOptions() : ModInterface("ProjectionOptions") {
+ProjectionOptions::ProjectionOptions() : ModInterface("ProjectionOptions", "On screen options buttons") {
   colors_showing_count = 0;
 };
 

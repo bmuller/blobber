@@ -12,11 +12,6 @@ libprojectionoptions_la_SOURCES = projection_options/projection_options.cpp
 
 
 # Modules that are conditionally compiled
-if MULTICOLOREDTAG
-  pkglib_LTLIBRARIES += libmulticoloredtag.la 
-  libmulticoloredtag_la_SOURCES = multi_colored_tag/multi_colored_tag.cpp
-endif
-
 if PONG
   pkglib_LTLIBRARIES += libpong.la 
   libpong_la_SOURCES = pong/pong.cpp pong/ball.cpp pong/paddle.cpp
