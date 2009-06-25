@@ -17,6 +17,7 @@
 */
 
 #include "additional_options_tab.h"
+#include "exception.h"
 
 namespace blobber {
   using namespace std;
@@ -44,6 +45,13 @@ namespace blobber {
   };
 
   void AdditionalOptionsTab::save() {
-    config->set("saved_images_directory", savedImagesDir.get_text());
+    string directory = savedImagesDir.get_text();
+    try {
+      Glib::Dir::Dir dirio(directory);
+    } catch(Glib::FileError fe) {
+      throw ConfigurationException("Directory set in additional options tab \"" + directory + "\" is invalid.");
+    };
+
+    config->set("saved_images_directory", directory);
   };
 };

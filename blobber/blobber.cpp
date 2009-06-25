@@ -41,7 +41,9 @@ You can find out more at http://trac.butterfat.net/public/blobber
 using namespace blobber;
 
 int main(int argc, char** argv) {
-  Gtk::Main kit(argc, argv);
+  Glib::OptionContext oc("this is a cool program");
+
+  Gtk::Main kit(argc, argv, oc);
   Application *b = Application::get_app();
   b->run();
   Application::delete_app();

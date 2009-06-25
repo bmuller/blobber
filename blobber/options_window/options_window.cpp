@@ -55,14 +55,19 @@ namespace blobber {
 
 
   void OptionsWindow::ok() {
-    mot.save();
-    cot.save();
-    poiot.save();
-    aot.save();
+    try {
+      mot.save();
+      cot.save();
+      poiot.save();
+      aot.save();
 
-    // reload config
-    Application::get_app()->reload_config();
-    hide();
+      // reload config if no exceptions thrown above
+      Application::get_app()->reload_config();
+      hide();
+    } catch(exception &e) {
+      // if error, display error
+      error(e.what());
+    }
   };
 
   void OptionsWindow::cancel() {
