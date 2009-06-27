@@ -132,14 +132,15 @@ namespace blobber {
   };
 
   bool Camarea::on_button_press_event(GdkEventButton* event) { 
-#ifdef DEBUG
-    if(hascam) {
+    string debug;
+    Configuration::get_config()->get("debug", debug, "0");
+    if(hascam && debug == "1") {
       unsigned char * data = (unsigned char *) frame->data;
       int index = (dimensions.width * (int) event->y) + (int) event->x;
       cout << " R:" << (int) data[index*4+2] << " G:" << (int) data[index*4+1] << " B:" << (int) data[index*4] << endl;
+      cout.flush();
     }
-    cout.flush();
-#endif
+
     if(hascam) {
       mouse_clicked = true;
       mouse_click.update((int) event->x, (int) event->y);

@@ -42,13 +42,12 @@ namespace blobber {
     }
   };
 
-  Configuration::Configuration() : config() {
+  Configuration::Configuration() : config(), tmpconfig() {
     directory =  Glib::build_filename(Glib::get_user_config_dir(), "blobber");
     filename = "conf.ini";
     try {
       string conflocation = Glib::build_filename(directory, filename);
       config.load_from_file(conflocation);
-      debug("Successfully loaded config file " + conflocation);
     } catch(Glib::Error e) {};
   };
 
@@ -71,6 +70,10 @@ namespace blobber {
     fio.close();
   };
 
+  void Configuration::settmp(string key, string value, string groupname) {
+    tmpconfig.set_string(groupname, key, value);
+  };
+
   void Configuration::set(string key, string value, string groupname) {
     config.set_string(groupname, key, value);
   };
@@ -82,6 +85,8 @@ namespace blobber {
   void Configuration::get(string key, string &value, string vdefault, string groupname) {
     if(config.has_group(groupname) && config.has_key(groupname, key))
       value = config.get_string(groupname, key);
+    else if(tmpconfig.has_group(groupname) && tmpconfig.has_key(groupname, key))
+      value = tmpconfig.get_string(groupname, key);      
     else
       value = vdefault;
   };

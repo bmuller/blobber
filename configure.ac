@@ -18,14 +18,6 @@ AC_HEADER_STDC
 AC_DEFINE([DEFAULT_DEVICE], ["/dev/video0"], [The default device])
 AC_DEFINE([DEFAULT_CRITERIA_WINDOW_SIZE], ["15"], [The default window size for criteria for POI])
 
-# provide flag --enable-debug
-AC_ARG_ENABLE(debug, AC_HELP_STRING([[--enable-debug]], [enable debugging output to stdout]),
-[if test "$enableval" = "yes"; then
-    DEBUG="yes"
-    CPPFLAGS="$CPPFLAGS -DDEBUG"
-fi]
-)
-
 # provide flag --enable-doxygen
 HAVE_DOXYGEN="no"
 AC_ARG_ENABLE(doxygen, AC_HELP_STRING([[--enable-doxygen]], [enable doxygen api docs output with make dox]),

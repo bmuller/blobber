@@ -35,15 +35,51 @@ You can find out more at http://trac.butterfat.net/public/blobber
 */
 
 #include "application.h"
-
 #include <gtkmm/main.h>
+#include <iostream>
 
 using namespace blobber;
+using namespace std;
 
 int main(int argc, char** argv) {
-  Glib::OptionContext oc("this is a cool program");
+  Glib::OptionContext option_context;
+  Glib::OptionGroup main_group("main", "Main Options", "Show main options");
 
-  Gtk::Main kit(argc, argv, oc);
+  bool print_version = false;
+  Glib::OptionEntry version_entry;
+  version_entry.set_short_name('v');
+  version_entry.set_long_name("version");
+  version_entry.set_description("Print the version info and return.");
+  main_group.add_entry(version_entry, print_version);
+
+  bool debug = false;
+  Glib::OptionEntry debug_entry;
+  debug_entry.set_short_name('d');
+  debug_entry.set_long_name("debug");
+  debug_entry.set_description("Print debugging information.");
+  main_group.add_entry(debug_entry, debug);
+
+  option_context.set_main_group(main_group);
+  Gtk::Main main(argc, argv); 
+  main.add_gtk_option_group(option_context); 
+
+  // parse options
+  try {
+    option_context.parse(argc, argv);
+  } catch (Glib::OptionError& error) {
+    cout << error.what() << endl << endl << option_context.get_help() << endl;
+    return -1;
+  }
+
+  // handle option choices
+  if(print_version) {
+    cout << PACKAGE_STRING << endl;
+    return 0;
+  }
+  Configuration *config = Configuration::get_config();
+  config->settmp("debug", (debug ? "1" : "0"));
+
+  // run application
   Application *b = Application::get_app();
   b->run();
   Application::delete_app();

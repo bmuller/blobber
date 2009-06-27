@@ -9,7 +9,8 @@ namespace blobber {
 
   class Configuration {
   private:
-    Glib::KeyFile config;
+    // temporary configuration values (like from the command line) are stored in tmpconfig
+    Glib::KeyFile config, tmpconfig;
     string filename, directory;
     Configuration();
     ~Configuration();
@@ -21,8 +22,11 @@ namespace blobber {
 
     // get/set values for main program
     void set(string key, string value, string groupname="blobber");
+    // set a temporary value that will not be saved
+    void settmp(string key, string value, string groupname="blobber");
     void set(string key, vector<string> values, string groupname="blobber");   
     bool is_set(string key, string groupname="blobber");
+    // get from a set value, if not found, check a set tmp value, if not found, return vdefault
     void get(string key, string &value, string vdefault, string groupname="blobber");
     // get if exists, set if not
     void get_set(string key, string &value, string vdefault, string groupname="blobber");

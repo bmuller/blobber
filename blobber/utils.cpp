@@ -17,6 +17,7 @@
 */
 
 #include "utils.h"
+#include "configuration.h"
 #include "config.h"
 
 #include <cstdlib>
@@ -28,7 +29,10 @@ namespace blobber {
   using namespace std;
 
   void debug(string msg) {
-#ifdef DEBUG
+    string should;
+    Configuration::get_config()->get("debug", should, "0");
+    if(should == "0") return;
+
     string time_s = "";
     time_t rawtime = time(NULL);
     tm *tm_t = localtime(&rawtime);
@@ -37,7 +41,6 @@ namespace blobber {
       time_s = "[" + string(rv) + "] ";
     cout << time_s << "[" << string(PACKAGE_NAME) << "] " << msg << endl;
     cout.flush();
-#endif
   };
 
   void error(string msg) {

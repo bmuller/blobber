@@ -133,11 +133,9 @@ namespace blobber {
   };
   
   bool ProjectionWindow::on_key_press_event(GdkEventKey* eventData) {
-#ifdef DEBUG
     string ks;
     num_to_string((int) eventData->keyval, ks);
     debug("Key pressed on projection window: "+ks);
-#endif
 
     switch(eventData->keyval) {
     case 32: // spacebar
