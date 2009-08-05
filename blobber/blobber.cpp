@@ -32,6 +32,7 @@ You can find out more at http://trac.butterfat.net/public/blobber
 \li Brian Muller <bmuller@butterfat.net>
 \li Matt Shotwell <shotwelm@musc.edu>
 \li Zenko B. Klapko Jr. <CovertCodeOp1@gmail.com>
+\li Josh West <jayscribbs@gmail.com>
 */
 
 #include "application.h"

@@ -14,7 +14,7 @@ libprojectionoptions_la_SOURCES = projection_options/projection_options.cpp
 # Modules that are conditionally compiled
 if PONG
   pkglib_LTLIBRARIES += libpong.la 
-  libpong_la_SOURCES = pong/pong.cpp pong/ball.cpp pong/paddle.cpp
+  libpong_la_SOURCES = pong/pong.cpp
 endif
 
 if INVADERS

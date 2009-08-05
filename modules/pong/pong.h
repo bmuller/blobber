@@ -1,23 +1,31 @@
+#include "blobber.h"
+
 using namespace blobber;
 
 class Pong : public ModInterface {
  public:
   Pong();
-  COORD origin;
-  DIMENSION court;
+  ~Pong();
+
   void init(Camarea &area, ProjectionWindow &pw);
   void update(Camarea &area, ProjectionWindow &pw);
 
  private:
-  Ball ball;
-  Paddle left_paddle;
-  Paddle right_paddle;
+   COORD laser[2];
+   float  vPercent, // Pixels in one percent of the vertical
+          hPercent; // and horizontal for scaling
 
-  int scale(int pw, int real_val, int coord);
-  COORD scale(DIMENSION pw, DIMENSION real_val, COORD coord);
- 
-  //temp variables to be removed later
-  short int paddle_moving_up;
+   struct Ball {
+     COORD coord;
+     float radius,
+           angle,  // Ball velocity vector angle
+           speed;  // Ball velocity magnitude (screen fraction/sec)
+   } ball;
+
+   struct Paddle {
+     COORD coord;
+     float height,
+           width,
+           speed; // Paddle velocity magnitude (screen fraction/sec)
+   } paddle[2];
 };
-
-
