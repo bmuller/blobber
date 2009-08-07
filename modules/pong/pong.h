@@ -9,9 +9,14 @@ class Pong : public ModInterface {
 
   void init(Camarea &area, ProjectionWindow &pw);
   void update(Camarea &area, ProjectionWindow &pw);
+  void updateFactors(ProjectionWindow &pw);
+  void reset();
+  void move();
+  void collision(ProjectionWindow &pw);
 
  private:
-   COORD laser[2];
+   COORD laser[2]; // Local laser coordinates
+   short int score[2];  // Player score
    float  vPercent, // Pixels in one percent of the vertical
           hPercent; // and horizontal for scaling
 
@@ -26,6 +31,7 @@ class Pong : public ModInterface {
      COORD coord;
      float height,
            width,
+	   angle, // Paddle velocity vector angle
            speed; // Paddle velocity magnitude (screen fraction/sec)
    } paddle[2];
 };

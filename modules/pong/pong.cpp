@@ -12,7 +12,7 @@
  *              90
  *              |
  *              |
- *       180----------0
+ *        0----------180
  *              |
  *              |
  *             270
@@ -25,7 +25,11 @@
 
 #include "pong.h"
 #include "blobber.h"
+#include <cstdlib>
+#include <cmath>
 #include <iostream>
+
+#define PI 3.14159265
 
 using namespace blobber;
 using namespace std;
@@ -36,38 +40,21 @@ Pong::~Pong() { }
 
 void Pong::init(Camarea &area, ProjectionWindow &pw) {
   register_poi(area, 2);
-
-  ball.coord.x = 50 * hPercent;
-  ball.coord.y = 50 * vPercent;
-
+  // Seed random number generator
+  srand(time(NULL));
+  updateFactors(pw);
+  reset();
 }
 
 void Pong::update(Camarea &area, ProjectionWindow &pw) {
-  
-  // Adjust scaling - FIXME Should only be done if win geometry changes
-  hPercent = pw.dimensions.width / 100;
-  vPercent = pw.dimensions.height / 100;
-
-  ball.coord.x = 50 * hPercent;
-  ball.coord.y = 50 * vPercent;
-
-  for (int i = 0; i < 2; i++) {
-    paddle[i].width = 3 * hPercent;
-    paddle[i].height = 10 * vPercent;
-  }
+  updateFactors(pw);
  
-  ball.radius = hPercent;
-
   // Handle POI
   vector<PIXEL> poi;
   get_poi(area, poi);
 
-  if(poi.size() == 0) {
-    //debug("no poi");
-  }
-  else {
-    //debug("poi found!");
-    for(int i = 0; i < poi.size(); i++) {
+  if (poi.size() > 0) {
+    for (int i = 0; i < 2; i++) {
 
       // Interpolate POI
       COORD p;
@@ -80,55 +67,163 @@ void Pong::update(Camarea &area, ProjectionWindow &pw) {
 	static_cast<float>(area.bounds.height())) *
 	static_cast<float>(pw.dimensions.height));
 
+      // Store POI locally
       if (i == 0 && p.x <= 10 * hPercent)
         laser[0] = p;
       if (i == 1 && p.x >= 90 * hPercent)
         laser[1] = p;
-
     }
   }
 
-  /** move stuff **/
+  collision(pw);
+  move();
 
-  //here is where we'll need to move the left paddle based on the poi
-
-  /** end move stuff **/
-
-  /** Check for stuff **/
-  /** end check for stuff **/
-
-  /** Clear stuff **/
+  // Draw stuff
   pw.clear();
-  /** end clear stuff **/
 
-  /** draw stuff **/
-  for (int i = 0; i < 2; i++)
-    pw.draw_circle_absolute(laser[i], 1, BLUE, true);
-//  pw.draw_box_absolute(origin,
-//		       pw.dimensions.width - 10,
-//		       pw.dimensions.height - 10,
-//		       BLUE);  //draw the court (TEMPORARY)
+  for (int i = 0; i < 2; i++) {
+    pw.draw_circle_absolute(laser[i],
+                            1,
+			    BLUE,
+			    true);
+
+    pw.draw_box_absolute(paddle[i].coord,
+                         paddle[i].width,
+			 paddle[i].height,
+			 WHITE,
+			 true);
+  }
 
   pw.draw_circle_absolute(ball.coord,
-			  ball.radius,
+                          ball.radius,
 			  WHITE,
 			  true);
-/*
-  pw.draw_box_absolute(scale(pw.dimensions, court, left_paddle.pos),
-		       scale(pw.dimensions.width, court.width, left_paddle.width),
-		       scale(pw.dimensions.height, court.height, left_paddle.height),
-		       WHITE,
-		       true);
-
-  pw.draw_box_absolute(scale(pw.dimensions, court, right_paddle.pos),
-		       scale(pw.dimensions.width, court.width, right_paddle.width),
-		       scale(pw.dimensions.height, court.height, right_paddle.height),
-		       WHITE,
-		       true);
-  /** end draw stuff **/
 }
 
-// Interpolate POI
+void Pong::updateFactors(ProjectionWindow &pw) {
+  hPercent = pw.dimensions.width / 100;
+  vPercent = pw.dimensions.height / 100;
+
+  for (int i = 0; i < 2; i++) {
+    paddle[i].width = hPercent;
+    paddle[i].height = 20 * vPercent;
+  }
+
+  paddle[0].coord.x = 5 * hPercent;
+  paddle[1].coord.x = 95 * hPercent;
+
+  ball.radius = hPercent;
+}
+
+void Pong::reset() {
+  ball.coord.x = 50 * hPercent;
+  ball.coord.y = 50 * vPercent;
+  ball.angle = 60;//(rand() % 360);
+  do {
+    ball.speed = (rand() % 10);
+  }
+  while (ball.speed < 5);
+  ball.radius = hPercent;
+
+  laser[0].x = paddle[0].coord.x = 5 * hPercent;
+  laser[0].y = paddle[0].coord.y = 50 * vPercent;
+
+  laser[1].x = paddle[1].coord.x = 95 * hPercent;
+  laser[1].y = paddle[1].coord.y = 50 * vPercent;
+}
+
+void Pong::move() {
+  // Check for misalignment between laser points and paddles
+  // Determine speed and angle of paddle movement - then move
+  for (int i = 0; i < 2; i++) {
+    if ((laser[i].y < paddle[i].coord.y) ||
+        (laser[i].y > paddle[i].coord.y + 
+         static_cast<int>(paddle[i].height))) {
+      paddle[i].angle = (laser[i].y < paddle[i].coord.y) ? 
+                         90 : 270;
+      paddle[i].speed = abs((laser[i].y - paddle[i].coord.y) / 10);
+      paddle[i].coord.y -= (paddle[i].speed *
+                            sin((paddle[i].angle * PI) / 180));
+    }
+    else paddle[i].speed = 0;
+  }
+
+  // Move the ball
+  ball.coord.x -= (ball.speed * cos((ball.angle * PI) / 180));
+  ball.coord.y -= (ball.speed * sin((ball.angle * PI) / 180));
+}
+
+void Pong::collision(ProjectionWindow &pw) {
+  // Check for a score
+  if (ball.coord.x <= 2 * hPercent) {
+    score[0]++;
+    reset();
+    return;
+  }
+
+  if (ball.coord.x >= 98 * hPercent) {
+    score[1]++;
+    reset();
+    return;
+  }
+
+  // Did we hit the roof or floor?
+  if (((ball.coord.y - static_cast<int>(ball.radius)) <= 0 &&
+	ball.angle < 180) ||
+      ((ball.coord.y + static_cast<int>(ball.radius)) >=
+        pw.dimensions.height) &&
+	ball.angle > 180)
+    ball.angle = 360 - ball.angle;
+
+  else { // FIXME top/bottom/outside sides of paddles?
+
+    // Did we hit the left paddle?
+    if ((ball.coord.x - static_cast<int>(ball.radius)) <=
+        (paddle[0].coord.x + static_cast<int>(paddle[0].width)) &&
+        (ball.coord.y >= paddle[0].coord.y) &&
+	(ball.coord.y <= (paddle[0].coord.y +
+	 static_cast<int>(paddle[0].height)))) {
+      if (paddle[0].speed > 0) {
+        // Calculate resultant vectors from collision
+	// while paddle is in motion
+        float x, y;
+        x = (paddle[0].speed * cos((paddle[0].angle * PI) / 180)) +
+            (ball.speed * cos((ball.angle * PI) / 180));
+        y = (paddle[0].speed * sin((paddle[0].angle * PI) / 180)) +
+            (ball.speed * sin((ball.angle * PI) / 180));
+        ball.speed = sqrt(x * x + y * y);
+	// Set some realistic limits here
+        ball.speed = (ball.speed > 10) ? 10 : ball.speed;
+	ball.angle = 180 * (atan(y / x) / PI);
+      }
+      ball.angle = (ball.angle > 180) ?
+	            540 - ball.angle : 180 - ball.angle;
+    }
+
+    // Did we hit the right paddle?
+    if ((ball.coord.x + static_cast<int>(ball.radius)) >=
+        (paddle[1].coord.x) &&
+        (ball.coord.y >= paddle[1].coord.y) &&
+	(ball.coord.y <= (paddle[1].coord.y +
+	 static_cast<int>(paddle[0].height)))) {
+      if (paddle[1].speed > 0) {
+        // Calculate resultant vectors from collision
+	// while paddle is in motion
+        float x, y;
+        x = (paddle[1].speed * cos((paddle[1].angle * PI) / 180)) +
+            (ball.speed * cos((ball.angle * PI) / 180));
+        y = (paddle[1].speed * sin((paddle[1].angle * PI) / 180)) +
+            (ball.speed * sin((ball.angle * PI) / 180));
+        ball.speed = sqrt(x * x + y * y);
+	// Set some realistic limits here
+        ball.speed = (ball.speed > 10) ? 10 : ball.speed;
+	ball.angle = 180 * (atan(y / x) / PI);
+      }
+      ball.angle = (ball.angle > 180) ?
+	            540 - ball.angle : 180 - ball.angle;
+    }
+  }
+}
 
 extern "C" {
   ModInterface *get_module() { return new Pong(); };
