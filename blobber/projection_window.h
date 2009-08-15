@@ -2,6 +2,7 @@
 #define __PROJECTION_WINDOW_H
 
 #include <gtkmm/window.h>
+#include <string>
 #include "types.h"
 #include "configuration.h"
 
@@ -31,6 +32,7 @@ namespace blobber {
     void draw_box_absolute(COORD coord, int width, int height, COLOR c, bool fill=false);
     void draw_circle_absolute(COORD coords, int radius, COLOR c, bool fill=false);
     void draw_curve(vector<COORD> points, COLOR c, double line_width=2.0);
+    void draw_text_absolute(COORD coords, float fontHeight, string data, COLOR c=WHITE);
     void show_alignment_graphics();
     void hide_alignment_graphics();
     void set_bounds(BOUNDS &b);

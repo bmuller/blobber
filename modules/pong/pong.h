@@ -1,5 +1,7 @@
 #include "blobber.h"
 
+#define PI 3.14159265
+
 using namespace blobber;
 
 class Pong : public ModInterface {
@@ -13,19 +15,24 @@ class Pong : public ModInterface {
   void reset();
   void move();
   void collision(ProjectionWindow &pw);
+  void grabOldData();
 
  private:
    COORD laser[2]; // Local laser coordinates
+   COORD oldLaser[2];
    short int score[2];  // Player score
-   float  vPercent, // Pixels in one percent of the vertical
-          hPercent; // and horizontal for scaling
+   float  yPercent, // Pixels in one percent of the vertical
+          xPercent; // and horizontal for scaling
+   bool debugEnabled;
 
    struct Ball {
      COORD coord;
      float radius,
            angle,  // Ball velocity vector angle
            speed;  // Ball velocity magnitude (screen fraction/sec)
-   } ball;
+   };
+   Ball ball,
+        oldBall;
 
    struct Paddle {
      COORD coord;
@@ -33,5 +40,7 @@ class Pong : public ModInterface {
            width,
 	   angle, // Paddle velocity vector angle
            speed; // Paddle velocity magnitude (screen fraction/sec)
-   } paddle[2];
+   };
+   Paddle paddle[2],
+          oldPaddle[2];
 };

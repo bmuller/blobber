@@ -374,4 +374,16 @@ namespace blobber {
     i_exposed_myself = true;
   };
 
+  void ProjectionWindow::draw_text_absolute(COORD coords, float fontHeight, string data, COLOR c) {
+    Cairo::RefPtr<Cairo::Context> cr;
+    if(!get_context(cr))
+      return;
+
+    cr->set_font_size(fontHeight * (dimensions.height / 100.0));
+    COLOR old_color(current_color);
+    cr->move_to(coords.x, coords.y);
+    set_color(cr, c);
+    cr->show_text(data);
+    set_color(cr, old_color);
+  }
 };
